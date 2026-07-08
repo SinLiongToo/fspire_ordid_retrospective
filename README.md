@@ -1,0 +1,97 @@
+# 🧭 ORID 焦點討論與決策羅盤 (ORID Mindset & Decision Compass)
+
+一個將「感性反思 (ORID)」、「理性收斂 (Pyramid/MECE)」與「敏捷執行 (PDCA)」無縫整合的單檔案 Web 工具，旨在協助使用者在日常生活中進行多維度的平衡管理與嚴謹的決策推演。
+
+---
+
+## 🗺️ 羅盤思考與行動決策流程 (Workflow)
+
+以下是本工具的完整運作流程。它整合了反射性思維、邏輯架構與持續改進的執行循環：
+
+```mermaid
+flowchart TD
+    Start([開始思考]) --> Step1[1. 選擇模式與分析面向]
+    
+    Step1 --> |🌟 生活平衡模式 F-SPIRE| DomainLife[選擇生活維度<br>財務、身體、人際...]
+    Step1 --> |🧠 思維決策模式 Decision| DomainDec[選擇決策模板<br>問題解決、專案復盤...]
+    
+    DomainLife & DomainDec --> Step2{2. ORID 焦點反思}
+    
+    subgraph ORID_Reflection [ORID 焦點討論法]
+        Step2 --> O[O - 客觀事實 Objective<br>發生了什麼數據/事實]
+        O --> R[R - 反應感受 Reflective<br>直覺與情绪體驗]
+        R --> I[I - 詮釋意義 Interpretive<br>有何啟發與原因剖析]
+        I --> D[D - 決定行動 Decisional<br>下一步的具體作為]
+    end
+    
+    D --> ModeSplit{模式分流}
+    
+    ModeSplit --> |生活平衡| Step3Life[3. 今日生活自評<br>1 - 5 分 based on FSPIRE domain]
+    ModeSplit --> |思維決策| Step3Dec[3. 金字塔與 PDCA 整合]
+    
+    subgraph Decision_Synthesis [決策收斂與計畫]
+        Step3Dec --> MECE[金字塔原理 & MECE<br>結論先行與論點自我檢視]
+        Step3Dec --> PDCA[PDCA 執行計畫<br>Plan -> Do -> Check -> Act]
+    end
+    
+    Step3Life --> Step4Life[4. 總覽儀表板 & 雷達圖<br>動態追蹤六大面向]
+    
+    MECE & PDCA --> Step4Dec[4. 決策品質自評<br>清晰度、證據力、洞察度、行動力]
+    
+    Step4Life & Step4Dec --> Step5[5. 儲存與匯出報告]
+    Step5 --> Export[匯出精美 Markdown / JSON 備份]
+    
+    %% Styling
+    classDef default fill:#16273D,stroke:#2C4666,color:#F8F4ED;
+    classDef highlight fill:#F5A623,stroke:#F5A623,color:#0F1B2D;
+    classDef branch fill:#1E3A5F,stroke:#F5A623,color:#F8F4ED;
+    
+    class Start,Step1,Step2,Step5 highlight;
+    class DomainLife,DomainDec,Step3Life,Step3Dec,Step4Life,Step4Dec branch;
+```
+
+---
+
+## 🚀 核心功能特色 (Key Features)
+
+### 1. 雙模式自由切換
+- **生活平衡模式 (🌟 Life)**: 基於 **F-SPIRE** 框架（財務 Financial、靈性 Spiritual、身體 Physical、智識 Intellectual、關係 Relational、情緒 Emotional），幫助您檢視生活各面向的平衡狀態，結合 **4M / 4F / 6P** 跨模型提示。
+- **思維決策模式 (🧠 Decision)**: 提供多種思維模板（問題解決、專案復盤、職涯決策、讀書學習、斯多葛反思、每週回顧），著重於邏輯推演、深度剖析與行動轉化。
+
+### 2. ORID 焦點討論引導
+內建階梯式引導，幫助您從客觀事實出發，經過情緒反思與因果詮釋，最後落實到具體決策（Objective ➔ Reflective ➔ Interpretive ➔ Decisional），避免思考失焦或流於發洩。
+
+### 3. 金字塔原理與 MECE 論證
+在決策模式下，提供結構化收斂工具：
+- **結論先行**: 提煉核心決策/結論建議（Key Message）。
+- **MECE 結構**: 拆解支持論點，確保「相互獨立，完全窮盡」（Mutually Exclusive and Collectively Exhaustive）。
+- **邏輯檢視**: 提供雙重檢視清單，確保推論嚴謹。
+
+### 4. PDCA 執行計畫與 D 連結
+將 ORID 的 **D（決定行動）** 進一步細化為 Plan (計畫) ➔ Do (執行) ➔ Check (度量查核) ➔ Act (改善調整) 的專案循環，確保決策不止停留在紙上，更能敏捷落地並持續改進。
+
+### 5. 決策品質 (DQ) 評估與雷達圖看板
+- **自評機制**: 從「清晰度、事實證據、洞察深度、可執行性」四維度評分，生成決策品質指數。
+- **多維看板**: 自動統計各面向數據，以精美的 SVG 多維雷達圖直觀呈現生活平衡狀態與決策品質。
+
+### 6. 本地保存與 Markdown 匯出
+- 數據完全保存在您的瀏覽器本地（LocalStorage），安全隱密。
+- 支持備份 JSON 數據，或一鍵匯出排版精美的結構化 Markdown 決策與反思報告，方便無縫導入至 Obsidian、Notion 或 Logseq 等個人知識管理庫。
+
+---
+
+## 🛠️ 開啟與使用方式 (Getting Started)
+
+本工具為純前端單檔案應用程式（Single-Page Application），無需進行任何安裝、編譯或設定伺服器：
+
+1. 下載或定位到專案目錄中的 [orid_life_compass.html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/orid_life_compass.html)。
+2. 在您的電腦上**按兩下開啟**該 HTML 檔案（使用 Chrome、Edge、Safari 或 Firefox 等任何現代瀏覽器）。
+3. 即可在瀏覽器中開始使用所有功能！
+
+---
+
+## 📂 專案檔案清單 (Files)
+
+- [orid_life_compass.html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/orid_life_compass.html): **最新主程式**（整合了雙模式、雷達圖、PDCA、金字塔 MECE、歷史紀錄、及互動流程說明分頁）。
+- [orid_pyraidm.html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/orid_pyraidm.html): 簡化版的思維決策工作區（早期版本）。
+- [fspire-life-manager (1).html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/fspire-life-manager%20(1).html): 生活管理與日記備份工具（早期版本）。

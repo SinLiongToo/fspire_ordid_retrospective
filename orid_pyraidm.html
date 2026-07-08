@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORID Meta-Decision Compass</title>
+
+<style>
+:root{
+    --bg:#0F1B2D;
+    --card:#182843;
+    --text:#ffffff;
+    --amber:#F5A623;
+    --border:rgba(255,255,255,.08);
+}
+
+.light{
+    --bg:#F8F4ED;
+    --card:#ffffff;
+    --text:#111111;
+    --border:rgba(0,0,0,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Segoe UI,system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:.25s;
+}
+
+header{
+    padding:20px;
+}
+
+.header-content{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:0 20px 30px;
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:24px;
+}
+
+.main-content{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:18px;
+    padding:22px;
+    border:1px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.sidebar{
+    height:fit-content;
+    position:sticky;
+    top:20px;
+}
+
+h1{
+    font-size:28px;
+    margin:0;
+}
+
+h2{
+    margin-top:0;
+    margin-bottom:16px;
+    font-size:20px;
+}
+
+h3{
+    margin-top:0;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:10px 14px;
+    cursor:pointer;
+}
+
+.theme{
+    background:var(--amber);
+    font-weight:bold;
+}
+
+.orid-flow{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.node{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#345889;
+    color:white;
+    font-size:20px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.node:hover{
+    transform:scale(1.05);
+}
+
+.active{
+    background:var(--amber);
+    color:black;
+}
+
+.dash{
+    height:22px;
+    border-left:3px dashed var(--amber);
+}
+
+.middle{
+    display:flex;
+    gap:50px;
+}
+
+.flow-caption{
+    margin-top:15px;
+    text-align:center;
+    opacity:.8;
+    font-size:13px;
+}
+
+.pyramid{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:15px;
+}
+
+.level{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-align:center;
+
+    clip-path:
+    polygon(
+    10% 100%,
+    90% 100%,
+    100% 0,
+    0 0
+    );
+}
+
+.level1{
+    width:120px;
+    height:48px;
+    background:#7d66ff;
+    font-size:12px;
+}
+
+.level2{
+    width:180px;
+    height:58px;
+    background:#5f42d3;
+    margin-top:8px;
+    font-size:12px;
+}
+
+.level3{
+    width:240px;
+    height:70px;
+    background:#38226c;
+    margin-top:8px;
+    font-size:12px;
+}
+
+select,
+textarea{
+    width:100%;
+}
+
+select{
+    padding:12px;
+    border-radius:10px;
+}
+
+textarea{
+    resize:vertical;
+    min-height:90px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    color:inherit;
+}
+
+textarea:focus{
+    outline:none;
+    box-shadow:0 0 0 3px rgba(245,166,35,.25);
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+}
+
+.input-row{
+    margin-bottom:18px;
+}
+
+.score-label{
+    display:flex;
+    justify-content:space-between;
+    margin-top:14px;
+    margin-bottom:4px;
+}
+
+.range{
+    width:100%;
+}
+
+.score-box{
+    margin-top:20px;
+    text-align:center;
+    background:rgba(255,255,255,.05);
+    padding:20px;
+    border-radius:14px;
+}
+
+.big-score{
+    font-size:36px;
+    margin-top:10px;
+    color:var(--amber);
+}
+
+.icons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.icons button{
+    background:var(--amber);
+    color:black;
+    font-weight:600;
+}
+
+.export-preview{
+    height:300px;
+}
+
+hr{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:18px 0;
+}
+
+.tabs{
+    display:flex;
+    gap:10px;
+}
+
+.tabBtn{
+    background:#345889;
+    color:white;
+    font-weight:600;
+}
+
+.tabBtn.activeTabBtn{
+    background:var(--amber);
+    color:black;
+}
+
+.tabContent{
+    display:none;
+}
+
+.tabContent.activeTab{
+    display:block;
+}
+@media(max-width:900px){
+
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        position:relative;
+        top:auto;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-content">
+<h1>🧭 ORID Meta-Decision Compass</h1>
+
+<button class="theme" onclick="toggleTheme()">
+☀️ / 🌙
+</button>
+</div>
+</header>
+
+<div class="container">
+
+<div class="card sidebar">
+
+<h2>ORID Flow</h2>
+
+<div class="orid-flow">
+
+<button class="node active">O</button>
+
+<div class="dash"></div>
+
+<div class="middle">
+<button class="node">R</button>
+<button class="node">I</button>
+</div>
+
+<div class="dash"></div>
+
+<button class="node">D</button>
+
+</div>
+
+<div class="flow-caption">
+Observe → Reflect → Interpret → Decide
+</div>
+
+<hr>
+
+<h2>Pyramid Principle</h2>
+
+<div class="pyramid">
+
+<div class="level level1">
+Key Message
+</div>
+
+<div class="level level2">
+Supporting Arguments
+</div>
+
+<div class="level level3">
+Supporting Facts
+</div>
+
+</div>
+
+<hr>
+
+<h3>Purpose</h3>
+
+<p>
+Transform observations into actionable
+decisions using ORID and the Pyramid Principle.
+</p>
+
+</div>
+
+<div class="main-content">
+
+<!-- Tabs -->
+
+<div class="card">
+
+    <div class="tabs">
+
+        <button class="tabBtn activeTabBtn"
+                onclick="openTab('workspace',this)">
+            Workspace
+        </button>
+
+        <button class="tabBtn"
+                onclick="openTab('readme',this)">
+            Help / Readme
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Workspace -->
+
+<div id="workspace" class="tabContent activeTab">
+
+<div class="card">
+
+<h2>Template</h2>
+
+<select id="template">
+<option>Book Review</option>
+<option>Project Retrospective</option>
+<option>Career Decision</option>
+<option>Problem Solving</option>
+<option>Weekly Reflection</option>
+<option>Stoic Reflection</option>
+</select>
+
+</div>
+
+<div class="card">
+
+<h2>ORID Workspace</h2>
+
+<div class="input-row">
+<label>Objective (Facts)</label>
+<textarea id="objective"></textarea>
+</div>
+
+<div class="input-row">
+<label>Reflective (Feelings)</label>
+<textarea id="reflective"></textarea>
+</div>
+
+<div class="input-row">
+<label>Interpretive (Insights)</label>
+<textarea id="interpretive"></textarea>
+</div>
+
+<div class="input-row">
+<label>Decisional (Actions)</label>
+<textarea id="decisional"></textarea>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Pyramid Content</h2>
+
+<textarea id="facts"
+placeholder="Supporting Facts / Data"></textarea>
+
+<br><br>
+
+<textarea id="arguments"
+placeholder="Supporting Arguments"></textarea>
+
+<br><br>
+
+<textarea id="message"
+placeholder="Key Message / Recommendation"></textarea>
+
+</div>
+
+<div class="card">
+
+<h2>Decision Quality</h2>
+
+<div class="score-label">
+<span>Clarity</span>
+<span id="clarityValue">3</span>
+</div>
+
+<input type="range"
+id="clarity"
+class="range"
+min="1"
+max="5"
+value="3">
+
+<div class="score-label">
+<span>Evidence</span>
+<span id="evidenceValue">3</span>
+</div>
+
+<input type="range"
+id="evidence"
+class="range"
+min="1"
+max="5"
+value="3">
+
+<div class="score-label">
+<span>Insight</span>
+<span id="insightValue">3</span>
+</div>
+
+<input type="range"
+id="insight"
+class="range"
+min="1"
+max="5"
+value="3">
+
+<div class="score-label">
+<span>Actionability</span>
+<span id="actionValue">3</span>
+</div>
+
+<input type="range"
+id="actionability"
+class="range"
+min="1"
+max="5"
+value="3">
+
+<div class="score-box">
+
+<strong>Decision Quality Score</strong>
+
+<div class="big-score">
+<span id="overall">3.0</span>/5
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Actions</h2>
+
+<div class="icons">
+
+<button onclick="loadDemo()">📚 Demo</button>
+
+<button onclick="saveData()">💾 Save</button>
+
+<button onclick="exportJson()">📤 JSON</button>
+
+<button onclick="exportMd()">📝 MD</button>
+
+<button onclick="importJson()">📥 Import</button>
+
+<button onclick="resetForm()">🔄 Reset</button>
+
+</div>
+
+
+<input
+type="file"
+id="fileInput"
+hidden>
+
+</div>
+
+<div class="card">
+
+<h2>Preview</h2>
+
+<textarea
+id="preview"
+class="export-preview"></textarea>
+
+</div>
+</div>
+<div id="readme" class="tabContent">
+
+<div class="card">
+
+<h1>🧭 ORID & Pyramid Principle Guide</h1>
+
+<p>
+ORID helps transform observations into decisions.
+The Pyramid Principle helps communicate those decisions clearly.
+Together they form a complete thinking and communication framework.
+</p>
+
+<hr>
+
+<h2>ORID Framework</h2>
+
+<h3>O — Objective</h3>
+
+<p>
+Focus on facts, observations and evidence.
+Avoid opinions or conclusions.
+</p>
+
+<ul>
+<li>What happened?</li>
+<li>What data exists?</li>
+<li>What did I observe?</li>
+</ul>
+
+<h3>R — Reflective</h3>
+
+<p>
+Capture reactions, surprises, concerns and intuition.
+</p>
+
+<ul>
+<li>What surprised me?</li>
+<li>What excited me?</li>
+<li>What concerned me?</li>
+</ul>
+
+<h3>I — Interpretive</h3>
+
+<p>
+Identify patterns, root causes and implications.
+</p>
+
+<ul>
+<li>Why did this happen?</li>
+<li>What patterns exist?</li>
+<li>What lessons can be learned?</li>
+</ul>
+
+<h3>D — Decisional</h3>
+
+<p>
+Convert learning into action.
+</p>
+
+<ul>
+<li>What should happen next?</li>
+<li>What action should be taken?</li>
+<li>Who owns it?</li>
+</ul>
+
+<hr>
+
+<h2>🏛 Pyramid Principle</h2>
+
+<pre>
+      Key Message
+            ▲
+            │
+ Supporting Arguments
+            ▲
+            │
+   Supporting Facts
+</pre>
+
+<p>
+Facts support arguments.
+Arguments support the recommendation.
+Start with evidence and end with a clear message.
+</p>
+
+<hr>
+
+<h2>🔗 ORID + Pyramid Workflow</h2>
+
+<pre>
+Objective
+   ↓
+Reflective
+   ↓
+Interpretive
+   ↓
+Decisional
+   ↓
+Facts
+   ↓
+Arguments
+   ↓
+Recommendation
+</pre>
+
+<hr>
+
+<h2>📚 Example</h2>
+
+<p><strong>Objective</strong><br>
+Project slipped by 2 weeks.</p>
+
+<p><strong>Reflective</strong><br>
+Team was frustrated by requirement changes.</p>
+
+<p><strong>Interpretive</strong><br>
+Lack of change control created rework.</p>
+
+<p><strong>Decisional</strong><br>
+Create weekly change-review meetings.</p>
+
+<p><strong>Recommendation</strong><br>
+Implement a formal change control process.</p>
+
+<hr>
+
+<h2>✅ Golden Rule</h2>
+
+<blockquote>
+Observe objectively.<br>
+Reflect honestly.<br>
+Interpret thoughtfully.<br>
+Decide deliberately.<br>
+Communicate clearly.
+</blockquote>
+
+</div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+const template=document.getElementById("template");
+
+const objective=document.getElementById("objective");
+const reflective=document.getElementById("reflective");
+const interpretive=document.getElementById("interpretive");
+const decisional=document.getElementById("decisional");
+
+const facts=document.getElementById("facts");
+const arguments=document.getElementById("arguments");
+const message=document.getElementById("message");
+
+const preview=document.getElementById("preview");
+const fileInput=document.getElementById("fileInput");
+
+const clarity=document.getElementById("clarity");
+const evidence=document.getElementById("evidence");
+const insight=document.getElementById("insight");
+const actionability=document.getElementById("actionability");
+
+function toggleTheme(){
+document.body.classList.toggle("light");
+}
+
+document.querySelectorAll(".node")
+.forEach(node=>{
+node.addEventListener("click",()=>{
+
+document.querySelectorAll(".node")
+.forEach(n=>n.classList.remove("active"));
+
+node.classList.add("active");
+
+});
+});
+
+function updateScore(){
+
+const c=+clarity.value;
+const e=+evidence.value;
+const i=+insight.value;
+const a=+actionability.value;
+
+document.getElementById("clarityValue").textContent=c;
+document.getElementById("evidenceValue").textContent=e;
+document.getElementById("insightValue").textContent=i;
+document.getElementById("actionValue").textContent=a;
+
+const avg=(c+e+i+a)/4;
+
+document.getElementById("overall").textContent=
+avg.toFixed(1);
+
+}
+
+clarity.addEventListener("input",updateScore);
+evidence.addEventListener("input",updateScore);
+insight.addEventListener("input",updateScore);
+actionability.addEventListener("input",updateScore);
+
+updateScore();
+
+function loadDemo(){
+
+objective.value="Project slipped by 2 weeks.";
+reflective.value="Surprised by communication gaps.";
+interpretive.value="Requirement changes created rework.";
+decisional.value="Implement weekly change review meeting.";
+
+facts.value="3 milestone misses and 20 change requests.";
+arguments.value="Requirements are unstable.";
+message.value="Establish change control process.";
+
+preview.value="Demo loaded.";
+}
+
+function getData(){
+
+return{
+
+template:template.value,
+
+orid:{
+objective:objective.value,
+reflective:reflective.value,
+interpretive:interpretive.value,
+decisional:decisional.value
+},
+
+pyramid:{
+facts:facts.value,
+arguments:arguments.value,
+message:message.value
+},
+
+scores:{
+clarity:clarity.value,
+evidence:evidence.value,
+insight:insight.value,
+actionability:actionability.value,
+overall:document.getElementById("overall").textContent
+}
+
+};
+
+}
+
+function saveData(){
+
+localStorage.setItem(
+"oridCompass",
+JSON.stringify(getData())
+);
+
+alert("Saved.");
+}
+
+function exportJson(){
+
+const content=
+JSON.stringify(getData(),null,2);
+
+preview.value=content;
+
+const blob=
+new Blob([content],{
+type:"application/json"
+});
+
+const link=
+document.createElement("a");
+
+link.href=
+URL.createObjectURL(blob);
+
+link.download=
+"orid-compass.json";
+
+link.click();
+
+}
+
+function exportMd(){
+
+const d=getData();
+
+const md=
+`# ORID Reflection
+
+## Objective
+${d.orid.objective}
+
+## Reflective
+${d.orid.reflective}
+
+## Interpretive
+${d.orid.interpretive}
+
+## Decisional
+${d.orid.decisional}
+
+# Pyramid Principle
+
+## Facts
+${d.pyramid.facts}
+
+## Arguments
+${d.pyramid.arguments}
+
+## Message
+${d.pyramid.message}
+
+# Score
+
+${d.scores.overall}/5`;
+
+preview.value=md;
+
+const blob=
+new Blob([md],
+{type:"text/markdown"});
+
+const link=
+document.createElement("a");
+
+link.href=
+URL.createObjectURL(blob);
+
+link.download=
+"orid-reflection.md";
+
+link.click();
+
+}
+
+function resetForm(){
+
+document
+.querySelectorAll("textarea")
+.forEach(t=>t.value="");
+
+clarity.value=3;
+evidence.value=3;
+insight.value=3;
+actionability.value=3;
+
+updateScore();
+
+}
+
+function importJson(){
+fileInput.click();
+}
+
+fileInput.addEventListener(
+"change",
+function(e){
+
+const file=e.target.files[0];
+
+if(!file) return;
+
+const reader=
+new FileReader();
+
+reader.onload=function(){
+
+try{
+
+const data=
+JSON.parse(reader.result);
+
+objective.value=
+data.orid?.objective || "";
+
+reflective.value=
+data.orid?.reflective || "";
+
+interpretive.value=
+data.orid?.interpretive || "";
+
+decisional.value=
+data.orid?.decisional || "";
+
+facts.value=
+data.pyramid?.facts || "";
+
+arguments.value=
+data.pyramid?.arguments || "";
+
+message.value=
+data.pyramid?.message || "";
+
+alert("Import successful.");
+
+}
+catch(err){
+
+alert("Invalid JSON file.");
+
+}
+
+};
+
+reader.readAsText(file);
+
+});
+
+window.onload=function(){
+
+const saved=
+localStorage.getItem("oridCompass");
+
+if(saved){
+
+try{
+
+const data=
+JSON.parse(saved);
+
+objective.value=data.orid?.objective || "";
+reflective.value=data.orid?.reflective || "";
+interpretive.value=data.orid?.interpretive || "";
+decisional.value=data.orid?.decisional || "";
+
+facts.value=data.pyramid?.facts || "";
+arguments.value=data.pyramid?.arguments || "";
+message.value=data.pyramid?.message || "";
+
+}
+catch(e){
+console.error(e);
+}
+
+}
+
+};
+
+</script>
+
+</body>
+</html>

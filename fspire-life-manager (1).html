@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F-SPIRE 生活羅盤 · Life Compass (Life Manager)</title>
+<style>
+:root{
+  --navy:#0F1B2D; --slate:#1E3A5F; --amber:#F5A623; --cream:#F8F4ED; --sage:#7FB5A0;
+  --fin:#F5A623; --spi:#7FB5A0; --phy:#E07A5F; --int:#6FA8DC; --rel:#A78BBA; --emo:#E8998D;
+  --radius:14px;
+}
+:root[data-theme="dark"]{
+  --bg:var(--navy); --bg-panel:var(--slate); --bg-card:rgba(255,255,255,.05);
+  --text:var(--cream); --text-muted:#A9B7C6; --border:rgba(248,244,237,.14);
+  --input-bg:rgba(255,255,255,.06); --shadow:0 8px 24px rgba(0,0,0,.35);
+}
+:root[data-theme="light"]{
+  --bg:var(--cream); --bg-panel:#FFFFFF; --bg-card:rgba(15,27,45,.035);
+  --text:var(--navy); --text-muted:#5b6b7a; --border:rgba(15,27,45,.12);
+  --input-bg:rgba(15,27,45,.04); --shadow:0 8px 24px rgba(15,27,45,.08);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang TC","Microsoft JhengHei",sans-serif;
+  min-height:100vh; transition:background .25s ease,color .25s ease;
+}
+.app{max-width:1280px;margin:0 auto;padding:20px 24px 60px;}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand .mark{width:42px;height:42px;border-radius:50%;background:conic-gradient(var(--fin) 0 60deg,var(--spi) 60deg 120deg,var(--phy) 120deg 180deg,var(--int) 180deg 240deg,var(--rel) 240deg 300deg,var(--emo) 300deg 360deg);flex:none;}
+.brand h1{font-size:20px;margin:0;font-weight:700;letter-spacing:.3px;}
+.brand p{margin:0;font-size:12px;color:var(--text-muted);}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+button{font-family:inherit;cursor:pointer;}
+.btn{
+  background:var(--bg-card); color:var(--text); border:1px solid var(--border);
+  padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;transition:.15s;
+}
+.btn:hover{border-color:var(--amber);color:var(--amber);}
+.btn.primary{background:var(--amber);color:var(--navy);border-color:var(--amber);}
+.btn.primary:hover{filter:brightness(1.08);color:var(--navy);}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);font-size:16px;}
+input[type=file]{display:none;}
+
+nav.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+nav.tabs button{
+  background:none;border:none;color:var(--text-muted);padding:10px 16px;font-size:14px;font-weight:600;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+nav.tabs button.active{color:var(--amber);border-bottom-color:var(--amber);}
+
+.layout{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;}
+@media (max-width:860px){.layout{grid-template-columns:1fr;}}
+
+.panel{background:var(--bg-panel);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:20px;}
+.compass-panel{position:sticky;top:20px;}
+@media (max-width:860px){.compass-panel{position:static;}}
+
+.compass-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.compass-wrap svg{width:100%;max-width:300px;height:auto;}
+.wedge{cursor:pointer;opacity:.85;transition:opacity .15s, transform .15s;transform-origin:150px 150px;}
+.wedge:hover{opacity:1;}
+.wedge.active{opacity:1;filter:drop-shadow(0 0 6px rgba(245,166,35,.6));}
+.wedge-label{font-size:13px;font-weight:700;fill:var(--navy);pointer-events:none;}
+.center-btn{cursor:pointer;}
+.center-circle{fill:var(--bg-panel);stroke:var(--border);stroke-width:2;transition:.15s;}
+.center-circle:hover, .center-circle.active{stroke:var(--amber);}
+.center-text{font-size:12px;font-weight:700;fill:var(--text);pointer-events:none;}
+
+.legend{display:none;}
+.mobile-tabs{display:none;gap:8px;overflow-x:auto;padding-bottom:4px;}
+@media (max-width:860px){
+  .compass-wrap{display:none;}
+  .mobile-tabs{display:flex;}
+}
+.mtab{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 12px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);font-size:11px;color:var(--text-muted);font-weight:600;}
+.mtab.active{border-color:var(--amber);color:var(--amber);}
+.mtab .dot{width:10px;height:10px;border-radius:50%;}
+
+.score-summary{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.score-chip{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;font-size:12px;transition:.15s;}
+.score-chip b{font-size:14px;}
+.score-chip.clickable{cursor:pointer;}
+.score-chip.clickable:hover{border-color:var(--amber);background:rgba(245,166,35,.08);}
+.score-chip.clickable.active{border-color:var(--amber);box-shadow:0 0 6px rgba(245,166,35,.4);background:rgba(245,166,35,.04);}
+
+.workspace h2{margin:0 0 4px;font-size:22px;}
+.workspace .sub{color:var(--text-muted);font-size:13px;margin-bottom:20px;}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:18px;}
+.card h3{margin:0 0 12px;font-size:15px;display:flex;align-items:center;gap:8px;}
+.card h3 .cnt{margin-left:auto;font-size:11px;color:var(--text-muted);font-weight:500;background:var(--bg-panel);padding:2px 8px;border-radius:20px;}
+
+.slider-row{display:flex;align-items:center;gap:14px;}
+input[type=range]{flex:1;accent-color:var(--amber);height:6px;}
+.slider-val{font-size:20px;font-weight:800;width:34px;text-align:center;}
+
+.row-form{display:flex;gap:8px;margin-bottom:12px;}
+.row-form input[type=text], .row-form textarea{
+  flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;
+}
+textarea{resize:vertical;min-height:60px;}
+select{background:var(--input-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px;font-size:12px;font-family:inherit;}
+
+ul.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.list li{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:13px;}
+.list li .txt{flex:1;}
+.list li .txt.done{text-decoration:line-through;color:var(--text-muted);}
+.status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;}
+.status-badge.not_started{background:rgba(169,183,198,.2);color:var(--text-muted);}
+.status-badge.in_progress{background:rgba(245,166,35,.2);color:var(--amber);}
+.status-badge.done{background:rgba(127,181,160,.25);color:var(--sage);}
+.del{background:none;border:none;color:var(--text-muted);font-size:16px;padding:2px 6px;border-radius:6px;}
+.del:hover{color:#e05f5f;}
+.empty{color:var(--text-muted);font-size:12px;font-style:italic;padding:6px 0;}
+
+.journal-entry{border-bottom:1px dashed var(--border);padding:10px 0;}
+.journal-entry:last-child{border-bottom:none;}
+.journal-entry .date{font-size:11px;color:var(--text-muted);font-weight:700;display:flex;align-items:center;gap:6px;}
+.journal-entry .date .j-actions{margin-left:auto;display:flex;gap:4px;}
+.journal-entry .text{font-size:13px;margin-top:6px;line-height:1.5;cursor:text;}
+
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media (max-width:640px){.overview-grid{grid-template-columns:1fr;}}
+.radar-big svg{width:100%;height:auto;}
+.stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+.stat-card b{display:block;font-size:24px;color:var(--amber);}
+.stat-card span{font-size:11px;color:var(--text-muted);}
+
+.checkbox{width:18px;height:18px;accent-color:var(--sage);flex:none;}
+
+.help-body h2{font-size:20px;margin-top:0;}
+.help-body h3{font-size:15px;color:var(--amber);margin-top:24px;}
+.help-body p, .help-body li{font-size:14px;line-height:1.7;color:var(--text);}
+.help-body table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+.help-body td, .help-body th{border:1px solid var(--border);padding:8px 10px;text-align:left;}
+.help-body th{background:var(--bg-card);}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;color:var(--navy);}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--slate);color:var(--cream);
+  padding:10px 20px;border-radius:30px;font-size:13px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+footer.credit{text-align:center;color:var(--text-muted);font-size:11px;margin-top:30px;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;max-width:360px;width:100%;text-align:center;}
+.modal-box p{font-size:14px;margin:0 0 18px;line-height:1.6;}
+.modal-actions{display:flex;gap:10px;justify-content:center;}
+.modal-actions .btn{flex:1;justify-content:center;}
+
+.framework-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:var(--bg-panel);border:1px solid var(--border);margin-left:6px;vertical-align:middle;white-space:nowrap;}
+.m4-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:var(--bg-panel);border:1px solid var(--border);color:var(--text-muted);margin-left:8px;vertical-align:middle;}
+.center-emoji{font-size:26px;}
+/* Edit button — always clearly visible */
+.edit-icon{
+  background:rgba(245,166,35,.12);
+  border:1px solid var(--amber);
+  color:var(--amber);
+  font-size:12px;font-weight:600;
+  padding:3px 10px;border-radius:20px;cursor:pointer;
+  transition:.15s;white-space:nowrap;flex:none;
+}
+.edit-icon:hover{background:var(--amber);color:var(--navy);}
+.del{
+  background:none;border:1px solid transparent;
+  color:var(--text-muted);font-size:15px;
+  padding:3px 7px;border-radius:20px;flex:none;
+}
+.del:hover{color:#e05f5f;border-color:#e05f5f;background:rgba(224,95,95,.1);}
+/* list items wrap so buttons never clip off-screen */
+.list li{flex-wrap:wrap;row-gap:6px;}
+.list li .txt{min-width:60px;}
+.inline-edit{flex:1;min-width:120px;background:var(--input-bg);border:1px solid var(--amber);border-radius:6px;padding:5px 8px;color:var(--text);font-size:13px;font-family:inherit;outline:none;}
+.item-txt-editable{cursor:pointer;padding:2px 6px;border-radius:4px;transition:background .15s;}
+.item-txt-editable:hover{text-decoration:underline dotted;background:rgba(245,166,35,.08);}
+.edit-hint{
+  font-size:11px;
+  color:var(--text-muted);
+  margin-left:6px;
+  opacity:0.35;
+  transition:opacity 0.15s;
+  pointer-events:none;
+  display:inline-block;
+}
+.item-txt-editable:hover .edit-hint{
+  opacity:1;
+  color:var(--amber);
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <h1>F-SPIRE 生活羅盤 · Life Compass</h1>
+        <p>Financial · Spiritual · Physical · Intellectual · Relational · Emotional</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle dark/light mode">🌙</button>
+      <button class="btn" id="loadDemoBtn">✨ Demo Data</button>
+      <button class="btn" id="resetBtn">🧹 Reset / Clean</button>
+      <label class="btn" for="importFile">📥 Import JSON</label>
+      <input type="file" id="importFile" accept="application/json">
+      <button class="btn" id="exportJsonBtn">📤 Export JSON</button>
+      <button class="btn primary" id="exportMdBtn">📝 Export Markdown</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">Dashboard 儀表板</button>
+    <button class="tab-btn" data-tab="help">Help / Readme 說明</button>
+  </nav>
+
+  <section id="tab-dashboard">
+    <div class="layout">
+
+      <div class="panel compass-panel">
+        <div class="compass-wrap">
+          <svg id="compassSvg" viewBox="0 0 300 300">
+            <g id="wedgesGroup"></g>
+            <circle class="center-circle" id="centerCircle" cx="150" cy="150" r="46"></circle>
+            <text class="center-emoji" x="150" y="145" text-anchor="middle" style="pointer-events:none;">🧑</text>
+            <text class="center-text" x="150" y="163" text-anchor="middle" style="font-size:10px;font-weight:600;pointer-events:none;">總覽 Overview</text>
+          </svg>
+        </div>
+        <div class="mobile-tabs" id="mobileTabs"></div>
+        <div class="score-summary" id="scoreSummary"></div>
+      </div>
+
+      <div class="panel workspace" id="workspace"></div>
+
+    </div>
+  </section>
+
+  <section id="tab-help" style="display:none;">
+    <div class="panel help-body" id="helpBody"></div>
+  </section>
+
+  <footer class="credit">F-SPIRE Life Manager · single-file offline tool · your data stays in this browser</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <p id="modalMsg"></p>
+    <div class="modal-actions">
+      <button class="btn" id="modalCancel">Cancel</button>
+      <button class="btn primary" id="modalOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= DATA MODEL ================= */
+/* ================= SAFE STORAGE ================= */
+/* Some preview/sandboxed contexts block localStorage entirely (throws on access).
+   This wrapper falls back to an in-memory store so the app still runs there —
+   data just won't persist across reloads in that specific case. In a normal
+   browser (opening this file directly), localStorage works as usual. */
+const _memStore = {};
+const safeStorage = {
+  getItem(key){ try{ return window.localStorage.getItem(key); }catch(e){ return (key in _memStore) ? _memStore[key] : null; } },
+  setItem(key,val){ try{ window.localStorage.setItem(key,val); }catch(e){ _memStore[key] = val; } }
+};
+
+const DIMENSIONS = [
+  {
+    key:'financial',     zh:'財務', en:'Financial',     icon:'💰', varc:'--fin',
+    m4:'Money',
+    f4:'Fuel Future', f4_full:'Fuel your future.',
+    p6:'Prove Right', p6_full:'PROVE yourself right.'
+  },
+  {
+    key:'spiritual',     zh:'靈性', en:'Spiritual',     icon:'🕊️', varc:'--spi',
+    m4:null,
+    f4:'Find Purpose', f4_full:'Find your purpose.',
+    p6:'Prayer Always', p6_full:'PRAYER always - Never underestimate its power.'
+  },
+  {
+    key:'physical',      zh:'身體', en:'Physical',      icon:'💪', varc:'--phy',
+    m4:'Muscle',
+    f4:null, f4_full:null,
+    p6:'Push Yourself', p6_full:'PUSH yourself when everyone doubts you.'
+  },
+  {
+    key:'intellectual',  zh:'智識', en:'Intellectual',  icon:'📚', varc:'--int',
+    m4:'Mindset',
+    f4:'Focus Present', f4_full:'Focus on your present.',
+    p6:'Promise Self', p6_full:"PROMISE yourself you'll never give up."
+  },
+  {
+    key:'relational',    zh:'關係', en:'Relational',    icon:'🤝', varc:'--rel',
+    m4:null,
+    f4:null, f4_full:null,
+    p6:'Proud of Self', p6_full:'PROUD of who you are.'
+  },
+  {
+    key:'emotional',     zh:'情緒', en:'Emotional',     icon:'❤️', varc:'--emo',
+    m4:'Mood',
+    f4:'Forgive Past', f4_full:'Forgive your past.',
+    p6:'Pick Up Self', p6_full:'PICK yourself up when you fall down.'
+  },
+];
+const STORAGE_KEY = 'fspire_state_v1';
+const THEME_KEY = 'fspire_theme';
+
+function emptyDim(){ return { score:5, goals:[], journal:[], actions:[] }; }
+function freshState(){
+  const s = { dimensions:{}, updated: new Date().toISOString() };
+  DIMENSIONS.forEach(d=> s.dimensions[d.key] = emptyDim());
+  return s;
+}
+let state = loadState();
+let activeDim = null; // null = overview
+
+function loadState(){
+  try{
+    const raw = safeStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ console.warn('load failed', e); }
+  return freshState();
+}
+function saveState(){
+  state.updated = new Date().toISOString();
+  safeStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+/* ================= THEME ================= */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t); // :root = <html>
+  document.getElementById('themeToggle').textContent = t === 'dark' ? '🌙' : '☀️';
+  safeStorage.setItem(THEME_KEY, t);
+}
+applyTheme(safeStorage.getItem(THEME_KEY) || 'dark');
+document.getElementById('themeToggle').onclick = ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+};
+
+/* ================= TOAST ================= */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+/* ================= CUSTOM CONFIRM MODAL ================= */
+function confirmDialog(message, onConfirm){
+  // Try custom modal first, fall back to native confirm()
+  try {
+    const overlay = document.getElementById('modalOverlay');
+    const msgEl = document.getElementById('modalMsg');
+    const ok = document.getElementById('modalOk');
+    const cancel = document.getElementById('modalCancel');
+    if(!overlay || !msgEl || !ok || !cancel){
+      // DOM elements missing — fall back to native confirm
+      if(confirm(message)) onConfirm();
+      return;
+    }
+    msgEl.textContent = message;
+    overlay.classList.add('show');
+    function cleanup(){
+      overlay.classList.remove('show');
+      ok.onclick=null; cancel.onclick=null; overlay.onclick=null;
+    }
+    ok.onclick = ()=>{ cleanup(); onConfirm(); };
+    cancel.onclick = ()=>{ cleanup(); };
+    overlay.onclick = (e)=>{ if(e.target === overlay) cleanup(); };
+  } catch(e) {
+    // If anything goes wrong, native confirm as last resort
+    console.warn('confirmDialog fallback:', e);
+    if(confirm(message)) onConfirm();
+  }
+}
+
+/* ================= COMPASS SVG ================= */
+const WEDGE_PATHS = [
+  "M150,150 L150,30 A120,120 0 0,1 253.92,90 Z",
+  "M150,150 L253.92,90 A120,120 0 0,1 253.92,210 Z",
+  "M150,150 L253.92,210 A120,120 0 0,1 150,270 Z",
+  "M150,150 L150,270 A120,120 0 0,1 46.08,210 Z",
+  "M150,150 L46.08,210 A120,120 0 0,1 46.08,90 Z",
+  "M150,150 L46.08,90 A120,120 0 0,1 150,30 Z",
+];
+const WEDGE_LABEL_POS = [
+  [150,66],[214,110],[214,190],[150,234],[86,190],[86,110]
+];
+function buildCompass(){
+  const g = document.getElementById('wedgesGroup');
+  g.innerHTML = '';
+  DIMENSIONS.forEach((d,i)=>{
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', WEDGE_PATHS[i]);
+    path.setAttribute('class','wedge');
+    path.style.fill = `var(${d.varc})`;
+    path.dataset.key = d.key;
+    path.addEventListener('click', ()=> selectDim(d.key));
+    g.appendChild(path);
+
+    const [lx,ly] = WEDGE_LABEL_POS[i];
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', lx); txt.setAttribute('y', ly);
+    txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('class','wedge-label');
+    txt.textContent = d.icon + ' ' + d.zh;
+    txt.style.pointerEvents = 'none';
+    g.appendChild(txt);
+  });
+  document.getElementById('centerCircle').addEventListener('click', ()=> selectDim(null));
+}
+function buildMobileTabs(){
+  const wrap = document.getElementById('mobileTabs');
+  wrap.innerHTML = '';
+  const ov = document.createElement('div');
+  ov.className = 'mtab'; ov.dataset.key='';
+  ov.innerHTML = `<span class="dot" style="background:var(--amber)"></span><span>總覽</span>`;
+  ov.onclick = ()=> selectDim(null);
+  wrap.appendChild(ov);
+  DIMENSIONS.forEach(d=>{
+    const el = document.createElement('div');
+    el.className='mtab'; el.dataset.key=d.key;
+    el.innerHTML = `<span class="dot" style="background:var(${d.varc})"></span><span>${d.icon}</span>`;
+    el.onclick = ()=> selectDim(d.key);
+    wrap.appendChild(el);
+  });
+}
+function highlightCompass(){
+  document.querySelectorAll('.wedge').forEach(w=> w.classList.toggle('active', w.dataset.key === activeDim));
+  document.getElementById('centerCircle').classList.toggle('active', activeDim === null);
+  document.querySelectorAll('.mtab').forEach(t=> t.classList.toggle('active', (t.dataset.key||null) === (activeDim||null) ));
+  document.querySelectorAll('.score-chip').forEach(c=> c.classList.toggle('active', c.dataset.navDim === activeDim));
+}
+
+/* ================= RADAR ================= */
+function radarPoints(scores, cx, cy, maxR){
+  return scores.map((s,i)=>{
+    const angle = (-90 + i*60) * Math.PI/180;
+    const r = (s/10) * maxR;
+    return [cx + r*Math.cos(angle), cy + r*Math.sin(angle)];
+  });
+}
+function buildRadarSVG(size, scores){
+  const cx=size/2, cy=size/2, maxR=size*0.38;
+  const rings = [0.25,0.5,0.75,1];
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+  rings.forEach(r=>{
+    const pts = radarPoints([10,10,10,10,10,10], cx, cy, maxR*r).map(p=>p.join(',')).join(' ');
+    svg += `<polygon points="${pts}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+  });
+  for(let i=0;i<6;i++){
+    const angle=(-90+i*60)*Math.PI/180;
+    const x2=cx+maxR*Math.cos(angle), y2=cy+maxR*Math.sin(angle);
+    svg += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="var(--border)" stroke-width="1"/>`;
+  }
+  const pts = radarPoints(scores, cx, cy, maxR).map(p=>p.join(',')).join(' ');
+  svg += `<polygon points="${pts}" fill="var(--amber)" fill-opacity="0.28" stroke="var(--amber)" stroke-width="2"/>`;
+  radarPoints(scores,cx,cy,maxR).forEach((p,i)=>{
+    svg += `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(${DIMENSIONS[i].varc})" stroke="var(--bg-panel)" stroke-width="1.5"/>`;
+  });
+  DIMENSIONS.forEach((d,i)=>{
+    const angle=(-90+i*60)*Math.PI/180;
+    const lx=cx+(maxR+18)*Math.cos(angle), ly=cy+(maxR+18)*Math.sin(angle);
+    svg += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text-muted)">${d.icon}</text>`;
+  });
+  svg += `</svg>`;
+  return svg;
+}
+
+/* ================= RENDER: SCORE SUMMARY ================= */
+function renderScoreSummary(){
+  const el = document.getElementById('scoreSummary');
+  el.innerHTML = DIMENSIONS.map(d=>{
+    const s = state.dimensions[d.key].score;
+    const activeClass = activeDim === d.key ? 'active' : '';
+    return `<div class="score-chip clickable ${activeClass}" data-nav-dim="${d.key}" title="Click to edit ${d.zh} / ${d.en}"><span>${d.icon} ${d.zh}</span><b style="color:var(${d.varc})">${s}</b></div>`;
+  }).join('');
+  el.querySelectorAll('[data-nav-dim]').forEach(chip=>{
+    chip.onclick = ()=> selectDim(chip.dataset.navDim);
+  });
+}
+
+/* ================= RENDER: WORKSPACE ================= */
+function statusLabel(s){ return {not_started:'未開始', in_progress:'進行中', done:'完成 ✓'}[s]; }
+
+function renderWorkspace(){
+  const ws = document.getElementById('workspace');
+  if(activeDim === null){ renderOverview(ws); return; }
+  const d = DIMENSIONS.find(x=>x.key===activeDim);
+  const dim = state.dimensions[d.key];
+  const badges = [];
+  if(d.m4) badges.push(`<span class="framework-badge" style="border-color:var(--amber);color:var(--amber);" title="4M Framework: ${d.m4}">4M: ${d.m4}</span>`);
+  if(d.f4) badges.push(`<span class="framework-badge" style="border-color:var(--sage);color:var(--sage);" title="4F Framework: ${d.f4_full}">4F: ${d.f4}</span>`);
+  if(d.p6) badges.push(`<span class="framework-badge" style="border-color:var(--int);color:var(--int);" title="6P Framework: ${d.p6_full}">6P: ${d.p6}</span>`);
+  const badgesHtml = badges.join('');
+
+  ws.innerHTML = `
+    <h2 style="color:var(${d.varc})">${d.icon} ${d.zh} · ${d.en}${badgesHtml}</h2>
+    <p class="sub">Track goals, reflections, and action items for this life dimension.</p>
+
+    <div class="card">
+      <h3>🎯 Self-Rating 自我評分 <span class="cnt">1–10</span></h3>
+      <div class="slider-row">
+        <input type="range" min="1" max="10" step="1" id="scoreSlider" value="${dim.score}">
+        <div class="slider-val" style="color:var(${d.varc})" id="scoreVal">${dim.score}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>✅ Goals 目標 <span class="cnt" id="goalsCnt">${dim.goals.length}</span></h3>
+      <div class="row-form">
+        <input type="text" id="goalInput" placeholder="Add a goal... 新增目標">
+        <select id="goalStatusInput">
+          <option value="not_started">Not Started</option>
+          <option value="in_progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+        <button class="btn primary" id="addGoalBtn">Add</button>
+      </div>
+      <ul class="list" id="goalsList"></ul>
+    </div>
+
+    <div class="card">
+      <h3>📖 Reflection Journal 反思日誌 <span class="cnt" id="journalCnt">${dim.journal.length}</span></h3>
+      <div class="row-form">
+        <textarea id="journalInput" placeholder="Write a reflection... 寫下你的反思"></textarea>
+      </div>
+      <button class="btn primary" id="addJournalBtn" style="margin-bottom:12px;">Add Entry</button>
+      <div id="journalList"></div>
+    </div>
+
+    <div class="card">
+      <h3>📋 Action Items 行動項目 <span class="cnt" id="actionsCnt">${dim.actions.length}</span></h3>
+      <div class="row-form">
+        <input type="text" id="actionInput" placeholder="Add an action item... 新增行動項目">
+        <button class="btn primary" id="addActionBtn">Add</button>
+      </div>
+      <ul class="list" id="actionsList"></ul>
+    </div>
+  `;
+
+  document.getElementById('scoreSlider').oninput = (e)=>{
+    dim.score = parseInt(e.target.value);
+    document.getElementById('scoreVal').textContent = dim.score;
+    document.getElementById('scoreVal').style.color = `var(${d.varc})`;
+    saveState(); renderScoreSummary();
+  };
+
+  document.getElementById('addGoalBtn').onclick = ()=>{
+    const inp = document.getElementById('goalInput');
+    const stt = document.getElementById('goalStatusInput');
+    if(!inp.value.trim()) return;
+    dim.goals.unshift({id:uid(), text:inp.value.trim(), status:stt.value});
+    inp.value=''; saveState(); renderWorkspace(); toast('Goal added');
+  };
+  document.getElementById('actionInput') && (document.getElementById('actionInput').onkeydown = (e)=>{ if(e.key==='Enter') document.getElementById('addActionBtn').click(); });
+  document.getElementById('goalInput').onkeydown = (e)=>{ if(e.key==='Enter') document.getElementById('addGoalBtn').click(); };
+
+  document.getElementById('addJournalBtn').onclick = ()=>{
+    const inp = document.getElementById('journalInput');
+    if(!inp.value.trim()) return;
+    dim.journal.unshift({id:uid(), date:new Date().toISOString().slice(0,10), text:inp.value.trim()});
+    inp.value=''; saveState(); renderWorkspace(); toast('Journal entry added');
+  };
+
+  document.getElementById('addActionBtn').onclick = ()=>{
+    const inp = document.getElementById('actionInput');
+    if(!inp.value.trim()) return;
+    dim.actions.unshift({id:uid(), text:inp.value.trim(), done:false});
+    inp.value=''; saveState(); renderWorkspace(); toast('Action item added');
+  };
+
+  const goalsList = document.getElementById('goalsList');
+  goalsList.innerHTML = dim.goals.length ? dim.goals.map(g=>`
+    <li data-row-goal="${g.id}">
+      <span class="txt item-txt-editable ${g.status==='done'?'done':''}" data-view-goal="${g.id}" title="Click to edit">${escapeHtml(g.text)}<span class="edit-hint">✎</span></span>
+      <span class="status-badge ${g.status}" data-cycle="${g.id}" style="cursor:pointer;" title="Click to cycle status">${statusLabel(g.status)}</span>
+      <button class="edit-icon" data-edit-goal="${g.id}">✏️ Edit</button>
+      <button class="del" data-del-goal="${g.id}" title="Delete">✕</button>
+    </li>`).join('') : `<li class="empty" style="border:none;background:none;">No goals yet. Add one above.</li>`;
+  goalsList.querySelectorAll('[data-del-goal]').forEach(b=> b.onclick = ()=>{
+    dim.goals = dim.goals.filter(g=>g.id!==b.dataset.delGoal); saveState(); renderWorkspace();
+  });
+  goalsList.querySelectorAll('[data-cycle]').forEach(b=> b.onclick = ()=>{
+    const order = ['not_started','in_progress','done'];
+    const g = dim.goals.find(x=>x.id===b.dataset.cycle);
+    g.status = order[(order.indexOf(g.status)+1)%order.length];
+    saveState(); renderWorkspace();
+  });
+  function startGoalEdit(g, span){
+    const input = document.createElement('input');
+    input.type='text'; input.className='inline-edit'; input.value = g.text;
+    span.replaceWith(input); input.focus(); input.select();
+    let committed = false;
+    const commit = ()=>{ if(committed) return; committed = true; if(input.value.trim()){ g.text = input.value.trim(); saveState(); } renderWorkspace(); };
+    input.onblur = commit;
+    input.onkeydown = (e)=>{ if(e.key==='Enter') commit(); if(e.key==='Escape'){ committed=true; renderWorkspace(); } };
+    // prevent del/edit button mousedown from causing a blur before commit runs
+    goalsList.querySelectorAll('[data-del-goal],[data-edit-goal]').forEach(b=> b.onmousedown=(e)=>e.preventDefault());
+  }
+  goalsList.querySelectorAll('[data-edit-goal]').forEach(b=> b.onclick = ()=>{
+    const g = dim.goals.find(x=>x.id===b.dataset.editGoal);
+    const span = goalsList.querySelector(`[data-view-goal="${g.id}"]`);
+    if(span) startGoalEdit(g, span);
+  });
+  goalsList.querySelectorAll('[data-view-goal]').forEach(span=> span.onclick = ()=>{
+    const g = dim.goals.find(x=>x.id===span.dataset.viewGoal);
+    if(g) startGoalEdit(g, span);
+  });
+
+  const journalList = document.getElementById('journalList');
+  journalList.innerHTML = dim.journal.length ? dim.journal.map(j=>`
+    <div class="journal-entry" data-row-j="${j.id}">
+      <div class="date">
+        <span>${j.date}</span>
+        <div class="j-actions">
+          <button class="edit-icon" data-edit-j="${j.id}">✏️ Edit</button>
+          <button class="del" data-del-j="${j.id}" title="Delete entry">✕</button>
+        </div>
+      </div>
+      <div class="text item-txt-editable" data-view-j="${j.id}" title="Click to edit">${escapeHtml(j.text)}<span class="edit-hint">✎</span></div>
+    </div>`).join('') : `<div class="empty">No reflections yet.</div>`;
+  journalList.querySelectorAll('[data-del-j]').forEach(b=> b.onclick = ()=>{
+    dim.journal = dim.journal.filter(j=>j.id!==b.dataset.delJ); saveState(); renderWorkspace();
+  });
+  function startJournalEdit(j, div){
+    const ta = document.createElement('textarea');
+    ta.className='inline-edit'; ta.style.width='100%'; ta.style.minHeight='80px'; ta.value = j.text;
+    div.replaceWith(ta); ta.focus();
+    let committed = false;
+    const commit = ()=>{ if(committed) return; committed = true; if(ta.value.trim()){ j.text = ta.value.trim(); saveState(); } renderWorkspace(); };
+    ta.onblur = commit;
+    ta.onkeydown = (e)=>{ if(e.key==='Escape'){ committed=true; renderWorkspace(); } };
+    // prevent action buttons mousedown from firing blur
+    journalList.querySelectorAll('[data-del-j],[data-edit-j]').forEach(b=> b.onmousedown=(e)=>e.preventDefault());
+  }
+  journalList.querySelectorAll('[data-edit-j]').forEach(b=> b.onclick = ()=>{
+    const j = dim.journal.find(x=>x.id===b.dataset.editJ);
+    const div = journalList.querySelector(`[data-view-j="${j.id}"]`);
+    if(div) startJournalEdit(j, div);
+  });
+  journalList.querySelectorAll('[data-view-j]').forEach(div=> div.onclick = ()=>{
+    const j = dim.journal.find(x=>x.id===div.dataset.viewJ);
+    if(j) startJournalEdit(j, div);
+  });
+
+  const actionsList = document.getElementById('actionsList');
+  actionsList.innerHTML = dim.actions.length ? dim.actions.map(a=>`
+    <li data-row-a="${a.id}">
+      <input type="checkbox" class="checkbox" data-toggle-a="${a.id}" ${a.done?'checked':''}>
+      <span class="txt item-txt-editable ${a.done?'done':''}" data-view-a="${a.id}" title="Click to edit">${escapeHtml(a.text)}<span class="edit-hint">✎</span></span>
+      <button class="edit-icon" data-edit-a="${a.id}">✏️ Edit</button>
+      <button class="del" data-del-a="${a.id}" title="Delete">✕</button>
+    </li>`).join('') : `<li class="empty" style="border:none;background:none;">No action items yet.</li>`;
+  actionsList.querySelectorAll('[data-toggle-a]').forEach(b=> b.onchange = ()=>{
+    const a = dim.actions.find(x=>x.id===b.dataset.toggleA); a.done = b.checked; saveState(); renderWorkspace();
+  });
+  actionsList.querySelectorAll('[data-del-a]').forEach(b=> b.onclick = ()=>{
+    dim.actions = dim.actions.filter(a=>a.id!==b.dataset.delA); saveState(); renderWorkspace();
+  });
+  function startActionEdit(a, span){
+    const input = document.createElement('input');
+    input.type='text'; input.className='inline-edit'; input.value = a.text;
+    span.replaceWith(input); input.focus(); input.select();
+    let committed = false;
+    const commit = ()=>{ if(committed) return; committed = true; if(input.value.trim()){ a.text = input.value.trim(); saveState(); } renderWorkspace(); };
+    input.onblur = commit;
+    input.onkeydown = (e)=>{ if(e.key==='Enter') commit(); if(e.key==='Escape'){ committed=true; renderWorkspace(); } };
+    // prevent action buttons mousedown from firing blur
+    actionsList.querySelectorAll('[data-del-a],[data-edit-a]').forEach(b=> b.onmousedown=(e)=>e.preventDefault());
+  }
+  actionsList.querySelectorAll('[data-edit-a]').forEach(b=> b.onclick = ()=>{
+    const a = dim.actions.find(x=>x.id===b.dataset.editA);
+    const span = actionsList.querySelector(`[data-view-a="${a.id}"]`);
+    if(span) startActionEdit(a, span);
+  });
+  actionsList.querySelectorAll('[data-view-a]').forEach(span=> span.onclick = ()=>{
+    const a = dim.actions.find(x=>x.id===span.dataset.viewA);
+    if(a) startActionEdit(a, span);
+  });
+}
+
+function renderOverview(ws){
+  const scores = DIMENSIONS.map(d=> state.dimensions[d.key].score);
+  const totalGoals = DIMENSIONS.reduce((n,d)=> n + state.dimensions[d.key].goals.length, 0);
+  const doneGoals = DIMENSIONS.reduce((n,d)=> n + state.dimensions[d.key].goals.filter(g=>g.status==='done').length, 0);
+  const totalActions = DIMENSIONS.reduce((n,d)=> n + state.dimensions[d.key].actions.length, 0);
+  const doneActions = DIMENSIONS.reduce((n,d)=> n + state.dimensions[d.key].actions.filter(a=>a.done).length, 0);
+  const avg = (scores.reduce((a,b)=>a+b,0)/6).toFixed(1);
+
+  ws.innerHTML = `
+    <h2>🧭 Overview 總覽</h2>
+    <p class="sub">Your balance across all six F-SPIRE dimensions. Click a wedge on the compass to dive into that area.</p>
+    <div class="overview-grid">
+      <div class="card radar-big">${buildRadarSVG(280, scores)}</div>
+      <div>
+        <div class="stat-cards">
+          <div class="stat-card"><b>${avg}</b><span>Average Score</span></div>
+          <div class="stat-card"><b>${doneGoals}/${totalGoals}</b><span>Goals Completed</span></div>
+          <div class="stat-card"><b>${doneActions}/${totalActions}</b><span>Actions Done</span></div>
+          <div class="stat-card"><b>${new Date(state.updated).toLocaleDateString()}</b><span>Last Updated</span></div>
+        </div>
+        <div class="card" style="margin-top:14px;">
+          <h3>Dimension Scores</h3>
+          <ul class="list">
+            ${DIMENSIONS.map(d=>`<li style="cursor:pointer;" data-nav-dim="${d.key}" title="Click to edit score"><span class="txt">${d.icon} ${d.zh} · ${d.en}</span><b style="color:var(${d.varc})">${state.dimensions[d.key].score}/10</b></li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+  `;
+  // Make overview dimension rows clickable to navigate to that dimension
+  ws.querySelectorAll('[data-nav-dim]').forEach(li=>{
+    li.onmouseenter = ()=> li.style.borderColor = 'var(--amber)';
+    li.onmouseleave = ()=> li.style.borderColor = '';
+    li.onclick = ()=> selectDim(li.dataset.navDim);
+  });
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function selectDim(key){
+  activeDim = key;
+  highlightCompass();
+  renderWorkspace();
+}
+
+/* ================= TABS ================= */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-dashboard').style.display = btn.dataset.tab==='dashboard' ? '' : 'none';
+    document.getElementById('tab-help').style.display = btn.dataset.tab==='help' ? '' : 'none';
+  };
+});
+
+/* ================= DEMO DATA ================= */
+function loadDemoData(){
+  state = freshState();
+  state.dimensions.financial = { score:6, goals:[
+    {id:uid(),text:'Build 6-month emergency fund',status:'in_progress'},
+    {id:uid(),text:'Review investment portfolio quarterly',status:'not_started'},
+    {id:uid(),text:'Pay off credit card balance',status:'done'},
+  ], journal:[{id:uid(),date:'2026-07-01',text:'Reviewed monthly budget — spending on dining out is creeping up. Need to reset the grocery habit.'}],
+  actions:[{id:uid(),text:'Set up automatic transfer to savings',done:true},{id:uid(),text:'Cancel unused subscriptions',done:false}]};
+
+  state.dimensions.spiritual = { score:7, goals:[
+    {id:uid(),text:'Daily 10-minute meditation',status:'in_progress'},
+    {id:uid(),text:'Read one contemplative book this quarter',status:'not_started'},
+  ], journal:[{id:uid(),date:'2026-06-28',text:'Sat with silence this morning. Noticed how much calmer decisions feel after even a short practice.'}],
+  actions:[{id:uid(),text:'Find a quiet corner at home for practice',done:true}]};
+
+  state.dimensions.physical = { score:5, goals:[
+    {id:uid(),text:'Walk 8,000 steps daily',status:'in_progress'},
+    {id:uid(),text:'Sleep 7+ hours consistently',status:'not_started'},
+    {id:uid(),text:'Annual health checkup',status:'done'},
+  ], journal:[{id:uid(),date:'2026-06-30',text:'Energy dipped this week — likely tied to poor sleep. Trying an earlier wind-down routine.'}],
+  actions:[{id:uid(),text:'Book dentist appointment',done:false},{id:uid(),text:'Meal-prep on Sundays',done:true}]};
+
+  state.dimensions.intellectual = { score:8, goals:[
+    {id:uid(),text:'Finish IASSC ICBB certification prep',status:'in_progress'},
+    {id:uid(),text:'Learn basic Taigi romanization (Tâi-lô)',status:'in_progress'},
+  ], journal:[{id:uid(),date:'2026-07-03',text:'Worked through the Analyze phase practice questions — root cause tools are finally clicking.'}],
+  actions:[{id:uid(),text:'Schedule mock exam this weekend',done:false}]};
+
+  state.dimensions.relational = { score:6, goals:[
+    {id:uid(),text:'Weekly call with parents',status:'in_progress'},
+    {id:uid(),text:'Plan a trip with old college friends',status:'not_started'},
+  ], journal:[{id:uid(),date:'2026-06-25',text:'Good long dinner with friends — realized I default to talking about work too much. Want to ask more, share less.'}],
+  actions:[{id:uid(),text:'Send birthday message to Wei',done:true}]};
+
+  state.dimensions.emotional = { score:5, goals:[
+    {id:uid(),text:'Journal three times a week',status:'in_progress'},
+    {id:uid(),text:'Practice naming emotions before reacting',status:'not_started'},
+  ], journal:[{id:uid(),date:'2026-07-02',text:'Felt frustrated in a meeting today and caught myself before snapping. Small win.'}],
+  actions:[{id:uid(),text:'Try a breathing exercise before stressful calls',done:false}]};
+
+  saveState();
+  selectDim(null);
+  renderScoreSummary();
+  toast('Demo data loaded');
+}
+document.getElementById('loadDemoBtn').onclick = function(e){
+  e.preventDefault(); e.stopPropagation();
+  confirmDialog('Load demo data? This will overwrite your current data.', loadDemoData);
+};
+
+document.getElementById('resetBtn').onclick = function(e){
+  e.preventDefault(); e.stopPropagation();
+  confirmDialog('Reset all data to a clean, empty state? This cannot be undone.', function(){
+    state = freshState();
+    saveState();
+    activeDim = null;
+    selectDim(null);
+    renderScoreSummary();
+    toast('All data cleared — fresh start');
+  });
+};
+
+/* ================= EXPORT / IMPORT ================= */
+function downloadFile(filename, content, mime){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('exportJsonBtn').onclick = ()=>{
+  downloadFile(`fspire-data-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(state, null, 2), 'application/json');
+  toast('JSON exported');
+};
+
+document.getElementById('importFile').onchange = (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      const parsed = JSON.parse(ev.target.result);
+      if(!parsed.dimensions) throw new Error('Invalid file format');
+      DIMENSIONS.forEach(d=>{ if(!parsed.dimensions[d.key]) parsed.dimensions[d.key] = emptyDim(); });
+      state = parsed;
+      saveState(); selectDim(null); renderScoreSummary();
+      toast('JSON imported successfully');
+    }catch(err){
+      toast('Import failed: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+};
+
+function toMarkdown(){
+  let md = `# F-SPIRE Life Report\n\n_Generated ${new Date().toLocaleString()}_\n\n`;
+  const scores = DIMENSIONS.map(d=>state.dimensions[d.key].score);
+  const avg = (scores.reduce((a,b)=>a+b,0)/6).toFixed(1);
+  md += `**Average Score:** ${avg}/10\n\n`;
+  md += `| Dimension | Score |\n|---|---|\n`;
+  DIMENSIONS.forEach(d=> md += `| ${d.icon} ${d.zh} / ${d.en} | ${state.dimensions[d.key].score}/10 |\n`);
+  md += `\n---\n`;
+  DIMENSIONS.forEach(d=>{
+    const dim = state.dimensions[d.key];
+    const tags = [];
+    if(d.m4) tags.push(`4M: ${d.m4}`);
+    if(d.f4) tags.push(`4F: ${d.f4_full}`);
+    if(d.p6) tags.push(`6P: ${d.p6_full}`);
+    const tagsStr = tags.length ? ` [${tags.join(' | ')}]` : '';
+    md += `\n## ${d.icon} ${d.zh} · ${d.en}${tagsStr}  (Score: ${dim.score}/10)\n\n`;
+    md += `### Goals\n`;
+    md += dim.goals.length ? dim.goals.map(g=>`- [${g.status==='done'?'x':' '}] ${g.text} _(${statusLabel(g.status)})_`).join('\n') + '\n' : '_No goals recorded._\n';
+    md += `\n### Reflection Journal\n`;
+    md += dim.journal.length ? dim.journal.map(j=>`- **${j.date}:** ${j.text}`).join('\n') + '\n' : '_No journal entries._\n';
+    md += `\n### Action Items\n`;
+    md += dim.actions.length ? dim.actions.map(a=>`- [${a.done?'x':' '}] ${a.text}`).join('\n') + '\n' : '_No action items._\n';
+  });
+  return md;
+}
+document.getElementById('exportMdBtn').onclick = ()=>{
+  downloadFile(`fspire-report-${new Date().toISOString().slice(0,10)}.md`, toMarkdown(), 'text/markdown');
+  toast('Markdown exported');
+};
+
+/* ================= HELP CONTENT ================= */
+document.getElementById('helpBody').innerHTML = `
+  <h2>📘 F-SPIRE 生活羅盤使用說明 · Life Compass (How to Use)</h2>
+  <p>F-SPIRE is a whole-life balance framework covering six dimensions. This tool helps you rate, plan, and reflect across each one — entirely offline, in a single HTML file.</p>
+
+  <h3>What does F-SPIRE stand for?</h3>
+  <table>
+    <tr><th>Letter</th><th>Dimension</th><th>中文</th><th>Focus</th></tr>
+    <tr><td><span class="tag" style="background:var(--fin)">F</span></td><td>Financial</td><td>財務</td><td>Money, budgeting, savings, investments</td></tr>
+    <tr><td><span class="tag" style="background:var(--spi)">S</span></td><td>Spiritual</td><td>靈性</td><td>Meaning, values, practice, inner life</td></tr>
+    <tr><td><span class="tag" style="background:var(--phy)">P</span></td><td>Physical</td><td>身體</td><td>Health, fitness, sleep, nutrition</td></tr>
+    <tr><td><span class="tag" style="background:var(--int)">I</span></td><td>Intellectual</td><td>智識</td><td>Learning, skills, curiosity</td></tr>
+    <tr><td><span class="tag" style="background:var(--rel)">R</span></td><td>Relational</td><td>關係</td><td>Family, friends, community</td></tr>
+    <tr><td><span class="tag" style="background:var(--emo)">E</span></td><td>Emotional</td><td>情緒</td><td>Self-awareness, regulation, resilience</td></tr>
+  </table>
+
+  <h3>The Compass & Navigation</h3>
+  <p>The circular compass on the left is your navigation hub. Click any colored wedge or <b>the score summary chips underneath</b> to open that dimension's workspace. Click the center circle to return to the <b>Overview</b> (radar chart). On mobile, use the horizontal tabs above the workspace.</p>
+
+  <h3>Each Dimension Workspace (Editing Content)</h3>
+  <ul>
+    <li><b>Self-Rating (1–10):</b> a quick gut-check score, visualized instantly on the radar chart.</li>
+    <li><b>Quick Inline Editing:</b> You can <b>single-click</b> on any goal, journal entry, or action item text (denoted by a <i>✎</i> pencil icon on hover) to rename/edit it. Alternatively, click the <b>✏️ Edit</b> button next to the item.</li>
+    <li><b>Goals:</b> click the status badge to cycle it (Not Started → In Progress → Done), click text/✏️ to edit, ✕ to delete.</li>
+    <li><b>Reflection Journal:</b> date-stamped notes. Click text/✏️ to edit, ✕ to delete.</li>
+    <li><b>Action Items:</b> simple checklist — tick the checkbox to cross it off, click text/✏️ to edit, ✕ to delete.</li>
+  </ul>
+
+  <h3>Framework Mapping (F-SPIRE vs. 4M vs. 4F vs. 6P)</h3>
+  <p>F-SPIRE integrates and maps directly to the <b>4M</b>, <b>4F of Life</b>, and <b>6P of Life</b> models. You can view your life dimensions through whichever lens fits your mindset, with badges highlighting matches in each workspace:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>F-SPIRE Dimension</th>
+        <th>中文 (ZH)</th>
+        <th>4M Framework</th>
+        <th>4F Framework (4F of Life)</th>
+        <th>6P Framework (6P of Life)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Financial</b></td>
+        <td>財務</td>
+        <td>💰 Money (金錢)</td>
+        <td>💵 <b>Fuel</b> your future (資助未來)</td>
+        <td>🪙 <b>PROVE</b> yourself right (證明自己)</td>
+      </tr>
+      <tr>
+        <td><b>Spiritual</b></td>
+        <td>靈性</td>
+        <td>-</td>
+        <td>🕊️ <b>Find</b> your purpose (尋找目的)</td>
+        <td>🎯 <b>PRAYER</b> always (恆常祈禱)</td>
+      </tr>
+      <tr>
+        <td><b>Physical</b></td>
+        <td>身體</td>
+        <td>💪 Muscle (肌肉)</td>
+        <td>-</td>
+        <td>🩺 <b>PUSH</b> yourself when everyone doubts you (在質疑中突破)</td>
+      </tr>
+      <tr>
+        <td><b>Intellectual</b></td>
+        <td>智識</td>
+        <td>📚 Mindset (心態)</td>
+        <td>🧠 <b>Focus</b> on your present (專注當下)</td>
+        <td>🧠 <b>PROMISE</b> yourself you'll never give up (承諾永不放棄)</td>
+      </tr>
+      <tr>
+        <td><b>Relational</b></td>
+        <td>關係</td>
+        <td>-</td>
+        <td>-</td>
+        <td>👥 <b>PROUD</b> of who you are (自豪自我)</td>
+      </tr>
+      <tr>
+        <td><b>Emotional</b></td>
+        <td>情緒</td>
+        <td>❤️ Mood (心情)</td>
+        <td>🌹 <b>Forgive</b> your past (原諒過去)</td>
+        <td>🧘 <b>PICK</b> yourself up when you fall down (跌倒時重新站起)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><i>Note: The 4M and 4F models leave some dimensions blank because they are 4-part models, whereas F-SPIRE and 6P provide full 6-dimensional coverage.</i></p>
+
+  <h3>Demo Data & Reset</h3>
+  <p>Click <b>✨ Demo Data</b> in the top bar to populate the tool with example goals, journal entries, and action items across all six dimensions — useful for exploring the layout before entering your own data. Click <b>🧹 Reset / Clean</b> to wipe everything and start from a blank slate. Both actions ask for confirmation in an on-screen dialog first, and both overwrite your current data, so export a backup beforehand if you want to keep it.</p>
+
+  <h3>Saving & Exporting</h3>
+  <ul>
+    <li>Your data auto-saves to this browser's local storage — closing the tab won't lose your work, but clearing browser data will.</li>
+    <li><b>📤 Export JSON:</b> full backup of all your data, importable back into this tool later or on another device.</li>
+    <li><b>📥 Import JSON:</b> load a previously exported JSON file (overwrites current data).</li>
+    <li><b>📝 Export Markdown:</b> generates a readable report of all scores, goals, journal entries, and action items — great for sharing or archiving.</li>
+  </ul>
+
+  <h3>Dark / Light Mode</h3>
+  <p>Toggle with the 🌙 / ☀️ button top-right. Your preference is remembered on this device.</p>
+
+  <h3>Privacy</h3>
+  <p>Everything runs locally in your browser. No data is sent anywhere — this is a single, self-contained HTML file you can save, move, or open offline.</p>
+`;
+
+/* ================= INIT ================= */
+buildCompass();
+buildMobileTabs();
+renderScoreSummary();
+selectDim(null);
+</script>
+</body>
+</html>
