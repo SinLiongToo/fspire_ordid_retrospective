@@ -1,12 +1,12 @@
 # 🧭 ORID 焦點討論與決策羅盤 (ORID Mindset & Decision Compass)
 
-一個將「感性反思 (ORID)」、「理性收斂 (Pyramid/MECE)」與「敏捷執行 (PDCA)」無縫整合的單檔案 Web 工具，旨在協助使用者在日常生活中進行多維度的平衡管理與嚴謹的決策推演。
+一個將「感性反思 (ORID)」、「邏輯論證 (Pyramid/MECE)」、「敏捷執行 (PDCA)」與「目標設定 (SMART)」無縫整合的單檔案 Web 工具，旨在協助使用者在日常生活中進行多維度的平衡管理與嚴謹的決策推演。
 
 ---
 
 ## 🗺️ 羅盤思考與行動決策流程 (Workflow)
 
-以下是本工具的完整運作流程。它整合了反射性思維、邏輯架構與持續改進的執行循環：
+以下是本工具的完整運作流程。它整合了反射性思維、邏輯架構、執行循環與目標檢核：
 
 ```mermaid
 flowchart TD
@@ -27,16 +27,17 @@ flowchart TD
     D --> ModeSplit{模式分流}
     
     ModeSplit --> |生活平衡| Step3Life[3. 今日生活自評<br>1 - 5 分 based on FSPIRE domain]
-    ModeSplit --> |思維決策| Step3Dec[3. 金字塔與 PDCA 整合]
+    ModeSplit --> |思維決策| Step3Dec[3. 邏輯、計畫與目標整合]
     
     subgraph Decision_Synthesis [決策收斂與計畫]
         Step3Dec --> MECE[金字塔原理 & MECE<br>結論先行與論點自我檢視]
         Step3Dec --> PDCA[PDCA 執行計畫<br>Plan -> Do -> Check -> Act]
+        Step3Dec --> SMART[SMART 目標設定<br>Specific, Measurable, Achievable...]
     end
     
     Step3Life --> Step4Life[4. 總覽儀表板 & 雷達圖<br>動態追蹤六大面向]
     
-    MECE & PDCA --> Step4Dec[4. 決策品質自評<br>清晰度、證據力、洞察度、行動力]
+    MECE & PDCA & SMART --> Step4Dec[4. 決策品質自評<br>清晰度、證據力、洞察度、行動力]
     
     Step4Life & Step4Dec --> Step5[5. 儲存與匯出報告]
     Step5 --> Export[匯出精美 Markdown / JSON 備份]
@@ -70,11 +71,14 @@ flowchart TD
 ### 4. PDCA 執行計畫與 D 連結
 將 ORID 的 **D（決定行動）** 進一步細化為 Plan (計畫) ➔ Do (執行) ➔ Check (度量查核) ➔ Act (改善調整) 的專案循環，確保決策不止停留在紙上，更能敏捷落地並持續改進。
 
-### 5. 決策品質 (DQ) 評估與雷達圖看板
+### 5. SMART 原則目標設定
+提供 **SMART 目標檢核工具**（Specific 明確、Measurable 可衡量、Achievable 可達成、Relevant 相關、Time-bound 時限），將行動計畫與 PDCA 目標具體化，確保目標易於追蹤與驗收。
+
+### 6. 決策品質 (DQ) 評估與雷達圖看板
 - **自評機制**: 從「清晰度、事實證據、洞察深度、可執行性」四維度評分，生成決策品質指數。
 - **多維看板**: 自動統計各面向數據，以精美的 SVG 多維雷達圖直觀呈現生活平衡狀態與決策品質。
 
-### 6. 本地保存與 Markdown 匯出
+### 7. 本地保存與 Markdown 匯出
 - 數據完全保存在您的瀏覽器本地（LocalStorage），安全隱密。
 - 支持備份 JSON 數據，或一鍵匯出排版精美的結構化 Markdown 決策與反思報告，方便無縫導入至 Obsidian、Notion 或 Logseq 等個人知識管理庫。
 
@@ -92,6 +96,6 @@ flowchart TD
 
 ## 📂 專案檔案清單 (Files)
 
-- [orid_life_compass.html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/orid_life_compass.html): **最新主程式**（整合了雙模式、雷達圖、PDCA、金字塔 MECE、歷史紀錄、及互動流程說明分頁）。
+- [orid_life_compass.html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/orid_life_compass.html): **最新主程式**（整合了雙模式、雷達圖、PDCA、SMART 目標設定、金字塔 MECE、歷史紀錄、及互動流程說明分頁）。
 - [orid_pyraidm.html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/orid_pyraidm.html): 簡化版的思維決策工作區（早期版本）。
 - [fspire-life-manager (1).html](file:///c:/Users/tu-hs/OneDrive/文件/2022_0308_MASA/2022-0708/Projects_antigravity/ORID_discuss/fspire-life-manager%20(1).html): 生活管理與日記備份工具（早期版本）。

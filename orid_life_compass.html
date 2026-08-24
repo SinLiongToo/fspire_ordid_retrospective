@@ -228,19 +228,19 @@ button{font-family:inherit;}
   color: var(--navy);
   background: var(--accent);
 }
-.pdca-box {
+.pdca-box, .smart-box {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
   margin-top: 14px;
 }
-.pdca-field {
+.pdca-field, .smart-field {
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px;
 }
-.pdca-field label {
+.pdca-field label, .smart-field label {
   font-size: 12.5px;
   color: var(--accent);
   font-weight: 600;
@@ -555,6 +555,7 @@ select{
         <div class="synthesis-tabs">
           <button class="synthesis-tab-btn active" id="synTabPyramid">🏛️ 金字塔與 MECE 整合</button>
           <button class="synthesis-tab-btn" id="synTabPdca">🔄 PDCA 執行計畫 (D 連結)</button>
+          <button class="synthesis-tab-btn" id="synTabSmart">🎯 SMART 目標設定</button>
         </div>
 
         <!-- Panel A: Pyramid & MECE -->
@@ -633,6 +634,37 @@ select{
               <div class="pdca-field">
                 <label>🛡️ A — Act (處理/調整)</label>
                 <textarea id="pdcaAct" placeholder="當成效與目標有偏差時，如何進行修正？成功的經驗如何標準化？"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel C: SMART Target Setting -->
+        <div id="synPanelSmart" class="hidden">
+          <div class="stage-card" style="margin-top:14px;">
+            <h3 style="display:flex;align-items:center;gap:8px;">🎯 SMART 目標設定 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">SMART Criteria (Target Setting)</span></h3>
+            <p class="stage-en">將行動計畫轉化為明確、具體且可衡量的目標，以確保執行成效</p>
+            
+            <div class="smart-box">
+              <div class="smart-field">
+                <label>📌 S — Specific (明確性)</label>
+                <textarea id="smartSpecific" placeholder="目標是什麼？具體要達成什麼結果？避免模糊字眼（例如：『多讀書』改為『讀完 2 本專案管理書籍』）。"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>📊 M — Measurable (可衡量性)</label>
+                <textarea id="smartMeasurable" placeholder="如何衡量是否達成？有哪些量化指標或驗收標準？（例如：『完成 100% 的章節閱讀與課後測驗』）。"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>💪 A — Achievable (可達成性)</label>
+                <textarea id="smartAchievable" placeholder="在現有的資源與能力下，這個目標是可行的嗎？挑戰性與可行性如何平衡？"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>🔗 R — Relevant (相關性)</label>
+                <textarea id="smartRelevant" placeholder="這個目標與你目前的核心決策、長遠價值觀或專案方向有何關聯？"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>📅 T — Time-bound (時限性)</label>
+                <textarea id="smartTimeBound" placeholder="預計在什麼時間點前完成？明確的截止日期或階段時程是什麼？"></textarea>
               </div>
             </div>
           </div>
@@ -796,12 +828,12 @@ select{
               <text x="180" y="301" text-anchor="middle" class="svg-text-small" fill="var(--text-dim)">based on FSPIRE domain</text>
             </g>
 
-            <!-- Step 3 Node Right (Decision - Pyramid / PDCA) -->
+            <!-- Step 3 Node Right (Decision - Pyramid / PDCA / SMART) -->
             <g class="interactive-node" data-step="step3-decision">
               <rect x="480" y="250" width="280" height="80" rx="10" />
-              <text x="620" y="274" text-anchor="middle" class="svg-title">3. 金字塔與 PDCA (Pyramid &amp; PDCA)</text>
-              <text x="620" y="292" text-anchor="middle" class="svg-sub">Minto Pyramid &amp; PDCA</text>
-              <text x="620" y="312" text-anchor="middle" class="svg-text-small" fill="var(--accent)" style="font-weight: bold;">MECE 論證與行動計畫 (MECE &amp; PDCA)</text>
+              <text x="620" y="272" text-anchor="middle" class="svg-title">3. 金字塔 / PDCA / SMART</text>
+              <text x="620" y="290" text-anchor="middle" class="svg-sub">Pyramid, PDCA &amp; SMART</text>
+              <text x="620" y="310" text-anchor="middle" class="svg-text-small" fill="var(--accent)" style="font-weight: bold;">邏輯論證、行動計畫與目標設定</text>
             </g>
 
             <!-- Step 4 Node Left (Life Balance - Dashboard) -->
@@ -963,6 +995,18 @@ select{
       </ul>
     </div>
 
+    <div class="help-section" id="helpSmartSection">
+      <h3>🎯 什麼是 SMART 原則目標設定？</h3>
+      <p><strong>SMART 原則</strong>是一種極為普及且實用的目標設定與檢核工具。在決策工作區中，它能協助你將 ORID 的 <strong>D (Decisional / 決定行動)</strong> 或是計畫目標，轉化為更具體、更具執行力且容易追蹤的標的：</p>
+      <ul>
+        <li><strong>S — Specific (明確性)</strong>: 目標必須是具體、明確的，而非籠統或含糊不清。例如：『多讀書』應明確為『讀完專案管理書籍』。</li>
+        <li><strong>M — Measurable (可衡量性)</strong>: 目標必須是可衡量的，有具體的量化指標或驗收標準，例如：『讀完 2 本書並完成所有導讀章節』。</li>
+        <li><strong>A — Achievable (可達成性)</strong>: 目標在現有資源、能力與限制下必須是可行且有現實感的，同時保有一定挑戰性。</li>
+        <li><strong>R — Relevant (相關性)</strong>: 目標必須與你當前的核心決策、長遠價值觀或整體專案方向緊密相連。</li>
+        <li><strong>T — Time-bound (時限性)</strong>: 目標必須有明確的截止日期或時程節點，避免無限期拖延。</li>
+      </ul>
+    </div>
+
     <div class="help-section">
       <h3>雙模式說明 Modes</h3>
       <p>1. <strong>生活平衡模式 (Life Compass)</strong>: 適合個人定期檢視財務、靈性、身體、智識、人際與情緒六大面向，透過 ORID 引導反思與 1-5 分的平衡自評。</p>
@@ -1095,7 +1139,12 @@ let draft = {
   pdcaDo: "",
   pdcaCheck: "",
   pdcaAct: "",
-  activeSynTab: "pyramid", // pyramid or pdca
+  smartSpecific: "",
+  smartMeasurable: "",
+  smartAchievable: "",
+  smartRelevant: "",
+  smartTimeBound: "",
+  activeSynTab: "pyramid", // pyramid, pdca or smart
   scores: { clarity: 3, evidence: 3, insight: 3, actionability: 3 }
 };
 
@@ -1112,6 +1161,11 @@ function resetDraft() {
     pdcaDo: "",
     pdcaCheck: "",
     pdcaAct: "",
+    smartSpecific: "",
+    smartMeasurable: "",
+    smartAchievable: "",
+    smartRelevant: "",
+    smartTimeBound: "",
     activeSynTab: "pyramid",
     scores: { clarity: 3, evidence: 3, insight: 3, actionability: 3 }
   };
@@ -1312,7 +1366,7 @@ document.getElementById("meceCheckCE").addEventListener("change", (e) => {
   draft.meceCE = e.target.checked;
 });
 
-/* ---------- Pyramid & PDCA Synthesis Listeners ---------- */
+/* ---------- Pyramid, PDCA & SMART Synthesis Listeners ---------- */
 document.getElementById("pyramidMessage").addEventListener("input", (e) => {
   draft.pyramidMessage = e.target.value;
 });
@@ -1333,6 +1387,22 @@ document.getElementById("pdcaAct").addEventListener("input", (e) => {
   draft.pdcaAct = e.target.value;
 });
 
+document.getElementById("smartSpecific").addEventListener("input", (e) => {
+  draft.smartSpecific = e.target.value;
+});
+document.getElementById("smartMeasurable").addEventListener("input", (e) => {
+  draft.smartMeasurable = e.target.value;
+});
+document.getElementById("smartAchievable").addEventListener("input", (e) => {
+  draft.smartAchievable = e.target.value;
+});
+document.getElementById("smartRelevant").addEventListener("input", (e) => {
+  draft.smartRelevant = e.target.value;
+});
+document.getElementById("smartTimeBound").addEventListener("input", (e) => {
+  draft.smartTimeBound = e.target.value;
+});
+
 // Synthesis Tab Listeners
 document.getElementById("synTabPyramid").addEventListener("click", () => {
   draft.activeSynTab = "pyramid";
@@ -1340,6 +1410,10 @@ document.getElementById("synTabPyramid").addEventListener("click", () => {
 });
 document.getElementById("synTabPdca").addEventListener("click", () => {
   draft.activeSynTab = "pdca";
+  renderWorkspace();
+});
+document.getElementById("synTabSmart").addEventListener("click", () => {
+  draft.activeSynTab = "smart";
   renderWorkspace();
 });
 
@@ -1447,12 +1521,22 @@ function renderWorkspace(){
     document.getElementById("pdcaCheck").value = draft.pdcaCheck || "";
     document.getElementById("pdcaAct").value = draft.pdcaAct || "";
 
+    // Populate SMART fields
+    document.getElementById("smartSpecific").value = draft.smartSpecific || "";
+    document.getElementById("smartMeasurable").value = draft.smartMeasurable || "";
+    document.getElementById("smartAchievable").value = draft.smartAchievable || "";
+    document.getElementById("smartRelevant").value = draft.smartRelevant || "";
+    document.getElementById("smartTimeBound").value = draft.smartTimeBound || "";
+
     // Toggle Synthesis Panels
-    const isPyramid = draft.activeSynTab === "pyramid";
-    document.getElementById("synTabPyramid").classList.toggle("active", isPyramid);
-    document.getElementById("synTabPdca").classList.toggle("active", !isPyramid);
-    document.getElementById("synPanelPyramid").classList.toggle("hidden", !isPyramid);
-    document.getElementById("synPanelPdca").classList.toggle("hidden", isPyramid);
+    const activeTab = draft.activeSynTab || "pyramid";
+    document.getElementById("synTabPyramid").classList.toggle("active", activeTab === "pyramid");
+    document.getElementById("synTabPdca").classList.toggle("active", activeTab === "pdca");
+    document.getElementById("synTabSmart").classList.toggle("active", activeTab === "smart");
+    
+    document.getElementById("synPanelPyramid").classList.toggle("hidden", activeTab !== "pyramid");
+    document.getElementById("synPanelPdca").classList.toggle("hidden", activeTab !== "pdca");
+    document.getElementById("synPanelSmart").classList.toggle("hidden", activeTab !== "smart");
   }
 }
 
@@ -1490,6 +1574,11 @@ document.getElementById("saveEntryBtn").addEventListener("click", ()=>{
     pdcaDo: state.mode === 'decision' ? draft.pdcaDo : "",
     pdcaCheck: state.mode === 'decision' ? draft.pdcaCheck : "",
     pdcaAct: state.mode === 'decision' ? draft.pdcaAct : "",
+    smartSpecific: state.mode === 'decision' ? draft.smartSpecific : "",
+    smartMeasurable: state.mode === 'decision' ? draft.smartMeasurable : "",
+    smartAchievable: state.mode === 'decision' ? draft.smartAchievable : "",
+    smartRelevant: state.mode === 'decision' ? draft.smartRelevant : "",
+    smartTimeBound: state.mode === 'decision' ? draft.smartTimeBound : "",
     scores: state.mode === 'decision' ? {
       clarity: draft.scores.clarity,
       evidence: draft.scores.evidence,
@@ -1648,6 +1737,20 @@ function renderHistory(){
         `;
       }
 
+      let smartHtml = "";
+      if (e.smartSpecific || e.smartMeasurable || e.smartAchievable || e.smartRelevant || e.smartTimeBound) {
+        smartHtml = `
+          <div style="margin-top:8px;padding:12px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;">
+            <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;display:flex;align-items:center;gap:4px;">🎯 SMART 目標設定</h4>
+            <p style="margin:3px 0;"><b>S — Specific (明確性)：</b>${e.smartSpecific ? escapeHtml(e.smartSpecific) : "（未填寫）"}</p>
+            <p style="margin:3px 0;"><b>M — Measurable (可衡量性)：</b>${e.smartMeasurable ? escapeHtml(e.smartMeasurable) : "（未填寫）"}</p>
+            <p style="margin:3px 0;"><b>A — Achievable (可達成性)：</b>${e.smartAchievable ? escapeHtml(e.smartAchievable) : "（未填寫）"}</p>
+            <p style="margin:3px 0;"><b>R — Relevant (相關性)：</b>${e.smartRelevant ? escapeHtml(e.smartRelevant) : "（未填寫）"}</p>
+            <p style="margin:3px 0;"><b>T — Time-bound (時限性)：</b>${e.smartTimeBound ? escapeHtml(e.smartTimeBound) : "（未填寫）"}</p>
+          </div>
+        `;
+      }
+
       detailsHtml += `
         <div style="margin-top:12px;padding:12px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;">
           <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;display:flex;align-items:center;gap:4px;">🏛️ 金字塔結構與 MECE 整合</h4>
@@ -1661,14 +1764,15 @@ function renderHistory(){
           </p>
           <p style="margin:4px 0;"><b>支持事實 (Facts & Data)：</b>${e.pyramidFacts ? escapeHtml(e.pyramidFacts) : "（未填寫）"}</p>
         </div>
-        \${pdcaHtml}
+        ${pdcaHtml}
+        ${smartHtml}
         <div style="margin-top:8px;padding:10px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;font-size:12px;">
           <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;">🎯 決策品質評估 (Decision Quality)</h4>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;">
-            <div>清晰度: \${e.scores ? e.scores.clarity : '—'}/5</div>
-            <div>事實證據: \${e.scores ? e.scores.evidence : '—'}/5</div>
-            <div>洞察深度: \${e.scores ? e.scores.insight : '—'}/5</div>
-            <div>可執行性: \${e.scores ? e.scores.actionability : '—'}/5</div>
+            <div>清晰度: ${e.scores ? e.scores.clarity : '—'}/5</div>
+            <div>事實證據: ${e.scores ? e.scores.evidence : '—'}/5</div>
+            <div>洞察深度: ${e.scores ? e.scores.insight : '—'}/5</div>
+            <div>可執行性: ${e.scores ? e.scores.actionability : '—'}/5</div>
           </div>
         </div>
       `;
@@ -1762,6 +1866,15 @@ document.getElementById("exportMdBtn").addEventListener("click", ()=>{
         md += `- **Check (查核)**：${e.pdcaCheck || "（未填寫）"}\n`;
         md += `- **Act (處理/調整)**：${e.pdcaAct || "（未填寫）"}\n\n`;
       }
+      
+      if (e.smartSpecific || e.smartMeasurable || e.smartAchievable || e.smartRelevant || e.smartTimeBound) {
+        md += `**🎯 SMART 目標設定**\n`;
+        md += `- **Specific (明確性)**：${e.smartSpecific || "（未填寫）"}\n`;
+        md += `- **Measurable (可衡量性)**：${e.smartMeasurable || "（未填寫）"}\n`;
+        md += `- **Achievable (可達成性)**：${e.smartAchievable || "（未填寫）"}\n`;
+        md += `- **Relevant (相關性)**：${e.smartRelevant || "（未填寫）"}\n`;
+        md += `- **Time-bound (時限性)**：${e.smartTimeBound || "（未填寫）"}\n\n`;
+      }
       md += `**🎯 決策品質評估 (Decision Quality)**\n`;
       md += `- 清晰度 Clarity: ${e.scores ? e.scores.clarity : '—'}/5\n`;
       md += `- 事實證據 Evidence: ${e.scores ? e.scores.evidence : '—'}/5\n`;
@@ -1829,7 +1942,10 @@ document.getElementById("loadDemoBtn").addEventListener("click", ()=>{
       domain: item.domain,
       date: new Date(now - item.offset*86400000).toISOString(),
       o:item.o, r:item.r, i:item.i, d:item.d, rating:item.rating,
-      pyramidFacts: "", pyramidMessage: "", arguments: [], meceME: false, meceCE: false, scores: null
+      pyramidFacts: "", pyramidMessage: "", arguments: [], meceME: false, meceCE: false,
+      pdcaPlan: "", pdcaDo: "", pdcaCheck: "", pdcaAct: "",
+      smartSpecific: "", smartMeasurable: "", smartAchievable: "", smartRelevant: "", smartTimeBound: "",
+      scores: null
     });
   });
 
@@ -1852,6 +1968,11 @@ document.getElementById("loadDemoBtn").addEventListener("click", ()=>{
       pdcaDo: "PM 負責召集每週三下午 2 點的規格對焦會，前端 Leader 與後端 Leader 必須對齊 Notion 變更記錄。",
       pdcaCheck: "以每週異動無記錄口頭交付次數（目標 0 次）以及前端重構工時（目標減半）作為查核指標。",
       pdcaAct: "運行兩週後評估，若成效良好則正式寫入「研發團隊開發流程 SOP」，新進人員受訓必須遵守。",
+      smartSpecific: "在 7/15 前制訂「前後端 API 規格變更協議」，將所有口頭規格變更減至 0 次，並在 Notion 上建立異動追蹤板。",
+      smartMeasurable: "1. 規格變動 100% 記錄在 Notion 異動追蹤板；2. 每週三下午召開 15 分鐘對焦會議；3. 口頭交付變更次數降為 0。",
+      smartAchievable: "可行，團隊目前已具備 Notion 協同作業習慣，且 Leader 同意配合固定短會時間。",
+      smartRelevant: "直接解決因頻繁口頭規格變更導致的專案延期與前端大量重做工時的問題。",
+      smartTimeBound: "於 2026/07/15 前完成協議制訂與 Notion 追蹤板建立，並自下半月起正式實行與查核。",
       scores: { clarity: 4, evidence: 5, insight: 4, actionability: 4, overall: 4.3 }
     },
     {
@@ -1861,13 +1982,22 @@ document.getElementById("loadDemoBtn").addEventListener("click", ()=>{
       i:"由於前兩週轉換效果不佳，我們緊急調高競價以獲取流量，雖然拉高了 CTR，但也拉高了 CPC，且後期忘記將預算限額調回正常值。",
       d:"在未來專案中設定廣告預算警告，若累積消費達日限額 90% 即送出 Slack 警示，並指派專人每天早晨檢查帳戶開銷。",
       pyramidFacts: "廣告實際花費 $115,000 (預算 $100,000)；CTR 達到 4.8% (目標 4%)；點擊成本 (CPC) 增加 25%。",
-      pyramidMessage: "行銷專案雖超額 20% 達成 CTR 目標，但預算超支 15%，主因是競價策略調整缺乏持續監控與預警，未來須導入 Slack 自動預算提醒與每日預算審查。",
+      pyramidMessage: "行銷專案雖超額 20% 達成 CTR 目標，但預算超支 15%，主因是競價策略調整缺乏持續監探與預警，未來須導入 Slack 自動預算提醒與每日預算審查。",
       arguments: [
         "為了衝刺點擊率而採取的競價調升缺乏實時成本效益評估。",
         "廣告投放平台未設定預算封頂強制限額，造成超支漏洞。",
         "團隊內部缺乏日營運開銷的追蹤機制，未能及時發現預算超標。"
       ],
       meceME: true, meceCE: true,
+      pdcaPlan: "設定廣告預算警告，達日限額 90% 即自動送出 Slack 警示，並進行每日早晨審查。",
+      pdcaDo: "廣告投放人員負責在投放平台設定警示，並於每日早上 10 點前填寫消費狀況日誌。",
+      pdcaCheck: "以超支率（目標 0%）與警報發送成功率（目標 100%）作為查核指標。",
+      pdcaAct: "兩週後回顧警告機制是否正常運作，若正常則擴大應用至其他行銷專案。",
+      smartSpecific: "在下一次行銷專案中，設定廣告預算預警（Slack 自動提醒）並每日早上 10 點指派專人審查投放帳戶，確保預算超支控制在 0% 以內。",
+      smartMeasurable: "1. 預算超支率為 0%；2. 當日花費達限額 90% 時 Slack 警報發送成功率 100%；3. 每日早晨 10 點審查日誌 100% 填寫。",
+      smartAchievable: "非常可行，Slack 機器人 API 設定僅需 2 小時，且每日審查僅需 5 分鐘。",
+      smartRelevant: "確保未來專案在超額達成點擊率目標的同時，不超出既定的廣告預算限額。",
+      smartTimeBound: "在下一個專案啟動前（預計 8/1）完成 Slack 機器人串接，並在專案執行 4 週內每日執行審查。",
       scores: { clarity: 5, evidence: 4, insight: 4, actionability: 5, overall: 4.5 }
     }
   ];
@@ -1884,6 +2014,15 @@ document.getElementById("loadDemoBtn").addEventListener("click", ()=>{
       arguments: item.arguments,
       meceME: item.meceME,
       meceCE: item.meceCE,
+      pdcaPlan: item.pdcaPlan || "",
+      pdcaDo: item.pdcaDo || "",
+      pdcaCheck: item.pdcaCheck || "",
+      pdcaAct: item.pdcaAct || "",
+      smartSpecific: item.smartSpecific || "",
+      smartMeasurable: item.smartMeasurable || "",
+      smartAchievable: item.smartAchievable || "",
+      smartRelevant: item.smartRelevant || "",
+      smartTimeBound: item.smartTimeBound || "",
       scores: item.scores
     });
   });
@@ -1993,13 +2132,14 @@ function initFlowchart() {
       ]
     },
     "step3-decision": {
-      title: "🏛️ 3. 金字塔與 PDCA 整合",
-      sub: "Pyramid Principle & PDCA Plan",
-      desc: "在決策模式下，對 ORID 反思進行二次結構化提煉：將 D (行動) 收斂為核心結論 (Key Message)；將 R/I 拆解為符合 MECE (獨立且完整) 的支持論點；再將 D (行動) 細化為 Plan-Do-Check-Act (PDCA) 執行計畫。",
+      title: "🏛️ 3. 金字塔、PDCA 與 SMART",
+      sub: "Pyramid, PDCA & SMART Target",
+      desc: "在決策模式下，對 ORID 反思進行二次結構化提煉：將 D (行動) 收斂為核心結論 (Key Message)；將 R/I 拆解為符合 MECE (獨立且完整) 的支持論點；再將 D (行動) 細化為 Plan-Do-Check-Act (PDCA) 執行計畫，或是透過 SMART 原則設定可衡量的具體目標。",
       tips: [
         "結論先行：核心結論（Key Message）必須是一句清晰、可被執行的建議。",
         "MECE 檢查：勾選 MECE 自我檢視表，確保論點「互無重疊，毫無遺漏」。",
-        "PDCA 計畫：將模糊的行動細化為具體計畫 (P)、分工與時程 (D)、度量指標 (C) 與標準化方案 (A)."
+        "PDCA 計畫：將模糊的行動細化為具體計畫 (P)、分工與時程 (D)、度量指標 (C) 與標準化方案 (A)。",
+        "SMART 目標：使用 Specific (明確)、Measurable (可衡量)、Achievable (可達成)、Relevant (相關) 與 Time-bound (時限) 檢核你的行動目標。"
       ]
     },
     "step4-life": {
