@@ -88,26 +88,18 @@ flowchart TD
 
 ---
 
-## 🌐 GitHub Pages 線上部署指南 (Deploy to GitHub Pages)
+## 🌐 GitHub Pages 線上部署與使用 (Live Demo)
 
 本專案已完全相容 **GitHub Pages**，無需任何伺服器或建置步驟：
 
-1. **建立 GitHub 儲存庫 (Repository)**：
-   - 於 GitHub 新增一個公開或私有儲存庫（例如命名為 `ORID_discuss` 或 `orid-compass`）。
-2. **推送程式碼至 GitHub**：
-   ```bash
-   git remote add origin https://github.com/<你的GitHub帳號>/<你的儲存庫名稱>.git
-   git branch -M master
-   git push -u origin master
-   ```
-3. **啟用 GitHub Pages**：
-   - 進入該儲存庫的 **Settings (設定)** ➔ 左側選單點擊 **Pages**。
-   - 在 **Build and deployment** 下的 **Branch** 選擇 `master` 分支與 `/(root)` 目錄。
-   - 點擊 **Save (儲存)**。
-4. **立即在線使用**：
-   - 等待約 30 秒至 1 分鐘，GitHub 會生成您的專屬線上網址：
-     `https://<你的GitHub帳號>.github.io/<你的儲存庫名稱>/`
-   - 全球任何人皆可直接透過瀏覽器在線使用！
+- **🔗 線上即用網址 (Live Demo)**：
+  👉 **https://sinliongtoo.github.io/fspire_ordid_retrospective/**
+
+### 啟用步驟說明 (How to Enable)
+1. 進入該儲存庫的 **Settings (設定)** ➔ 左側選單點擊 **Pages**。
+2. 在 **Build and deployment** 下的 **Branch** 選擇 `master` 分支與 `/(root)` 目錄。
+3. 點擊 **Save (儲存)**。
+4. 約 30 秒至 1 分鐘後即可在全球直接透過上方網址在線使用！
 
 ---
 
