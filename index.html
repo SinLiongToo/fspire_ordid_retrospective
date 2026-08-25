@@ -1,0 +1,3032 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>焦點討論與決策羅盤 ORID Mindset & Decision Compass</title>
+<style>
+:root{
+  --navy:#0F1B2D;
+  --slate:#1E3A5F;
+  --amber:#F5A623;
+  --cream:#F8F4ED;
+  --sage:#7FB5A0;
+
+  --c-financial:#F5A623;
+  --c-spiritual:#7FB5A0;
+  --c-physical:#C97064;
+  --c-intellectual:#4A7BA6;
+  --c-relational:#9575A8;
+  --c-emotional:#D98B8B;
+
+  --bg:var(--navy);
+  --bg-panel:#16273D;
+  --bg-card:#1E3A5F;
+  --text:var(--cream);
+  --text-dim:#B7C4D6;
+  --border:#2C4666;
+  --accent:var(--amber);
+  --shadow:0 4px 18px rgba(0,0,0,.35);
+}
+[data-theme="light"]{
+  --bg:var(--cream);
+  --bg-panel:#FFFFFF;
+  --bg-card:#FBF8F2;
+  --text:#22303F;
+  --text-dim:#5C6B7A;
+  --border:#E3DACB;
+  --shadow:0 4px 14px rgba(15,27,45,.08);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang TC","Microsoft JhengHei",Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; transition:background .25s,color .25s;
+}
+button{font-family:inherit;}
+.app{max-width:1400px;margin:0 auto;padding:0 20px 60px;}
+
+/* Synthesis Tabs */
+/* Flowchart Visualization styles */
+.flowchart-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  margin: 18px 0;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .flowchart-container {
+    grid-template-columns: 1fr !important;
+  }
+}
+.flowchart-svg-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: auto;
+}
+.flowchart-svg-wrap svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.flowchart-details-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.svg-flow-path {
+  fill: none;
+  stroke: var(--text-dim);
+  opacity: 0.15;
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  transition: stroke 0.3s, opacity 0.3s, stroke-width 0.3s;
+}
+
+.svg-flow-path.active {
+  stroke: var(--accent);
+  opacity: 1;
+  stroke-width: 2.5;
+  stroke-dasharray: 8 4;
+  animation: svg-flow-dash-active 20s linear infinite;
+}
+.svg-flow-path.active-life {
+  stroke: #7FB5A0;
+  opacity: 1;
+  stroke-width: 2.5;
+  stroke-dasharray: 8 4;
+  animation: svg-flow-dash-active 20s linear infinite;
+}
+@keyframes svg-flow-dash-active {
+  to { stroke-dashoffset: -1000; }
+}
+
+.interactive-node {
+  cursor: pointer;
+}
+.interactive-node rect {
+  fill: var(--bg-panel);
+  stroke: var(--border);
+  stroke-width: 1.5;
+  transition: fill 0.3s ease, stroke 0.3s ease, filter 0.3s ease;
+}
+.interactive-node:hover rect, .interactive-node.active-hover rect {
+  fill: rgba(245, 166, 35, 0.06);
+  stroke: var(--accent);
+  filter: drop-shadow(0 4px 10px rgba(245, 166, 35, 0.25));
+}
+/* Ensure svg text is crisp and not blurred by filter */
+.svg-title {
+  font-weight: 700;
+  font-size: 13.5px;
+  fill: var(--text);
+  pointer-events: none;
+  text-shadow: none !important;
+}
+.svg-sub {
+  font-size: 10px;
+  fill: var(--text-dim);
+  pointer-events: none;
+  text-shadow: none !important;
+}
+.svg-text-small {
+  font-size: 9px;
+  fill: var(--text-dim);
+  pointer-events: none;
+  text-shadow: none !important;
+}
+
+.svg-circle-node {
+  fill: var(--bg-card);
+  stroke: var(--border);
+  stroke-width: 1.5;
+  transition: all 0.3s ease;
+}
+.interactive-node:hover .svg-circle-node, .interactive-node.active-hover .svg-circle-node {
+  stroke: var(--accent);
+  fill: var(--accent);
+}
+.interactive-node:hover .svg-circle-text, .interactive-node.active-hover .svg-circle-text {
+  fill: var(--navy) !important;
+}
+
+.svg-title {
+  font-weight: 700;
+  font-size: 13.5px;
+  fill: var(--text);
+}
+.svg-sub {
+  font-size: 10px;
+  fill: var(--text-dim);
+}
+.svg-text-small {
+  font-size: 9px;
+  fill: var(--text-dim);
+}
+.svg-badge {
+  font-size: 10.5px;
+  font-weight: bold;
+}
+.svg-badge-life {
+  fill: #7FB5A0;
+}
+.svg-badge-decision {
+  fill: #C97064;
+}
+.framework-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  margin-left: 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.synthesis-tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 8px;
+}
+.synthesis-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 6px;
+}
+.synthesis-tab-btn:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+}
+.synthesis-tab-btn.active {
+  color: var(--navy);
+  background: var(--accent);
+}
+.pdca-box, .smart-box {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.pdca-field, .smart-field {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.pdca-field label, .smart-field label {
+  font-size: 12.5px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Mode Switcher & MECE/Pyramid Styles */
+.mode-select-wrap {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 3px;
+  border-radius: 20px;
+  gap: 2px;
+}
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mode-btn:hover {
+  color: var(--text);
+}
+.mode-btn.active {
+  background: var(--accent);
+  color: var(--navy);
+}
+.mece-arg-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.mece-arg-input {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 13.5px;
+  font-family: inherit;
+}
+.mece-arg-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.btn-icon:hover {
+  border-color: #C97064;
+  color: #C97064;
+  background: rgba(201,112,100,0.1);
+}
+.dq-slider {
+  accent-color: var(--accent);
+  margin-top: 4px;
+}
+.mece-checklist-card input[type=checkbox] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Header */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 4px 16px;flex-wrap:wrap;gap:14px;
+  border-bottom:1px solid var(--border);margin-bottom:22px;
+}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-mark{
+  width:42px;height:42px;border-radius:50%;
+  background:conic-gradient(var(--c-financial),var(--c-spiritual),var(--c-physical),var(--c-intellectual),var(--c-relational),var(--c-emotional));
+  flex-shrink:0;
+}
+.brand h1{font-size:19px;margin:0;letter-spacing:.3px;}
+.brand p{margin:2px 0 0;font-size:12.5px;color:var(--text-dim);}
+
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;}
+nav.tabs button{
+  background:transparent;border:1px solid var(--border);color:var(--text-dim);
+  padding:9px 16px;border-radius:999px;font-size:13.5px;cursor:pointer;
+  transition:all .15s;
+}
+nav.tabs button:hover{color:var(--text);border-color:var(--accent);}
+nav.tabs button.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:600;}
+
+.header-tools{display:flex;gap:8px;align-items:center;}
+.icon-btn{
+  background:var(--bg-card);border:1px solid var(--border);color:var(--text);
+  width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Layout */
+main.layout{display:grid;grid-template-columns:360px 1fr;gap:26px;align-items:start;}
+@media(max-width:900px){ main.layout{grid-template-columns:1fr;} }
+
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;
+  padding:22px;box-shadow:var(--shadow);
+}
+.compass-panel{position:sticky;top:20px;}
+@media(max-width:900px){.compass-panel{position:static;}}
+.panel h2{margin:0 0 4px;font-size:16px;}
+.panel .sub{color:var(--text-dim);font-size:12.5px;margin:0 0 16px;}
+
+/* Compass SVG */
+.compass-wrap{display:flex;justify-content:center;margin:6px 0 8px;}
+svg.compass{width:100%;max-width:300px;height:auto;}
+.wedge{cursor:pointer;stroke:var(--bg-panel);stroke-width:2;opacity:.88;transition:opacity .15s,transform .15s;transform-origin:150px 150px;}
+.wedge:hover{opacity:1;transform:scale(1.02);}
+.wedge.active{opacity:1;stroke:var(--accent);stroke-width:3;}
+.wedge-label{font-size:12px;fill:var(--cream);font-weight:600;pointer-events:none;}
+.compass-center{fill:var(--bg-panel);stroke:var(--border);stroke-width:1;}
+.compass-center-text{fill:var(--text);font-size:11px;font-weight:600;text-anchor:middle;pointer-events:none;}
+
+.legend{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.legend-item{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;
+  cursor:pointer;border:1px solid transparent;transition:.15s;
+}
+.legend-item:hover{background:var(--bg-card);}
+.legend-item.active{border-color:var(--accent);background:var(--bg-card);}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.legend-item .name{font-size:13.5px;flex:1;}
+.legend-item .streak{font-size:11px;color:var(--text-dim);}
+
+/* Workspace */
+.workspace{min-height:400px;}
+.domain-header{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.domain-badge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.domain-header h2{margin:0;font-size:19px;}
+.domain-header .en{color:var(--text-dim);font-size:12.5px;}
+
+.orid-stepper{display:flex;gap:6px;margin:18px 0;flex-wrap:wrap;}
+.orid-step{
+  flex:1;min-width:110px;text-align:center;padding:9px 6px;border-radius:10px;
+  border:1px solid var(--border);cursor:pointer;font-size:12.5px;color:var(--text-dim);transition:.15s;
+}
+.orid-step.active{border-color:var(--accent);color:var(--text);background:var(--bg-card);font-weight:600;}
+.orid-step .letter{display:block;font-size:18px;font-weight:700;color:var(--accent);}
+
+.stage-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;}
+.stage-card h3{margin:0 0 4px;font-size:15px;}
+.stage-card .stage-en{color:var(--text-dim);font-size:12px;margin:0 0 12px;}
+.guide-q{list-style:none;padding:0;margin:0 0 12px;}
+.guide-q li{font-size:12.5px;color:var(--text-dim);padding-left:16px;position:relative;margin-bottom:4px;}
+.guide-q li::before{content:"—";position:absolute;left:0;color:var(--accent);}
+textarea{
+  width:100%;min-height:90px;background:var(--bg-panel);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);padding:12px;font-size:14px;font-family:inherit;resize:vertical;
+}
+textarea:focus{outline:none;border-color:var(--accent);}
+
+.rating-row{display:flex;align-items:center;gap:12px;margin:18px 0;}
+.rating-row label{font-size:13px;color:var(--text-dim);white-space:nowrap;}
+input[type=range]{flex:1;accent-color:var(--accent);}
+.rating-value{width:26px;text-align:center;font-weight:700;color:var(--accent);}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+.btn{
+  border:none;border-radius:10px;padding:11px 20px;font-size:13.5px;cursor:pointer;font-weight:600;
+  transition:.15s;
+}
+.btn-primary{background:var(--accent);color:var(--navy);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-danger{background:transparent;border:1px solid #C97064;color:#C97064;}
+.btn-danger:hover{background:#C97064;color:var(--cream);}
+
+/* Dashboard */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px;}
+.dcard{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.dcard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.dcard-top .name{font-weight:600;font-size:14px;}
+.dcard .last{font-size:12px;color:var(--text-dim);margin:0 0 8px;}
+.bar-bg{height:6px;background:var(--bg-panel);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;}
+.empty-hint{color:var(--text-dim);font-size:13px;padding:30px;text-align:center;border:1px dashed var(--border);border-radius:12px;}
+
+.radar-wrap{display:flex;justify-content:center;margin:20px 0;}
+svg.radar{width:100%;max-width:340px;height:auto;}
+
+/* History */
+.hist-filter{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+select{
+  background:var(--bg-card);border:1px solid var(--border);color:var(--text);
+  padding:9px 12px;border-radius:10px;font-size:13px;
+}
+.hist-item{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:10px;cursor:pointer;
+}
+.hist-item .row1{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.hist-item .meta{font-size:11.5px;color:var(--text-dim);}
+.hist-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:13px;line-height:1.6;}
+.hist-detail.open{display:block;}
+.hist-detail b{color:var(--accent);}
+
+/* Help */
+.help-section{margin-bottom:22px;}
+.help-section h3{font-size:15px;margin:0 0 8px;color:var(--accent);}
+.help-section p, .help-section li{font-size:13.5px;line-height:1.7;color:var(--text-dim);}
+.orid-explain{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0;}
+.orid-explain div{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.orid-explain .letter{font-size:22px;font-weight:800;color:var(--accent);}
+.orid-explain h4{margin:4px 0 6px;font-size:13.5px;}
+.orid-explain p{margin:0;font-size:12px;}
+
+.hidden{display:none !important;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+</style>
+</head>
+<body data-theme="dark">
+<div class="app">
+
+<header>
+  <div class="brand">
+    <div class="brand-mark" id="brandMark"></div>
+    <div>
+      <h1 id="brandTitle">焦點討論生活羅盤</h1>
+      <p id="brandSub">ORID Life Compass · 財務 · 靈性 · 身體 · 智識 · 人際 · 情緒</p>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button data-tab="dashboard" class="active">總覽 Dashboard</button>
+    <button data-tab="workspace">羅盤 Compass</button>
+    <button data-tab="history">紀錄 History</button>
+    <button data-tab="help">說明 Help</button>
+  </nav>
+  <div class="header-tools">
+    <div class="mode-select-wrap">
+      <button id="modeLifeBtn" class="mode-btn active">🌟 生活平衡 Life</button>
+      <button id="modeDecisionBtn" class="mode-btn">🧠 思維決策 Decision</button>
+    </div>
+    <button class="btn btn-ghost" id="langToggle" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;" title="Switch Language / 切換語言">🌐 EN</button>
+    <button class="icon-btn" id="themeToggle" title="Toggle dark/light">🌙</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- LEFT: Compass -->
+  <div class="panel compass-panel">
+    <h2>生活羅盤</h2>
+    <p class="sub">點選一個面向，開始 O-R-I-D 反思</p>
+    <div class="compass-wrap">
+      <svg class="compass" viewBox="0 0 300 300"></svg>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <!-- RIGHT: dynamic content -->
+  <div class="panel workspace" id="tab-dashboard">
+    <h2 style="margin-top:0;">總覽儀表板 <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Dashboard</span></h2>
+    <p class="sub">六大面向的最新自評分數與更新狀態</p>
+    <div class="radar-wrap"><svg class="radar" viewBox="0 0 300 300"></svg></div>
+    <div class="dash-grid" id="dashGrid"></div>
+  </div>
+
+  <div class="panel workspace hidden" id="tab-workspace">
+    <div id="workspaceEmpty" class="empty-hint">← 請從左側羅盤選擇一個生活面向，開始今天的焦點討論反思。<br>Select a domain from the compass to begin.</div>
+    <div id="workspaceContent" class="hidden">
+      <div class="domain-header">
+        <div class="domain-badge" id="wsBadge"></div>
+        <div>
+          <h2 id="wsName"></h2>
+          <div class="en" id="wsEn"></div>
+        </div>
+      </div>
+
+      <div class="orid-stepper" id="oridStepper"></div>
+      <div id="stageCards"></div>
+
+      <!-- Life-mode only: Self-Rating -->
+      <div class="rating-row" id="lifeRatingRow">
+        <label>今日自評分數 Self-rating</label>
+        <input type="range" id="ratingSlider" min="1" max="5" value="3">
+        <span class="rating-value" id="ratingValue">3</span>
+      </div>
+
+      <!-- Decision-mode only: Pyramid & MECE / PDCA Synthesis -->
+      <div id="decisionPyramidPanel" class="hidden">
+        
+        <!-- Tab Swapper for Synthesis Model -->
+        <div class="synthesis-tabs">
+          <button class="synthesis-tab-btn active" id="synTabPyramid">🏛️ 金字塔與 MECE 整合</button>
+          <button class="synthesis-tab-btn" id="synTabPdca">🔄 PDCA 執行計畫 (D 連結)</button>
+          <button class="synthesis-tab-btn" id="synTabSmart">🎯 SMART 目標設定</button>
+        </div>
+
+        <!-- Panel A: Pyramid & MECE -->
+        <div id="synPanelPyramid">
+          <div class="stage-card" style="margin-top:14px;">
+            <h3 style="display:flex;align-items:center;gap:8px;">🏛️ 金字塔結構與 MECE 整合 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">Pyramid Principle & MECE</span></h3>
+            <p class="stage-en">將 ORID 焦點討論的思考，收斂並淬煉成邏輯嚴密的決策結論</p>
+            
+            <!-- Key Message -->
+            <div class="input-row" style="margin-top:16px;">
+              <label style="display:flex;justify-content:space-between;width:100%;margin-bottom:6px;">
+                <strong>核心決策 / 結論建議 (Key Message)</strong>
+                <span style="font-size:11px;color:var(--accent);font-weight:normal;">對應 D (Decisional)</span>
+              </label>
+              <textarea id="pyramidMessage" placeholder="例如：導入每週變更審查會議，降低時程延誤。起手式：為了解決...，建議執行..."></textarea>
+            </div>
+
+            <!-- MECE Arguments -->
+            <div class="input-row" style="margin-top:16px;">
+              <label style="display:flex;justify-content:space-between;width:100%;align-items:center;margin-bottom:4px;">
+                <strong>支持論點 (Supporting Arguments - MECE 結構)</strong>
+                <span style="font-size:11px;color:var(--accent);font-weight:normal;">對應 R/I (Reflective/Interpretive)</span>
+              </label>
+              <p style="font-size:12px;color:var(--text-dim);margin:0 0 10px;">請將理由拆解為多個「獨立無重疊，加總無遺漏」的具體論點：</p>
+              <div id="meceArgsContainer">
+                <!-- Dynamically rendered input rows with add/remove buttons -->
+              </div>
+              <button class="btn btn-ghost" id="addArgBtn" style="padding:6px 12px;font-size:12px;margin-top:8px;border-radius:6px;">➕ 新增論點 Add Argument</button>
+            </div>
+
+            <!-- MECE Verification Checklist -->
+            <div class="mece-checklist-card" style="background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:16px;">
+              <strong style="font-size:13px;display:flex;align-items:center;gap:6px;color:var(--accent);">🛡️ MECE 邏輯自我檢視表 (Logic Checklist)</strong>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+                <label style="font-weight:normal;font-size:12.5px;cursor:pointer;display:flex;align-items:start;gap:8px;margin:0;">
+                  <input type="checkbox" id="meceCheckME" style="margin-top:3px;">
+                  <span><strong>Mutually Exclusive (互無重疊)</strong>: 我的論點是否彼此獨立？沒有重複計算或概念混淆的地方？</span>
+                </label>
+                <label style="font-weight:normal;font-size:12.5px;cursor:pointer;display:flex;align-items:start;gap:8px;margin:0;">
+                  <input type="checkbox" id="meceCheckCE" style="margin-top:3px;">
+                  <span><strong>Collectively Exhaustive (毫無遺漏)</strong>: 論點加總是否已經涵蓋了所有合理的成因或考量面向？</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Supporting Facts -->
+            <div class="input-row" style="margin-top:16px;">
+              <label style="display:flex;justify-content:space-between;width:100%;margin-bottom:6px;">
+                <strong>支持事實與數據 (Supporting Facts & Data)</strong>
+                <span style="font-size:11px;color:var(--accent);font-weight:normal;">對應 O (Objective)</span>
+              </label>
+              <textarea id="pyramidFacts" placeholder="列出客觀數據、指標與事實背景..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel B: PDCA Action Planner -->
+        <div id="synPanelPdca" class="hidden">
+          <div class="stage-card" style="margin-top:14px;">
+            <h3 style="display:flex;align-items:center;gap:8px;">🔄 PDCA 執行計畫 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">PDCA Cycle (Action Planner)</span></h3>
+            <p class="stage-en">承接 ORID 焦點討論的「D 決定行動」，將其展開為可持續改善的循環專案</p>
+            
+            <div class="pdca-box">
+              <div class="pdca-field">
+                <label>📋 P — Plan (計畫)</label>
+                <textarea id="pdcaPlan" placeholder="我們要達成什麼具體目標？實施的行動步驟與規劃是什麼？"></textarea>
+              </div>
+              <div class="pdca-field">
+                <label>🚀 D — Do (執行)</label>
+                <textarea id="pdcaDo" placeholder="具體如何落實？分工是誰？時間節點是什麼？"></textarea>
+              </div>
+              <div class="pdca-field">
+                <label>🔍 C — Check (查核)</label>
+                <textarea id="pdcaCheck" placeholder="執行過程中如何評估成效與進度？量化的關鍵指標是什麼？"></textarea>
+              </div>
+              <div class="pdca-field">
+                <label>🛡️ A — Act (處理/調整)</label>
+                <textarea id="pdcaAct" placeholder="當成效與目標有偏差時，如何進行修正？成功的經驗如何標準化？"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel C: SMART Target Setting -->
+        <div id="synPanelSmart" class="hidden">
+          <div class="stage-card" style="margin-top:14px;">
+            <h3 style="display:flex;align-items:center;gap:8px;">🎯 SMART 目標設定 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">SMART Criteria (Target Setting)</span></h3>
+            <p class="stage-en">將行動計畫轉化為明確、具體且可衡量的目標，以確保執行成效</p>
+            
+            <div class="smart-box">
+              <div class="smart-field">
+                <label>📌 S — Specific (明確性)</label>
+                <textarea id="smartSpecific" placeholder="目標是什麼？具體要達成什麼結果？避免模糊字眼（例如：『多讀書』改為『讀完 2 本專案管理書籍』）。"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>📊 M — Measurable (可衡量性)</label>
+                <textarea id="smartMeasurable" placeholder="如何衡量是否達成？有哪些量化指標或驗收標準？（例如：『完成 100% 的章節閱讀與課後測驗』）。"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>💪 A — Achievable (可達成性)</label>
+                <textarea id="smartAchievable" placeholder="在現有的資源與能力下，這個目標是可行的嗎？挑戰性與可行性如何平衡？"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>🔗 R — Relevant (相關性)</label>
+                <textarea id="smartRelevant" placeholder="這個目標與你目前的核心決策、長遠價值觀或專案方向有何關聯？"></textarea>
+              </div>
+              <div class="smart-field">
+                <label>📅 T — Time-bound (時限性)</label>
+                <textarea id="smartTimeBound" placeholder="預計在什麼時間點前完成？明確的截止日期或階段時程是什麼？"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decision Quality Scoring -->
+        <div class="stage-card" style="margin-top:16px;">
+          <h3>🎯 決策品質評估 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">Decision Quality (DQ) Score</span></h3>
+          <p class="stage-en">評估本次反思與思考的嚴謹程度</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
+                <span>清晰度 Clarity</span>
+                <span id="scoreClarityVal" style="color:var(--accent);font-weight:bold;">3</span>
+              </div>
+              <input type="range" class="dq-slider" id="dqClarity" min="1" max="5" value="3" style="width:100%;">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
+                <span>事實證據 Evidence</span>
+                <span id="scoreEvidenceVal" style="color:var(--accent);font-weight:bold;">3</span>
+              </div>
+              <input type="range" class="dq-slider" id="dqEvidence" min="1" max="5" value="3" style="width:100%;">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
+                <span>洞察深度 Insight</span>
+                <span id="scoreInsightVal" style="color:var(--accent);font-weight:bold;">3</span>
+              </div>
+              <input type="range" class="dq-slider" id="dqInsight" min="1" max="5" value="3" style="width:100%;">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
+                <span>可執行性 Actionability</span>
+                <span id="scoreActionVal" style="color:var(--accent);font-weight:bold;">3</span>
+              </div>
+              <input type="range" class="dq-slider" id="dqAction" min="1" max="5" value="3" style="width:100%;">
+            </div>
+          </div>
+
+          <div style="background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:16px;text-align:center;display:flex;justify-content:center;align-items:center;gap:12px;">
+            <strong style="font-size:13.5px;color:var(--text-dim);">決策品質綜合得分：</strong>
+            <span style="font-size:24px;font-weight:bold;color:var(--accent);" id="dqOverallScore">3.0</span>
+            <span style="font-size:14px;color:var(--text-dim);">/ 5.0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="saveEntryBtn">儲存紀錄 Save Entry</button>
+        <button class="btn btn-ghost" id="clearFormBtn">清空 Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel workspace hidden" id="tab-history">
+    <h2 style="margin-top:0;">歷史紀錄 History</h2>
+    <div class="hist-filter">
+      <select id="histFilterDomain"><option value="">所有面向 All domains</option></select>
+      <select id="histSort">
+        <option value="desc">最新優先 Newest first</option>
+        <option value="asc">最舊優先 Oldest first</option>
+      </select>
+    </div>
+    <div id="histList"></div>
+  </div>
+
+  <div class="panel workspace hidden" id="tab-help">
+    <h2 style="margin-top:0;">使用說明 Help &amp; README</h2>
+
+    <!-- Flowchart Visualization -->
+    <div class="help-section">
+      <h3>🧭 羅盤思考與行動決策流程 (Thinking & Action Flow)</h3>
+      <p>本工具將「自我反思 (ORID)」、「邏輯架構 (Pyramid/MECE)」與「敏捷執行 (PDCA)」無縫整合，形成一個高效的思考與決策閉環流程：</p>
+      
+      <div class="flowchart-container">
+        <!-- Left: SVG Visualization -->
+        <div class="flowchart-svg-wrap">
+          <svg id="flowchartSvg" width="800" height="570" viewBox="0 0 800 570" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="svg-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 7 5 L 0 8.5 z" fill="var(--border)" />
+              </marker>
+              <marker id="svg-arrow-active" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 7 5 L 0 8.5 z" fill="var(--accent)" />
+              </marker>
+              <marker id="svg-arrow-active-life" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 7 5 L 0 8.5 z" fill="#7FB5A0" />
+              </marker>
+            </defs>
+
+            <!-- Flow lines (Step 1 -> Step 2) -->
+            <line id="flowPathMain" x1="400" y1="80" x2="400" y2="108" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+
+            <!-- Flow lines (Step 2 -> Step 3 Left/Right branch) -->
+            <!-- Left branch (Life) -->
+            <path id="flowPathLife" d="M 360,205 C 360,225 180,225 180,242" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+            <!-- Right branch (Decision) -->
+            <path id="flowPathDecision" d="M 440,205 C 440,225 620,225 620,238" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+
+            <!-- Flow lines (Step 3 -> Step 4 Left/Right branch) -->
+            <!-- Left branch (Life) -->
+            <line id="flowPathLife2" x1="180" y1="316" x2="180" y2="350" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+            <!-- Right branch (Decision) -->
+            <line id="flowPathDecision2" x1="620" y1="330" x2="620" y2="350" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+
+            <!-- Flow lines (Step 4 -> Step 5 Left/Right branch) -->
+            <!-- Left branch (Life) -->
+            <path id="flowPathLife3" d="M 180,420 C 180,460 380,460 380,478" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+            <!-- Right branch (Decision) -->
+            <path id="flowPathDecision3" d="M 620,420 C 620,460 420,460 420,478" class="svg-flow-path" marker-end="url(#svg-arrow)" />
+
+            <!-- Labels on branching paths -->
+            <rect x="200" y="211" width="120" height="22" rx="4" fill="var(--bg-card)" stroke="var(--border)" stroke-width="0.5" />
+            <text x="260" y="222" text-anchor="middle" class="svg-text-small" fill="var(--text-dim)" dominant-baseline="middle">🌟 生活平衡 (Life)</text>
+
+            <rect x="480" y="211" width="120" height="22" rx="4" fill="var(--bg-card)" stroke="var(--border)" stroke-width="0.5" />
+            <text x="540" y="222" text-anchor="middle" class="svg-text-small" fill="var(--accent)" style="font-weight:bold;" dominant-baseline="middle">🧠 思維決策 (Decision)</text>
+
+            <!-- Step 1 Node -->
+            <g class="interactive-node" data-step="step1">
+              <rect x="260" y="20" width="280" height="60" rx="10" />
+              <text x="400" y="44" text-anchor="middle" class="svg-title">1. 選擇模式與面向 (Mode &amp; Domain)</text>
+              <text x="400" y="62" text-anchor="middle" class="svg-sub">Mode &amp; Domain Selection</text>
+            </g>
+
+            <!-- Step 2 Node -->
+            <g class="interactive-node" data-step="step2">
+              <rect x="200" y="115" width="400" height="90" rx="10" />
+              <text x="400" y="138" text-anchor="middle" class="svg-title">2. ORID 核心焦點反思 (Core Reflection)</text>
+              
+              <!-- Sub-steps O R I D -->
+              <g>
+                <circle cx="260" cy="170" r="16" class="svg-circle-node" />
+                <text x="260" y="174" text-anchor="middle" class="svg-circle-text" fill="var(--text)" style="font-weight:bold; font-size:12px;">O</text>
+                <text x="260" y="196" text-anchor="middle" class="svg-text-small">事實 (Objective)</text>
+                <path d="M 276,170 L 324,170" stroke="var(--border)" stroke-dasharray="2 2" stroke-width="1.5" marker-end="url(#svg-arrow)" />
+                
+                <circle cx="350" cy="170" r="16" class="svg-circle-node" />
+                <text x="350" y="174" text-anchor="middle" class="svg-circle-text" fill="var(--text)" style="font-weight:bold; font-size:12px;">R</text>
+                <text x="350" y="196" text-anchor="middle" class="svg-text-small">感受 (Reflective)</text>
+                <path d="M 366,170 L 414,170" stroke="var(--border)" stroke-dasharray="2 2" stroke-width="1.5" marker-end="url(#svg-arrow)" />
+
+                <circle cx="440" cy="170" r="16" class="svg-circle-node" />
+                <text x="440" y="174" text-anchor="middle" class="svg-circle-text" fill="var(--text)" style="font-weight:bold; font-size:12px;">I</text>
+                <text x="440" y="196" text-anchor="middle" class="svg-text-small">啟發 (Interpretive)</text>
+                <path d="M 456,170 L 504,170" stroke="var(--border)" stroke-dasharray="2 2" stroke-width="1.5" marker-end="url(#svg-arrow)" />
+
+                <circle cx="530" cy="170" r="16" class="svg-circle-node" />
+                <text x="530" y="174" text-anchor="middle" class="svg-circle-text" fill="var(--text)" style="font-weight:bold; font-size:12px;">D</text>
+                <text x="530" y="196" text-anchor="middle" class="svg-text-small">行動 (Decisional)</text>
+              </g>
+            </g>
+
+            <!-- Step 3 Node Left (Life Balance - Self-Rating) -->
+            <g class="interactive-node" data-step="step3-life">
+              <rect x="40" y="250" width="280" height="66" rx="10" />
+              <text x="180" y="272" text-anchor="middle" class="svg-title">3. 今日生活自評 (Self-Rating)</text>
+              <text x="180" y="288" text-anchor="middle" class="svg-sub">Domain Self-Rating (1-5)</text>
+              <text x="180" y="301" text-anchor="middle" class="svg-text-small" fill="var(--text-dim)">based on FSPIRE domain</text>
+            </g>
+
+            <!-- Step 3 Node Right (Decision - Pyramid / PDCA / SMART) -->
+            <g class="interactive-node" data-step="step3-decision">
+              <rect x="480" y="250" width="280" height="80" rx="10" />
+              <text x="620" y="272" text-anchor="middle" class="svg-title">3. 金字塔 / PDCA / SMART</text>
+              <text x="620" y="290" text-anchor="middle" class="svg-sub">Pyramid, PDCA &amp; SMART</text>
+              <text x="620" y="310" text-anchor="middle" class="svg-text-small" fill="var(--accent)" style="font-weight: bold;">邏輯論證、行動計畫與目標設定</text>
+            </g>
+
+            <!-- Step 4 Node Left (Life Balance - Dashboard) -->
+            <g class="interactive-node" data-step="step4-life">
+              <rect x="40" y="360" width="280" height="60" rx="10" />
+              <text x="180" y="384" text-anchor="middle" class="svg-title">4. 總覽儀表板 &amp; 雷達圖 (Dashboard &amp; Radar)</text>
+              <text x="180" y="402" text-anchor="middle" class="svg-sub">Dashboard &amp; Radar</text>
+            </g>
+
+            <!-- Step 4 Node Right (Decision - DQ Score) -->
+            <g class="interactive-node" data-step="step4-decision">
+              <rect x="480" y="360" width="280" height="60" rx="10" />
+              <text x="620" y="384" text-anchor="middle" class="svg-title">4. 決策品質評估 (Decision Quality)</text>
+              <text x="620" y="402" text-anchor="middle" class="svg-sub">Decision Quality Score</text>
+            </g>
+
+            <!-- Step 5 Node (Output & Report) -->
+            <g class="interactive-node" data-step="step5">
+              <rect x="250" y="490" width="300" height="60" rx="10" />
+              <text x="400" y="514" text-anchor="middle" class="svg-title">5. 報告存檔與匯出 (Save &amp; Export)</text>
+              <text x="400" y="532" text-anchor="middle" class="svg-sub">Save History &amp; Export (MD/JSON)</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Right: Flowchart details panel -->
+        <div class="flowchart-details-panel" id="flowchartDetails">
+          <div id="flowchartDetailsPlaceholder">
+            <h4 style="margin-top: 0; color: var(--accent); display: flex; align-items: center; gap: 8px;">🧭 互動流程指南</h4>
+            <p style="font-size: 13px; line-height: 1.6; margin: 0; color: var(--text-dim);">
+              將滑鼠游標移至左側流程圖的各個步驟上，此處將顯示該步驟的<b>核心概念、引導提問與實用小技巧</b>。
+            </p>
+          </div>
+          <div id="flowchartDetailsContent" class="hidden">
+            <h4 id="flowchartDetailTitle" style="margin-top: 0; color: var(--accent); display: flex; align-items: center; gap: 8px;"></h4>
+            <div id="flowchartDetailSub" style="font-size: 11px; color: var(--text-dim); margin-top: -8px; margin-bottom: 12px; font-weight: bold; text-transform: uppercase;"></div>
+            <p id="flowchartDetailDesc" style="font-size: 13px; line-height: 1.6; margin: 0 0 12px; color: var(--text);"></p>
+            <div style="background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 10px;" id="flowchartDetailTipsBox">
+              <strong style="font-size: 12.5px; color: var(--accent); display: block; margin-bottom: 4px;">💡 實作指引 &amp; 技巧</strong>
+              <ul style="font-size: 12px; margin: 0; padding-left: 18px; line-height: 1.6; color: var(--text-dim);" id="flowchartDetailTipsList">
+              </ul>
+            </div>
+          </div>
+        </div>
+
+    <div id="helpGuideContent"></div>
+  </div>
+
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Domain definitions (Bilingual) ---------- */
+const LIFE_DOMAINS = [
+  {
+    id: "financial", name: "財務", en: "Financial", icon: "💰", color: "var(--c-financial)", hex: "#F5A623",
+    m4: "Money", f4: "Fuel Future", f4_full: "Fuel your future.", p6: "Prove Right", p6_full: "PROVE yourself right.",
+    q: {
+      zh: {
+        o: ["這個月的收入與支出狀況為何？有哪些具體數字？", "有沒有新增的資產或負債？"],
+        r: ["面對這些數字，你有什麼直覺反應或情緒？", "是安心、焦慮，還是無感？"],
+        i: ["這些數字對你的財務目標與安全感代表什麼意義？", "是否偏離了原本的計畫？"],
+        d: ["下一步你要採取什麼具體行動？", "有沒有需要調整的預算或儲蓄目標？"]
+      },
+      en: {
+        o: ["What were your income and expenses this month? What are the exact figures?", "Are there any newly added assets or liabilities?"],
+        r: ["How do you feel when looking at these numbers?", "Do you feel secure, anxious, or indifferent?"],
+        i: ["What do these numbers mean for your financial goals and security?", "Have you deviated from your original plan?"],
+        d: ["What specific action will you take next?", "Is there any budget or savings target to adjust?"]
+      }
+    }
+  },
+  {
+    id: "spiritual", name: "靈性", en: "Spiritual", icon: "🕊️", color: "var(--c-spiritual)", hex: "#7FB5A0",
+    m4: null, f4: "Find Purpose", f4_full: "Find your purpose.", p6: "Prayer Always", p6_full: "PRAYER always - Never underestimate its power.",
+    q: {
+      zh: {
+        o: ["最近有哪些讓你感到平靜、連結或超越自我的時刻？", "有沒有固定的儀式、信仰實踐或靜心習慣？"],
+        r: ["這些經驗帶給你什麼樣的感受？", "有沒有出乎意料的情緒浮現？"],
+        i: ["這對你的信念、價值觀與人生意義有何啟發？", "它如何連結到你更大的目的？"],
+        d: ["你想如何持續或深化這份連結？", "有什麼具體實踐可以帶入日常？"]
+      },
+      en: {
+        o: ["What moments recently made you feel calm, connected, or transcendent?", "Do you have consistent rituals, mindfulness, or spiritual practices?"],
+        r: ["How did these experiences feel to you?", "Did any unexpected emotions surface?"],
+        i: ["What insights does this bring to your beliefs, values, and life purpose?", "How does it connect to your overarching life mission?"],
+        d: ["How do you want to sustain or deepen this connection?", "What tangible practice can you integrate into daily life?"]
+      }
+    }
+  },
+  {
+    id: "physical", name: "身體", en: "Physical", icon: "💪", color: "var(--c-physical)", hex: "#C97064",
+    m4: "Muscle", f4: null, f4_full: null, p6: "Push Yourself", p6_full: "PUSH yourself when everyone doubts you.",
+    q: {
+      zh: {
+        o: ["這週的睡眠、運動、飲食狀況客觀上是如何？", "有沒有具體的數字：步數、體重、睡眠時數？"],
+        r: ["身體目前給你什麼樣的訊號或感覺？", "是精力充沛還是疲憊？"],
+        i: ["這代表你的身體目前處於什麼狀態？需要什麼？", "跟你的健康目標之間有什麼落差？"],
+        d: ["你要調整的具體行動是什麼？", "本週可以立刻執行的一個小改變是？"]
+      },
+      en: {
+        o: ["How was your sleep, exercise, and diet objectively this week?", "What are the specific metrics: steps, weight, hours of sleep?"],
+        r: ["What signals or sensations is your body giving you right now?", "Are you energized or fatigued?"],
+        i: ["What state is your body currently in? What does it need?", "What is the gap between your current state and your health goals?"],
+        d: ["What specific adjustments will you make?", "What is one micro-change you can execute immediately this week?"]
+      }
+    }
+  },
+  {
+    id: "intellectual", name: "智識", en: "Intellectual", icon: "📚", color: "var(--c-intellectual)", hex: "#4A7BA6",
+    m4: "Mindset", f4: "Focus Present", f4_full: "Focus on your present.", p6: "Promise Self", p6_full: "PROMISE yourself you'll never give up.",
+    q: {
+      zh: {
+        o: ["最近學了什麼、讀了什麼、討論了什麼？", "有沒有接觸到新的觀點或技能？"],
+        r: ["哪些內容讓你興奮、困惑或有共鳴？", "有沒有讓你意外的發現？"],
+        i: ["這些學習如何連結到你已知的知識或目標？", "它改變了你原本的想法嗎？"],
+        d: ["接下來你想深入探索或應用的方向是？", "有沒有想開始的學習計畫？"]
+      },
+      en: {
+        o: ["What have you learned, read, or discussed recently?", "Have you encountered any fresh perspectives or skills?"],
+        r: ["What excited, puzzled, or resonated with you?", "Were there any unexpected insights?"],
+        i: ["How does this new learning connect to what you already know or aim for?", "Did it shift how you view a problem?"],
+        d: ["What direction do you want to explore or apply next?", "Is there a learning plan you wish to start?"]
+      }
+    }
+  },
+  {
+    id: "relational", name: "人際", en: "Relational", icon: "🤝", color: "var(--c-relational)", hex: "#9575A8",
+    m4: null, f4: null, f4_full: null, p6: "Proud of Self", p6_full: "PROUD of who you are.",
+    q: {
+      zh: {
+        o: ["最近與重要的人之間發生了哪些具體互動？", "有沒有衝突、合作或特別的對話？"],
+        r: ["這些互動帶給你什麼感受？", "是被理解、被忽略，還是被支持？"],
+        i: ["這反映出這段關係目前的狀態或需求？", "有沒有需要被說出口的事？"],
+        d: ["你想採取什麼行動來滋養或修復這段關係？", "下一次互動你想怎麼做不一樣？"]
+      },
+      en: {
+        o: ["What specific interactions occurred recently with important people in your life?", "Were there conflicts, collaborations, or deep conversations?"],
+        r: ["How did these interactions make you feel?", "Did you feel understood, neglected, or supported?"],
+        i: ["What does this reflect about the current state or needs of this relationship?", "Is there something left unsaid that needs to be expressed?"],
+        d: ["What action will you take to nurture or repair this relationship?", "What will you do differently in your next interaction?"]
+      }
+    }
+  },
+  {
+    id: "emotional", name: "情緒", en: "Emotional", icon: "❤️", color: "var(--c-emotional)", hex: "#D98B8B",
+    m4: "Mood", f4: "Forgive Past", f4_full: "Forgive your past.", p6: "Pick Up Self", p6_full: "PICK yourself up when you fall down.",
+    q: {
+      zh: {
+        o: ["這段時間你經歷了哪些具體事件？", "有沒有明顯的情緒轉折點？"],
+        r: ["當下你感受到哪些情緒？強度如何（1-10）？", "身體有沒有伴隨反應？"],
+        i: ["這些情緒想告訴你什麼？", "它們跟你的需求或界線有關嗎？"],
+        d: ["你要如何照顧自己、回應這些情緒？", "有沒有需要尋求的支持？"]
+      },
+      en: {
+        o: ["What specific events did you experience recently?", "Were there noticeable emotional turning points?"],
+        r: ["What emotions did you feel in the moment? Intensity (1-10)?", "Were there accompanying physical sensations?"],
+        i: ["What are these emotions trying to tell you?", "Do they relate to unmet needs or crossed boundaries?"],
+        d: ["How will you care for yourself and respond to these emotions?", "Is there support you need to seek?"]
+      }
+    }
+  }
+];
+
+const DECISION_DOMAINS = [
+  {
+    id: "problem_solving", name: "問題解決", en: "Problem Solving", icon: "🔍", color: "var(--c-financial)", hex: "#17A2B8",
+    q: {
+      zh: {
+        o: ["這裡有什麼客觀事實、數據或發生的狀況？", "有沒有具體的證據與客觀指標？"],
+        r: ["面對這個問題，你有什麼直覺反應、焦慮或擔憂？", "有沒有什麼直覺或預感？"],
+        i: ["這個問題的根本原因是什麼？", "有哪些潛在影響、機會與限制？"],
+        d: ["我們要採取什麼具體行動來解決它？", "有哪些備選方案與應對措施？"]
+      },
+      en: {
+        o: ["What objective facts, data, or events occurred?", "What is the tangible evidence and measurable indicators?"],
+        r: ["What was your gut reaction, anxiety, or concern facing this issue?", "Do you have any intuition or foreboding?"],
+        i: ["What is the root cause of this problem?", "What are the potential impacts, opportunities, and constraints?"],
+        d: ["What specific action will we take to resolve it?", "What are the alternative options and mitigation plans?"]
+      }
+    }
+  },
+  {
+    id: "retrospective", name: "專案復盤", en: "Retrospective", icon: "🚀", color: "var(--c-spiritual)", hex: "#E05D5D",
+    q: {
+      zh: {
+        o: ["專案的實際時程、產出與客觀數據為何？", "有沒有達到預期的目標或里程碑？"],
+        r: ["過程中哪些時刻讓你感到興奮、沮喪或意外？", "團隊或你的情緒反應如何？"],
+        i: ["我們學到了什麼？", "有哪些成功因素與失敗教訓？"],
+        d: ["下一個專案中，我們要做哪些調整？", "哪些作法應該維持，哪些該停止？"]
+      },
+      en: {
+        o: ["What were the actual project timeline, deliverables, and objective metrics?", "Did we achieve expected milestones and KPIs?"],
+        r: ["What moments made you feel excited, frustrated, or surprised?", "How did the team or you react emotionally?"],
+        i: ["What lessons have we learned?", "What were the key success factors and failure takeaways?"],
+        d: ["What adjustments will we make for the next project?", "What should we keep doing, stop doing, or start doing?"]
+      }
+    }
+  },
+  {
+    id: "career_decision", name: "職涯決策", en: "Career Decision", icon: "🎯", color: "var(--c-physical)", hex: "#F5A623",
+    q: {
+      zh: {
+        o: ["目前面臨的職涯選擇、薪資、工作內容等客觀事實是什麼？", "各選項的條件與機會成本為何？"],
+        r: ["對於各個選項，你的直覺感受、興奮感或擔憂是什麼？", "內心最渴望的是什麼？"],
+        i: ["這些選擇如何符合你的長遠價值觀、天賦與成長空間？", "五年後看這個決定會如何？"],
+        d: ["你的決定是什麼？", "下一步的具體行動（如更新履歷、約面試、進修）是什麼？"]
+      },
+      en: {
+        o: ["What are the objective facts regarding options, compensation, role responsibilities?", "What are the conditions and opportunity costs of each option?"],
+        r: ["What are your gut feelings, excitement, or anxieties about each path?", "What does your inner voice truly yearn for?"],
+        i: ["How do these choices align with your long-term values, strengths, and growth potential?", "How will this decision look in 5 years?"],
+        d: ["What is your decision?", "What are your concrete next steps (e.g., updating resume, scheduling interviews, upskilling)?"]
+      }
+    }
+  },
+  {
+    id: "book_learning", name: "讀書學習", en: "Book & Learning", icon: "📖", color: "var(--c-intellectual)", hex: "#2ECC71",
+    q: {
+      zh: {
+        o: ["這本書或學習內容的核心觀點、主要事實與理論是什麼？", "作者提出了哪些關鍵證據？"],
+        r: ["哪些部分讓你產生共鳴、驚訝或困惑？", "有沒有讓你質疑的地方？"],
+        i: ["這些知識如何連結到你已知的認知與盲點？", "這改變了你原本的思考方式嗎？"],
+        d: ["你要如何把這些學到的內容應用到生活或工作實踐中？", "有沒有第一步的微小嘗試？"]
+      },
+      en: {
+        o: ["What are the core arguments, empirical facts, and frameworks in this book/material?", "What key evidence did the author present?"],
+        r: ["Which parts sparked resonance, astonishment, or skepticism in you?", "Is there anything you disagree with?"],
+        i: ["How does this knowledge connect with your mental models and blind spots?", "Has it altered your way of thinking?"],
+        d: ["How will you apply these insights to your daily life or work practice?", "What is the first micro-experiment you will try?"]
+      }
+    }
+  },
+  {
+    id: "stoic_reflection", name: "斯多葛反思", en: "Stoic Reflection", icon: "🛡️", color: "var(--c-relational)", hex: "#9B59B6",
+    q: {
+      zh: {
+        o: ["今天發生了什麼事？", "哪些是你能控制的，哪些是不能控制的？"],
+        r: ["面對這些事，你產生了什麼情緒、衝動或直覺反應？", "是否有被情緒牽著走？"],
+        i: ["你的情緒是否源於對事情的判斷而非事情本身？", "它如何考驗你的美德？"],
+        d: ["你如何以理性與美德面對明天？", "下一次遇到類似情況如何做得更好？"]
+      },
+      en: {
+        o: ["What happened today objectively?", "What was within your control, and what was outside your control?"],
+        r: ["What emotions, impulses, or instinctive reactions arose?", "Did you let external events dictate your inner state?"],
+        i: ["Did your distress stem from your judgment of events rather than the events themselves?", "How does this test your virtue and character?"],
+        d: ["How will you face tomorrow with reason and virtue?", "How can you respond better next time?"]
+      }
+    }
+  },
+  {
+    id: "weekly_reflection", name: "每週回顧", en: "Weekly Reflection", icon: "📅", color: "var(--c-emotional)", hex: "#16A085",
+    q: {
+      zh: {
+        o: ["這週完成了哪些任務？", "有哪些具體進展、客觀數據或重要事件？"],
+        r: ["這週的情緒起伏如何？", "最感恩與最受挫的時刻分別是？"],
+        i: ["這週的時間與精力分配是否合理？", "有哪些習慣或方法需要改善？"],
+        d: ["下週的首要目標是什麼？", "有哪些具體且不可妥協的待辦事項？"]
+      },
+      en: {
+        o: ["What key tasks were completed this week?", "What tangible progress, metrics, or significant events occurred?"],
+        r: ["How was your emotional state across the week?", "What was your most grateful moment, and your most challenging moment?"],
+        i: ["Was your allocation of time and energy well-aligned with your priorities?", "What habits or workflows require refinement?"],
+        d: ["What is your #1 priority goal for next week?", "What are your non-negotiable action items?"]
+      }
+    }
+  }
+];
+
+let DOMAINS = LIFE_DOMAINS;
+
+const STAGES = [
+  {id:"o", letter:"O", zh:"客觀事實", en:"Objective"},
+  {id:"r", letter:"R", zh:"反應感受", en:"Reflective"},
+  {id:"i", letter:"I", zh:"詮釋意義", en:"Interpretive"},
+  {id:"d", letter:"D", zh:"決定行動", en:"Decisional"},
+];
+
+/* ---------- I18N Translations Dictionary ---------- */
+const I18N = {
+  zh: {
+    appTitle: "焦點討論與決策羅盤 ORID Mindset & Decision Compass",
+    langBtn: "🌐 EN",
+    brandTitleLife: "焦點討論生活羅盤",
+    brandSubLife: "ORID Life Compass · 財務 · 靈性 · 身體 · 智識 · 人際 · 情緒",
+    brandTitleDecision: "思維反思與決策羅盤",
+    brandSubDecision: "ORID Mindset & Decision Compass · 問題解決 · 專案復盤 · 職涯決策 · 讀書學習 · 斯多葛反思 · 每週回顧",
+    tabDashboard: "總覽 Dashboard",
+    tabWorkspace: "羅盤 Compass",
+    tabHistory: "紀錄 History",
+    tabHelp: "說明 Help",
+    modeLife: "🌟 生活平衡 Life",
+    modeDecision: "🧠 思維決策 Decision",
+    compassTitleLife: "生活羅盤",
+    compassSubLife: "點選一個面向，開始 O-R-I-D 反思",
+    compassTitleDecision: "思維與決策羅盤",
+    compassSubDecision: "點選一個決策模板，展開結構化推演",
+    dashTitleLife: '生活平衡儀表板 <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Dashboard</span>',
+    dashSubLife: "六大面向的最新自評分數與更新狀態",
+    dashTitleDecision: '思維與決策儀表板 <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Decision Dashboard</span>',
+    dashSubDecision: "六個決策模板的最新決策品質綜合評分",
+    noEntries: "尚無紀錄 No entries yet",
+    lastUpdated: "最近更新：",
+    entriesCount: "筆",
+    workspaceEmpty: "← 請從左側羅盤選擇一個面向，開始今天的焦點討論反思。<br>Select a domain from the compass to begin.",
+    selfRatingLabel: "今日自評分數 Self-rating",
+    pyramidTab: "🏛️ 金字塔與 MECE 整合",
+    pdcaTab: "🔄 PDCA 執行計畫 (D 連結)",
+    smartTab: "🎯 SMART 目標設定",
+    pyramidHeader: '🏛️ 金字塔結構與 MECE 整合 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">Pyramid Principle & MECE</span>',
+    pyramidSub: "將 ORID 焦點討論的思考，收斂並淬煉成邏輯嚴密的決策結論",
+    keyMessageLabel: "核心決策 / 結論建議 (Key Message)",
+    keyMessageSub: "對應 D (Decisional)",
+    keyMessagePlaceholder: "例如：導入每週變更審查會議，降低時程延誤。起手式：為了解決...，建議執行...",
+    argsLabel: "支持論點 (Supporting Arguments - MECE 結構)",
+    argsSub: "對應 R/I (Reflective/Interpretive)",
+    argsDesc: "請將理由拆解為多個「獨立無重疊，加總無遺漏」的具體論點：",
+    addArgBtn: "➕ 新增論點 Add Argument",
+    meceChecklistHeader: "🛡️ MECE 邏輯自我檢視表 (Logic Checklist)",
+    meceMELabel: "<strong>Mutually Exclusive (互無重疊)</strong>: 我的論點是否彼此獨立？沒有重複計算或概念混淆的地方？",
+    meceCELabel: "<strong>Collectively Exhaustive (毫無遺漏)</strong>: 論點加總是否已經涵蓋了所有合理的成因或考量面向？",
+    factsLabel: "支持事實與數據 (Supporting Facts & Data)",
+    factsSub: "對應 O (Objective)",
+    factsPlaceholder: "列出客觀數據、指標與事實背景...",
+    pdcaHeader: '🔄 PDCA 執行計畫 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">PDCA Cycle (Action Planner)</span>',
+    pdcaSub: "承接 ORID 焦點討論的「D 決定行動」，將其展開為可持續改善的循環專案",
+    pdcaPlanLabel: "📋 P — Plan (計畫)",
+    pdcaPlanPlaceholder: "我們要達成什麼具體目標？實施的行動步驟與規劃是什麼？",
+    pdcaDoLabel: "🚀 D — Do (執行)",
+    pdcaDoPlaceholder: "具體如何落實？分工是誰？時間節點是什麼？",
+    pdcaCheckLabel: "🔍 C — Check (查核)",
+    pdcaCheckPlaceholder: "執行過程中如何評估成效與進度？量化的關鍵指標是什麼？",
+    pdcaActLabel: "🛡️ A — Act (處理/調整)",
+    pdcaActPlaceholder: "當成效與目標有偏差時，如何進行修正？成功的經驗如何標準化？",
+    smartHeader: '🎯 SMART 目標設定 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">SMART Criteria (Target Setting)</span>',
+    smartSub: "將行動計畫轉化為明確、具體且可衡量的目標，以確保執行成效",
+    smartSLabel: "📌 S — Specific (明確性)",
+    smartSPlaceholder: "目標是什麼？具體要達成什麼結果？避免模糊字眼（例如：『多讀書』改為『讀完 2 本專案管理書籍』）。",
+    smartMLabel: "📊 M — Measurable (可衡量性)",
+    smartMPlaceholder: "如何衡量是否達成？有哪些量化指標或驗收標準？（例如：『完成 100% 的章節閱讀與課後測驗』）。",
+    smartALabel: "💪 A — Achievable (可達成性)",
+    smartAPlaceholder: "在現有的資源與能力下，這個目標是可行的嗎？挑戰性與可行性如何平衡？",
+    smartRLabel: "🔗 R — Relevant (相關性)",
+    smartRPlaceholder: "這個目標與你目前的核心決策、長遠價值觀或專案方向有何關聯？",
+    smartTLabel: "📅 T — Time-bound (時限性)",
+    smartTPlaceholder: "預計在什麼時間點前完成？明確的截止日期或階段時程是什麼？",
+    dqHeader: '🎯 決策品質評估 <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">Decision Quality (DQ) Score</span>',
+    dqSub: "評估本次反思與思考的嚴謹程度",
+    dqClarity: "清晰度 Clarity",
+    dqClarityDesc: "核心結論是否清楚明確？",
+    dqEvidence: "事實證據 Evidence",
+    dqEvidenceDesc: "是否有客觀數據支持？",
+    dqInsight: "洞察深度 Insight",
+    dqInsightDesc: "是否掌握根本原因？",
+    dqAction: "可執行性 Actionability",
+    dqActionDesc: "行動與 PDCA 是否具體可行？",
+    dqOverall: "決策品質綜合得分：",
+    saveBtn: "儲存紀錄 Save Entry",
+    clearBtn: "清空 Clear",
+    histTitle: '歷史紀錄 <span style="color:var(--text-dim);font-weight:400;font-size:13px;">History</span>',
+    histFilterAll: "所有面向 All domains",
+    histSortNewest: "最新優先 Newest first",
+    histSortOldest: "最舊優先 Oldest first",
+    histEmpty: "尚無符合條件的紀錄。No entries found.",
+    unfilled: "（未填寫）",
+    noArgs: "<li>（無論點）</li>",
+    deleteBtn: "刪除 Delete",
+    confirmDelete: "確定要刪除這筆紀錄嗎？",
+    confirmLoadDemo: "這將會新增示範資料到目前的紀錄中，是否繼續？\nThis will add demo entries to your current data. Continue?",
+    confirmResetAll: "這將永久刪除所有紀錄，確定要繼續嗎？\nThis will permanently delete all data. Continue?",
+    alertSaved: "已儲存！Saved successfully.",
+    alertFillAtLeastOne: "請至少填寫一個階段的內容再儲存。\nPlease fill in at least one stage before saving.",
+    alertDemoLoaded: "示範資料已載入！請查看「總覽」與「紀錄」分頁。",
+    alertAllReset: "已清除所有資料。All data cleared.",
+    alertImportSuccess: "匯入成功！Import successful.",
+    alertImportFail: "匯入失敗，請確認 JSON 檔案格式正確。\nImport failed: invalid JSON format.",
+    fcTipsHeader: "💡 實作指引 & 技巧",
+    fcPlaceholder: '<h4 style="margin-top:0;color:var(--accent);display:flex;align-items:center;gap:8px;">🧭 互動流程指南</h4><p style="font-size:13px;line-height:1.6;margin:0;color:var(--text-dim);">將滑鼠游標移至左側流程圖的各個步驟上，此處將顯示該步驟的<b>核心概念、引導提問與實用小技巧</b>。</p>',
+    flowchart: {
+      "step1": {
+        title: "🎯 1. 選擇模式與面向",
+        sub: "Mode & Domain Selection",
+        desc: "在使用羅盤前，先選擇要分析的場景。本工具提供「生活平衡 (F-SPIRE)」與「思維決策 (Decision)」雙模式。在羅盤上點選特定面向，以載入專屬的焦點討論與分析工具。",
+        tips: [
+          "生活平衡模式：提供財務、身體、智識等六大面向的日常反思與自評。",
+          "思維決策模式：提供問題解決、專案復盤、職涯決策等主題模板，著重邏輯推演。",
+          "點擊左下方的 Legend 可以看見每個面向已累積的日誌數量。"
+        ]
+      },
+      "step2": {
+        title: "💬 2. ORID 核心焦點反思",
+        sub: "ORID Core Reflection",
+        desc: "遵循引導，由淺入深進行反思：客觀事實 (O) → 反應感受 (R) → 詮釋意義 (I) → 決定行動 (D)。點選輸入框上方的步驟導覽，即可切換閱讀各步驟的思考引導問題。",
+        tips: [
+          "Objective (事實)：記錄客觀具體事實、數據與觀察，不帶主觀臆測。",
+          "Reflective (感受)：庫存並直面當下的直覺情緒、身體感覺與反應。",
+          "Interpretive (意義)：深入探索原因、關聯與啟發，找出核心本質。",
+          "Decisional (行動)：將思維火花轉化為具體、可落地的實踐方案。"
+        ]
+      },
+      "step3-life": {
+        title: "⭐ 3. 今日生活自評",
+        sub: "Domain Self-Rating",
+        desc: "在生活平衡模式中，針對選擇的面向進行 1 至 5 分的滿意度自評。此評分將被儲存並與歷史平均值比較，自動反映在雷達圖中。",
+        tips: [
+          "1 分代表有重大阻礙或極度不滿意；5 分代表非常理想且符合預期。",
+          "每天固定反思與給分，有助於追踪各面向在時間軸上的動態變化與失衡預警。"
+        ]
+      },
+      "step3-decision": {
+        title: "🏛️ 3. 金字塔、PDCA 與 SMART",
+        sub: "Pyramid, PDCA & SMART Target",
+        desc: "在決策模式下，對 ORID 反思進行二次結構化提煉：將 D (行動) 收斂為核心結論 (Key Message)；將 R/I 拆解為符合 MECE (獨立且完整) 的支持論點；再將 D (行動) 細化為 Plan-Do-Check-Act (PDCA) 執行計畫，或是透過 SMART 原則設定可衡量的具體目標。",
+        tips: [
+          "結論先行：核心結論（Key Message）必須是一句清晰、可被執行的建議。",
+          "MECE 檢查：勾選 MECE 自我檢視表，確保論點「互無重疊，毫無遺漏」。",
+          "PDCA 計畫：將模糊的行動細化為具體計畫 (P)、分工與時程 (D)、度量指標 (C) 與標準化方案 (A)。",
+          "SMART 目標：使用 Specific (明確)、Measurable (可衡量)、Achievable (可達成)、Relevant (相關) 與 Time-bound (時限) 檢核你的行動目標。"
+        ]
+      },
+      "step4-life": {
+        title: "📊 4. 總覽儀表板 & 雷達圖",
+        sub: "Dashboard & Balance Radar",
+        desc: "系統自動計算六大生活面向（F-SPIRE）的最新分數，並繪製成多維雷達圖。可以直觀看出目前的生活是否失衡，或是哪些維度需要重新投入精力。",
+        tips: [
+          "雷達圖頂點分佈代表平衡狀態，凹陷處即是目前需要關注的弱點。",
+          "生活管理本質是精力管理，避免偏廢特定維度以達成長期身心健康。"
+        ]
+      },
+      "step4-decision": {
+        title: "🎯 4. 決策品質自我評估",
+        sub: "Decision Quality (DQ) Scoring",
+        desc: "針對本決策的思考過程進行「清晰度 (Clarity)」、「事實證據 (Evidence)」、「洞察深度 (Insight)」與「可執行性 (Actionability)」自評，得出綜合決策品質得分 (DQ Score)。",
+        tips: [
+          "清晰度：我的核心結論是否容易理解？",
+          "事實證據：我的论证是否以 Objective 的數據和事實為支撐？",
+          "洞察深度：我有沒有挖掘到根本原因，還是只在表層？",
+          "可執行性：PDCA 計畫是否足夠具體，能直接落地？"
+        ]
+      },
+      "step5": {
+        title: "💾 5. 報告存檔與匯出",
+        sub: "Save History & Export Reports",
+        desc: "儲存後的反思紀錄會保存在瀏覽器本地 (LocalStorage)，並可匯入/匯出 JSON 備份。此外，支持一鍵匯出排版精美的 Markdown (MD) 決策與反思報告，適合存入個人筆記軟體 (如 Obsidian, Notion) 作為個人知識庫。",
+        tips: [
+          "儲存紀錄 (Save)：將資料寫入本地，更新儀表板雷達圖及歷史清單。",
+          "匯出 MD (Export MD)：將 ORID 反思、金字塔架構、PDCA 計畫與決策分數，打包成專業的結構化 Markdown 報告。"
+        ]
+      }
+    }
+  },
+  en: {
+    appTitle: "ORID Mindset & Decision Compass",
+    langBtn: "🌐 中文",
+    brandTitleLife: "ORID Life Compass",
+    brandSubLife: "Financial · Spiritual · Physical · Intellectual · Relational · Emotional",
+    brandTitleDecision: "ORID Mindset & Decision Compass",
+    brandSubDecision: "Problem Solving · Retrospective · Career · Book Learning · Stoic · Weekly Review",
+    tabDashboard: "Dashboard",
+    tabWorkspace: "Compass",
+    tabHistory: "History",
+    tabHelp: "Help & Guide",
+    modeLife: "🌟 Life Balance",
+    modeDecision: "🧠 Decision Mindset",
+    compassTitleLife: "Life Compass",
+    compassSubLife: "Select a life domain to start O-R-I-D reflection",
+    compassTitleDecision: "Decision Compass",
+    compassSubDecision: "Select a decision template to structure reasoning",
+    dashTitleLife: 'Life Balance Dashboard <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Dashboard</span>',
+    dashSubLife: "Latest self-rating scores and status across 6 life dimensions",
+    dashTitleDecision: 'Mindset & Decision Dashboard <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Decision Dashboard</span>',
+    dashSubDecision: "Latest decision quality composite scores across 6 decision templates",
+    noEntries: "No entries yet",
+    lastUpdated: "Last updated: ",
+    entriesCount: "entries",
+    workspaceEmpty: "← Select a domain or template from the compass on the left to begin your reflection.",
+    selfRatingLabel: "Today's Self-Rating (1 - 5)",
+    pyramidTab: "🏛️ Pyramid & MECE",
+    pdcaTab: "🔄 PDCA Action Plan",
+    smartTab: "🎯 SMART Goal Setting",
+    pyramidHeader: '🏛️ Pyramid Structure & MECE <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">Pyramid Principle & MECE</span>',
+    pyramidSub: "Synthesize your ORID reflection into rigorous, logically structured conclusions",
+    keyMessageLabel: "Core Decision / Key Message",
+    keyMessageSub: "Linked to D (Decisional)",
+    keyMessagePlaceholder: "e.g. Implement weekly change review meeting to cut timeline slippage. 'To resolve X, we recommend Y...'",
+    argsLabel: "Supporting Arguments (MECE Structure)",
+    argsSub: "Linked to R/I (Reflective/Interpretive)",
+    argsDesc: "Break down reasons into mutually exclusive, collectively exhaustive arguments:",
+    addArgBtn: "➕ Add Argument",
+    meceChecklistHeader: "🛡️ MECE Logic Self-Checklist",
+    meceMELabel: "<strong>Mutually Exclusive (No Overlap)</strong>: Are the arguments independent without overlapping concepts or double counting?",
+    meceCELabel: "<strong>Collectively Exhaustive (No Gaps)</strong>: Do the arguments together cover all critical facets and root causes?",
+    factsLabel: "Supporting Facts & Data",
+    factsSub: "Linked to O (Objective)",
+    factsPlaceholder: "List objective data, metrics, observed facts and background evidence...",
+    pdcaHeader: '🔄 PDCA Action Planner <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">PDCA Cycle (Action Planner)</span>',
+    pdcaSub: "Connect ORID Decisional (D) into an agile, iterative continuous improvement cycle",
+    pdcaPlanLabel: "📋 P — Plan",
+    pdcaPlanPlaceholder: "What specific goal are we achieving? What are the action steps and schedule?",
+    pdcaDoLabel: "🚀 D — Do",
+    pdcaDoPlaceholder: "How is it executed? Who is responsible? What are the key milestone dates?",
+    pdcaCheckLabel: "🔍 C — Check",
+    pdcaCheckPlaceholder: "How do we measure progress and effectiveness? What are the key quantitative metrics?",
+    pdcaActLabel: "🛡️ A — Act / Adjust",
+    pdcaActPlaceholder: "How do we correct deviations? How do we standardize successful practices into SOPs?",
+    smartHeader: '🎯 SMART Goal Setting <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">SMART Criteria</span>',
+    smartSub: "Transform action plans into concrete, measurable goals to ensure effective execution",
+    smartSLabel: "📌 S — Specific",
+    smartSPlaceholder: "What is the exact goal? What specific outcome is desired? Avoid vague phrases (e.g., 'Read 2 PM books' instead of 'Read more').",
+    smartMLabel: "📊 M — Measurable",
+    smartMPlaceholder: "How will success be measured? What quantitative metrics or acceptance criteria will be used?",
+    smartALabel: "💪 A — Achievable",
+    smartAPlaceholder: "Is this goal feasible within current capabilities and resources while remaining appropriately challenging?",
+    smartRLabel: "🔗 R — Relevant",
+    smartRPlaceholder: "How does this goal align with your core decisions, overarching values, or project direction?",
+    smartTLabel: "📅 T — Time-bound",
+    smartTPlaceholder: "When is the target completion date? What are the key deadline milestones?",
+    dqHeader: '🎯 Decision Quality (DQ) Assessment <span style="font-size:12px;font-weight:normal;color:var(--text-dim);">DQ Score</span>',
+    dqSub: "Self-evaluate the rigor and clarity of this decision process",
+    dqClarity: "Clarity",
+    dqClarityDesc: "Is the core recommendation clear and succinct?",
+    dqEvidence: "Evidence",
+    dqEvidenceDesc: "Is it backed by objective facts and data?",
+    dqInsight: "Insight",
+    dqInsightDesc: "Did you uncover the fundamental root causes?",
+    dqAction: "Actionability",
+    dqActionDesc: "Are the PDCA/SMART action steps concrete?",
+    dqOverall: "Overall Decision Quality (DQ) Score:",
+    saveBtn: "Save Entry",
+    clearBtn: "Clear Form",
+    histTitle: 'Reflection & Decision History <span style="color:var(--text-dim);font-weight:400;font-size:13px;">History</span>',
+    histFilterAll: "All Domains",
+    histSortNewest: "Newest First",
+    histSortOldest: "Oldest First",
+    histEmpty: "No entries found matching criteria.",
+    unfilled: "(Unfilled)",
+    noArgs: "<li>(No arguments added)</li>",
+    deleteBtn: "Delete",
+    confirmDelete: "Are you sure you want to delete this entry?",
+    confirmLoadDemo: "This will add sample demo entries to your dataset. Continue?",
+    confirmResetAll: "This will permanently delete all entries. Are you sure you want to proceed?",
+    alertSaved: "Saved successfully!",
+    alertFillAtLeastOne: "Please fill in at least one stage before saving.",
+    alertDemoLoaded: "Demo data loaded! Please check Dashboard and History tabs.",
+    alertAllReset: "All data cleared successfully.",
+    alertImportSuccess: "Import successful!",
+    alertImportFail: "Import failed: invalid JSON format.",
+    fcTipsHeader: "💡 Action Tips & Guidelines",
+    fcPlaceholder: '<h4 style="margin-top:0;color:var(--accent);display:flex;align-items:center;gap:8px;">🧭 Interactive Process Guide</h4><p style="font-size:13px;line-height:1.6;margin:0;color:var(--text-dim);">Hover over any step in the flowchart to view its <b>core concepts, guided questions, and practical tips</b>.</p>',
+    flowchart: {
+      "step1": {
+        title: "🎯 1. Select Mode & Domain",
+        sub: "Mode & Domain Selection",
+        desc: "Choose between Life Balance (F-SPIRE) and Decision Mindset. Click a domain on the compass to load specialized questions and synthesis tools.",
+        tips: [
+          "Life Balance Mode: Daily reflections and 1-5 ratings across 6 life dimensions.",
+          "Decision Mindset: Themed templates (Problem Solving, Retrospective, Career, etc.) focused on deductive reasoning.",
+          "Click items in the legend to quickly jump to specific domains."
+        ]
+      },
+      "step2": {
+        title: "💬 2. ORID Core Reflection",
+        sub: "Focused Conversation Method",
+        desc: "Step through structured prompts: Objective Facts (O) → Reflective Feelings (R) → Interpretive Meaning (I) → Decisional Actions (D).",
+        tips: [
+          "Objective (Facts): Record observable data and events without premature assumptions.",
+          "Reflective (Feelings): Acknowledge gut instincts, emotional reactions, and energy levels.",
+          "Interpretive (Meaning): Uncover root causes, deeper lessons, and personal insights.",
+          "Decisional (Actions): Convert insights into clear, practical next steps."
+        ]
+      },
+      "step3-life": {
+        title: "⭐ 3. Domain Self-Rating",
+        sub: "Life Balance Score (1-5)",
+        desc: "Rate your satisfaction level from 1 to 5. Scores are aggregated into the multi-axis radar chart for dynamic balance tracking.",
+        tips: [
+          "1 = Severe friction/obstacle; 5 = Ideal flow and complete fulfillment.",
+          "Consistent daily ratings provide early warnings for life imbalances."
+        ]
+      },
+      "step3-decision": {
+        title: "🏛️ 3. Pyramid, PDCA & SMART",
+        sub: "Synthesis & Action Frameworks",
+        desc: "Synthesize ORID into a top-down Pyramid Key Message with MECE supporting arguments, detailed PDCA action plans, or SMART goals.",
+        tips: [
+          "Conclusion First: State your primary Key Message in one actionable sentence.",
+          "MECE Check: Verify that supporting arguments are mutually exclusive and collectively exhaustive.",
+          "PDCA Planner: Specify Plan, Do, Check, and Act phases for operational rigor.",
+          "SMART Goals: Ensure targets are Specific, Measurable, Achievable, Relevant, and Time-bound."
+        ]
+      },
+      "step4-life": {
+        title: "📊 4. Dashboard & Radar Chart",
+        sub: "Multi-Axis Balance Radar",
+        desc: "Visualizes current scores across all 6 F-SPIRE dimensions to quickly identify areas needing attention.",
+        tips: [
+          "Radar vertices reflect current balance; depressions highlight growth areas.",
+          "Life management is energy management: avoid chronic neglected dimensions."
+        ]
+      },
+      "step4-decision": {
+        title: "🎯 4. Decision Quality (DQ) Score",
+        sub: "Four-Pillar Decision Assessment",
+        desc: "Evaluate your decision process across Clarity, Evidence, Insight, and Actionability to calculate a composite DQ score.",
+        tips: [
+          "Clarity: Is the recommendation crisp and unambiguous?",
+          "Evidence: Is it substantiated by objective data?",
+          "Insight: Did you address the underlying root causes?",
+          "Actionability: Are next steps concrete and measurable?"
+        ]
+      },
+      "step5": {
+        title: "💾 5. Save & Export Reports",
+        sub: "Local Storage & Markdown Reports",
+        desc: "All entries are preserved locally in your browser. Export beautiful structured Markdown reports ready for Obsidian, Notion, or Logseq.",
+        tips: [
+          "Save Entry: Persists data locally and updates dashboard radars immediately.",
+          "Export Markdown: Bundles ORID reflections, Pyramid structures, PDCA plans, and DQ scores into formatted reports."
+        ]
+      }
+    }
+  }
+};
+
+/* ---------- State & Draft ---------- */
+const STORAGE_KEY = "oridLifeCompass_v1";
+let state = { theme: "dark", mode: "life", lang: "zh", entries: [] };
+let activeDomain = null;
+let activeStage = "o";
+let draft = {
+  o: "", r: "", i: "", d: "",
+  rating: 3,
+  pyramidFacts: "",
+  pyramidMessage: "",
+  arguments: [""],
+  meceME: false,
+  meceCE: false,
+  pdcaPlan: "",
+  pdcaDo: "",
+  pdcaCheck: "",
+  pdcaAct: "",
+  smartSpecific: "",
+  smartMeasurable: "",
+  smartAchievable: "",
+  smartRelevant: "",
+  smartTimeBound: "",
+  activeSynTab: "pyramid", // pyramid, pdca or smart
+  scores: { clarity: 3, evidence: 3, insight: 3, actionability: 3 }
+};
+
+function resetDraft() {
+  draft = {
+    o: "", r: "", i: "", d: "",
+    rating: 3,
+    pyramidFacts: "",
+    pyramidMessage: "",
+    arguments: [""],
+    meceME: false,
+    meceCE: false,
+    pdcaPlan: "",
+    pdcaDo: "",
+    pdcaCheck: "",
+    pdcaAct: "",
+    smartSpecific: "",
+    smartMeasurable: "",
+    smartAchievable: "",
+    smartRelevant: "",
+    smartTimeBound: "",
+    activeSynTab: "pyramid",
+    scores: { clarity: 3, evidence: 3, insight: 3, actionability: 3 }
+  };
+}
+
+/* ---------- Persistence ---------- */
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      state = Object.assign(state, parsed);
+      if(!state.mode) state.mode = "life";
+      if(!state.lang) state.lang = "zh";
+    } else {
+      // Auto-detect browser language if available
+      const browserLang = navigator.language || navigator.userLanguage || "zh";
+      state.lang = browserLang.toLowerCase().startsWith("zh") ? "zh" : "en";
+    }
+  }catch(e){ console.warn("load failed", e); }
+}
+function save(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ console.warn("save failed", e); }
+}
+
+/* ---------- Theme ---------- */
+function applyTheme(){
+  document.body.setAttribute("data-theme", state.theme);
+  document.getElementById("themeToggle").textContent = state.theme === "dark" ? "🌙" : "☀️";
+}
+document.getElementById("themeToggle").addEventListener("click", ()=>{
+  state.theme = state.theme === "dark" ? "light" : "dark";
+  applyTheme(); save();
+});
+
+/* ---------- Tabs ---------- */
+const tabButtons = document.querySelectorAll("nav.tabs button");
+tabButtons.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    tabButtons.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".workspace").forEach(w=>w.classList.add("hidden"));
+    document.getElementById("tab-"+btn.dataset.tab).classList.remove("hidden");
+    if(btn.dataset.tab === "dashboard") renderDashboard();
+    if(btn.dataset.tab === "history") renderHistory();
+    if(btn.dataset.tab === "help") renderHelp();
+  });
+});
+function goToTab(tabId){
+  document.querySelector(`nav.tabs button[data-tab="${tabId}"]`).click();
+}
+
+/* ---------- Mode Switching ---------- */
+const modeLifeBtn = document.getElementById("modeLifeBtn");
+const modeDecisionBtn = document.getElementById("modeDecisionBtn");
+
+function switchMode(newMode) {
+  state.mode = newMode;
+  DOMAINS = state.mode === "life" ? LIFE_DOMAINS : DECISION_DOMAINS;
+  activeDomain = null;
+  resetDraft();
+  save();
+
+  modeLifeBtn.classList.toggle("active", state.mode === "life");
+  modeDecisionBtn.classList.toggle("active", state.mode === "decision");
+
+  const t = I18N[state.lang];
+  const titleEl = document.getElementById("brandTitle");
+  const subEl = document.getElementById("brandSub");
+  const markEl = document.getElementById("brandMark");
+  
+  if (state.mode === "life") {
+    titleEl.textContent = t.brandTitleLife;
+    subEl.textContent = t.brandSubLife;
+    markEl.style.background = "conic-gradient(var(--c-financial), var(--c-spiritual), var(--c-physical), var(--c-intellectual), var(--c-relational), var(--c-emotional))";
+    document.getElementById("lifeRatingRow").classList.remove("hidden");
+    document.getElementById("decisionPyramidPanel").classList.add("hidden");
+  } else {
+    titleEl.textContent = t.brandTitleDecision;
+    subEl.textContent = t.brandSubDecision;
+    markEl.style.background = "conic-gradient(#17A2B8, #E05D5D, #F5A623, #2ECC71, #9B59B6, #16A085)";
+    document.getElementById("lifeRatingRow").classList.add("hidden");
+    document.getElementById("decisionPyramidPanel").classList.remove("hidden");
+  }
+
+  document.querySelector(".compass-panel h2").textContent = state.mode === "life" ? t.compassTitleLife : t.compassTitleDecision;
+  document.querySelector(".compass-panel p.sub").textContent = state.mode === "life" ? t.compassSubLife : t.compassSubDecision;
+
+  buildCompass();
+  buildLegend();
+  populateHistFilter();
+  renderWorkspace();
+  if (typeof updateFlowchartHighlight === "function") {
+    updateFlowchartHighlight();
+  }
+  
+  goToTab("dashboard");
+}
+
+modeLifeBtn.addEventListener("click", () => {
+  if (state.mode !== "life") switchMode("life");
+});
+modeDecisionBtn.addEventListener("click", () => {
+  if (state.mode !== "decision") switchMode("decision");
+});
+
+/* ---------- Language Toggle & Dynamic i18n Application ---------- */
+document.getElementById("langToggle").addEventListener("click", () => {
+  state.lang = state.lang === "zh" ? "en" : "zh";
+  applyLanguage();
+  save();
+});
+
+function applyLanguage() {
+  const lang = state.lang || "zh";
+  const t = I18N[lang];
+  document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+  document.title = t.appTitle;
+  
+  document.getElementById("langToggle").textContent = t.langBtn;
+
+  // Header & Brand
+  const titleEl = document.getElementById("brandTitle");
+  const subEl = document.getElementById("brandSub");
+  if (state.mode === "life") {
+    titleEl.textContent = t.brandTitleLife;
+    subEl.textContent = t.brandSubLife;
+  } else {
+    titleEl.textContent = t.brandTitleDecision;
+    subEl.textContent = t.brandSubDecision;
+  }
+
+  // Nav tabs
+  document.querySelector('nav.tabs button[data-tab="dashboard"]').textContent = t.tabDashboard;
+  document.querySelector('nav.tabs button[data-tab="workspace"]').textContent = t.tabWorkspace;
+  document.querySelector('nav.tabs button[data-tab="history"]').textContent = t.tabHistory;
+  document.querySelector('nav.tabs button[data-tab="help"]').textContent = t.tabHelp;
+
+  // Mode buttons
+  modeLifeBtn.textContent = t.modeLife;
+  modeDecisionBtn.textContent = t.modeDecision;
+
+  // Left Compass panel
+  document.querySelector(".compass-panel h2").textContent = state.mode === "life" ? t.compassTitleLife : t.compassTitleDecision;
+  document.querySelector(".compass-panel p.sub").textContent = state.mode === "life" ? t.compassSubLife : t.compassSubDecision;
+
+  // Empty workspace hint
+  document.getElementById("workspaceEmpty").innerHTML = t.workspaceEmpty;
+  document.querySelector("#lifeRatingRow label").textContent = t.selfRatingLabel;
+
+  // Synthesis Tab Buttons
+  document.getElementById("synTabPyramid").textContent = t.pyramidTab;
+  document.getElementById("synTabPdca").textContent = t.pdcaTab;
+  document.getElementById("synTabSmart").textContent = t.smartTab;
+
+  // Pyramid Form Texts
+  const synPyr = document.getElementById("synPanelPyramid");
+  if (synPyr) {
+    synPyr.querySelector("h3").innerHTML = t.pyramidHeader;
+    synPyr.querySelector(".stage-en").textContent = t.pyramidSub;
+    const labels = synPyr.querySelectorAll(".input-row label");
+    if (labels[0]) {
+      labels[0].querySelector("strong").textContent = t.keyMessageLabel;
+      labels[0].querySelector("span").textContent = t.keyMessageSub;
+    }
+    document.getElementById("pyramidMessage").placeholder = t.keyMessagePlaceholder;
+    if (labels[1]) {
+      labels[1].querySelector("strong").textContent = t.argsLabel;
+      labels[1].querySelector("span").textContent = t.argsSub;
+    }
+    const argsDescEl = synPyr.querySelector(".input-row p");
+    if (argsDescEl) argsDescEl.textContent = t.argsDesc;
+    document.getElementById("addArgBtn").textContent = t.addArgBtn;
+
+    const chkHeader = synPyr.querySelector(".mece-checklist-card strong");
+    if (chkHeader) chkHeader.textContent = t.meceChecklistHeader;
+    const chkLabels = synPyr.querySelectorAll(".mece-checklist-card label span");
+    if (chkLabels[0]) chkLabels[0].innerHTML = t.meceMELabel;
+    if (chkLabels[1]) chkLabels[1].innerHTML = t.meceCELabel;
+
+    if (labels[2]) {
+      labels[2].querySelector("strong").textContent = t.factsLabel;
+      labels[2].querySelector("span").textContent = t.factsSub;
+    }
+    document.getElementById("pyramidFacts").placeholder = t.factsPlaceholder;
+  }
+
+  // PDCA Form Texts
+  const synPdca = document.getElementById("synPanelPdca");
+  if (synPdca) {
+    synPdca.querySelector("h3").innerHTML = t.pdcaHeader;
+    synPdca.querySelector(".stage-en").textContent = t.pdcaSub;
+    const pdcaFields = synPdca.querySelectorAll(".pdca-field");
+    if (pdcaFields[0]) {
+      pdcaFields[0].querySelector("label").textContent = t.pdcaPlanLabel;
+      document.getElementById("pdcaPlan").placeholder = t.pdcaPlanPlaceholder;
+    }
+    if (pdcaFields[1]) {
+      pdcaFields[1].querySelector("label").textContent = t.pdcaDoLabel;
+      document.getElementById("pdcaDo").placeholder = t.pdcaDoPlaceholder;
+    }
+    if (pdcaFields[2]) {
+      pdcaFields[2].querySelector("label").textContent = t.pdcaCheckLabel;
+      document.getElementById("pdcaCheck").placeholder = t.pdcaCheckPlaceholder;
+    }
+    if (pdcaFields[3]) {
+      pdcaFields[3].querySelector("label").textContent = t.pdcaActLabel;
+      document.getElementById("pdcaAct").placeholder = t.pdcaActPlaceholder;
+    }
+  }
+
+  // SMART Form Texts
+  const synSmart = document.getElementById("synPanelSmart");
+  if (synSmart) {
+    synSmart.querySelector("h3").innerHTML = t.smartHeader;
+    synSmart.querySelector(".stage-en").textContent = t.smartSub;
+    const smartFields = synSmart.querySelectorAll(".smart-field");
+    if (smartFields[0]) {
+      smartFields[0].querySelector("label").textContent = t.smartSLabel;
+      document.getElementById("smartSpecific").placeholder = t.smartSPlaceholder;
+    }
+    if (smartFields[1]) {
+      smartFields[1].querySelector("label").textContent = t.smartMLabel;
+      document.getElementById("smartMeasurable").placeholder = t.smartMPlaceholder;
+    }
+    if (smartFields[2]) {
+      smartFields[2].querySelector("label").textContent = t.smartALabel;
+      document.getElementById("smartAchievable").placeholder = t.smartAPlaceholder;
+    }
+    if (smartFields[3]) {
+      smartFields[3].querySelector("label").textContent = t.smartRLabel;
+      document.getElementById("smartRelevant").placeholder = t.smartRPlaceholder;
+    }
+    if (smartFields[4]) {
+      smartFields[4].querySelector("label").textContent = t.smartTLabel;
+      document.getElementById("smartTimeBound").placeholder = t.smartTPlaceholder;
+    }
+  }
+
+  // Decision Quality Scoring Texts
+  const dqCard = document.querySelector("#decisionPyramidPanel .stage-card:last-child");
+  if (dqCard) {
+    dqCard.querySelector("h3").innerHTML = t.dqHeader;
+    dqCard.querySelector(".stage-en").textContent = t.dqSub;
+    const dqLabels = dqCard.querySelectorAll(".dq-slider-item label");
+    if (dqLabels[0]) {
+      dqLabels[0].querySelector("span:first-child").textContent = t.dqClarity;
+      dqLabels[0].querySelector("span:last-child").textContent = t.dqClarityDesc;
+    }
+    if (dqLabels[1]) {
+      dqLabels[1].querySelector("span:first-child").textContent = t.dqEvidence;
+      dqLabels[1].querySelector("span:last-child").textContent = t.dqEvidenceDesc;
+    }
+    if (dqLabels[2]) {
+      dqLabels[2].querySelector("span:first-child").textContent = t.dqInsight;
+      dqLabels[2].querySelector("span:last-child").textContent = t.dqInsightDesc;
+    }
+    if (dqLabels[3]) {
+      dqLabels[3].querySelector("span:first-child").textContent = t.dqAction;
+      dqLabels[3].querySelector("span:last-child").textContent = t.dqActionDesc;
+    }
+  }
+
+  const overallLabelEl = document.querySelector("#decisionPyramidPanel div[style*='margin-top:16px;text-align:center'] strong");
+  if (overallLabelEl) overallLabelEl.textContent = t.dqOverall;
+
+  // Workspace buttons
+  document.getElementById("saveEntryBtn").textContent = t.saveBtn;
+  document.getElementById("clearFormBtn").textContent = t.clearBtn;
+
+  // History Tab
+  document.querySelector("#tab-history h2").innerHTML = t.histTitle;
+  const sortSel = document.getElementById("histSort");
+  if (sortSel) {
+    sortSel.options[0].textContent = t.histSortNewest;
+    sortSel.options[1].textContent = t.histSortOldest;
+  }
+
+  // Flowchart details placeholder & tips header
+  const fcPl = document.getElementById("flowchartDetailsPlaceholder");
+  if (fcPl) fcPl.innerHTML = t.fcPlaceholder;
+  const fcTipsHeader = document.querySelector("#flowchartDetailTipsBox strong");
+  if (fcTipsHeader) fcTipsHeader.textContent = t.fcTipsHeader;
+
+  // Rebuild / Re-render views
+  DOMAINS = state.mode === "life" ? LIFE_DOMAINS : DECISION_DOMAINS;
+  buildCompass();
+  buildLegend();
+  populateHistFilter();
+  renderWorkspace();
+  renderDashboard();
+  renderHistory();
+  renderHelp();
+}
+
+/* ---------- Compass SVG ---------- */
+function buildCompass(){
+  const svg = document.querySelector("svg.compass");
+  if(!svg) return;
+  const cx=150, cy=150, rOuter=130, rInner=46;
+  const n = DOMAINS.length;
+  const step = (Math.PI*2)/n;
+  let html = "";
+  DOMAINS.forEach((d, i)=>{
+    const start = -Math.PI/2 + i*step;
+    const end = start + step;
+    const x1 = cx + rOuter*Math.cos(start), y1 = cy + rOuter*Math.sin(start);
+    const x2 = cx + rOuter*Math.cos(end),   y2 = cy + rOuter*Math.sin(end);
+    const ix1 = cx + rInner*Math.cos(start), iy1 = cy + rInner*Math.sin(start);
+    const ix2 = cx + rInner*Math.cos(end),   iy2 = cy + rInner*Math.sin(end);
+    const path = `M ${ix1} ${iy1} L ${x1} ${y1} A ${rOuter} ${rOuter} 0 0 1 ${x2} ${y2} L ${ix2} ${iy2} A ${rInner} ${rInner} 0 0 0 ${ix1} ${iy1} Z`;
+    const mid = start + step/2;
+    const lx = cx + (rInner+rOuter)/2*Math.cos(mid);
+    const ly = cy + (rInner+rOuter)/2*Math.sin(mid);
+    html += `<path class="wedge" id="wedge-${d.id}" data-domain="${d.id}" d="${path}" fill="${d.hex}"></path>`;
+    html += `<text class="wedge-label" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${d.icon}</text>`;
+  });
+  
+  const centerTitle = state.mode === 'life' ? (state.lang === 'zh' ? '生活' : 'Life') : (state.lang === 'zh' ? '思維' : 'Decision');
+  const centerSub = state.mode === 'life' ? (state.lang === 'zh' ? '羅盤' : 'Compass') : (state.lang === 'zh' ? '決策' : 'Compass');
+  
+  html += `<circle class="compass-center" cx="${cx}" cy="${cy}" r="${rInner-2}"></circle>`;
+  html += `<text class="compass-center-text" x="${cx}" y="${cy-4}">${centerTitle}</text>`;
+  html += `<text class="compass-center-text" x="${cx}" y="${cy+11}" style="font-weight:400;font-size:9px;">${centerSub}</text>`;
+  svg.innerHTML = html;
+  
+  svg.querySelectorAll(".wedge").forEach(w=>{
+    w.addEventListener("click", ()=> selectDomain(w.dataset.domain, true));
+  });
+}
+
+function buildLegend(){
+  const legend = document.getElementById("legend");
+  if(!legend) return;
+  legend.innerHTML = "";
+  const t = I18N[state.lang || "zh"];
+  DOMAINS.forEach(d=>{
+    const entries = state.entries.filter(e=>(e.mode || "life") === state.mode && e.domain===d.id);
+    const item = document.createElement("div");
+    item.className = "legend-item";
+    item.id = "legend-"+d.id;
+    const displayName = state.lang === "en" ? d.en : d.name;
+    const subName = state.lang === "en" ? d.name : d.en;
+    item.innerHTML = `<span class="dot" style="background:${d.hex}"></span>
+      <span class="name">${d.icon} ${displayName} <span style="color:var(--text-dim);font-weight:400;">${subName}</span></span>
+      <span class="streak">${entries.length} ${t.entriesCount}</span>`;
+    item.addEventListener("click", ()=> selectDomain(d.id, true));
+    legend.appendChild(item);
+  });
+}
+
+function selectDomain(domainId, jump){
+  activeDomain = DOMAINS.find(d=>d.id===domainId);
+  activeStage = "o";
+  resetDraft();
+  document.querySelectorAll(".wedge").forEach(w=>w.classList.toggle("active", w.dataset.domain===domainId));
+  document.querySelectorAll(".legend-item").forEach(l=>l.classList.toggle("active", l.id==="legend-"+domainId));
+  renderWorkspace();
+  if(jump) goToTab("workspace");
+}
+
+/* ---------- MECE Arguments List Component ---------- */
+function renderMeceArgs() {
+  const container = document.getElementById("meceArgsContainer");
+  if (!container) return;
+  container.innerHTML = "";
+  
+  const isEn = state.lang === "en";
+  draft.arguments.forEach((arg, index) => {
+    const row = document.createElement("div");
+    row.className = "mece-arg-row";
+    const ph = isEn ? `Supporting argument ${index + 1}...` : `支持論點 ${index + 1}... `;
+    row.innerHTML = `
+      <input type="text" class="mece-arg-input" value="${escapeHtml(arg)}" placeholder="${ph}" data-index="${index}">
+      ${draft.arguments.length > 1 ? `<button class="btn-icon remove-arg-btn" data-index="${index}">❌</button>` : ''}
+    `;
+    row.querySelector(".mece-arg-input").addEventListener("input", (e) => {
+      draft.arguments[index] = e.target.value;
+    });
+    if (draft.arguments.length > 1) {
+      row.querySelector(".remove-arg-btn").addEventListener("click", () => {
+        draft.arguments.splice(index, 1);
+        renderMeceArgs();
+      });
+    }
+    container.appendChild(row);
+  });
+}
+
+document.getElementById("addArgBtn").addEventListener("click", () => {
+  draft.arguments.push("");
+  renderMeceArgs();
+});
+
+/* ---------- MECE Checklist Listeners ---------- */
+document.getElementById("meceCheckME").addEventListener("change", (e) => {
+  draft.meceME = e.target.checked;
+});
+document.getElementById("meceCheckCE").addEventListener("change", (e) => {
+  draft.meceCE = e.target.checked;
+});
+
+/* ---------- Pyramid, PDCA & SMART Synthesis Listeners ---------- */
+document.getElementById("pyramidMessage").addEventListener("input", (e) => {
+  draft.pyramidMessage = e.target.value;
+});
+document.getElementById("pyramidFacts").addEventListener("input", (e) => {
+  draft.pyramidFacts = e.target.value;
+});
+
+document.getElementById("pdcaPlan").addEventListener("input", (e) => {
+  draft.pdcaPlan = e.target.value;
+});
+document.getElementById("pdcaDo").addEventListener("input", (e) => {
+  draft.pdcaDo = e.target.value;
+});
+document.getElementById("pdcaCheck").addEventListener("input", (e) => {
+  draft.pdcaCheck = e.target.value;
+});
+document.getElementById("pdcaAct").addEventListener("input", (e) => {
+  draft.pdcaAct = e.target.value;
+});
+
+document.getElementById("smartSpecific").addEventListener("input", (e) => {
+  draft.smartSpecific = e.target.value;
+});
+document.getElementById("smartMeasurable").addEventListener("input", (e) => {
+  draft.smartMeasurable = e.target.value;
+});
+document.getElementById("smartAchievable").addEventListener("input", (e) => {
+  draft.smartAchievable = e.target.value;
+});
+document.getElementById("smartRelevant").addEventListener("input", (e) => {
+  draft.smartRelevant = e.target.value;
+});
+document.getElementById("smartTimeBound").addEventListener("input", (e) => {
+  draft.smartTimeBound = e.target.value;
+});
+
+// Synthesis Tab Listeners
+document.getElementById("synTabPyramid").addEventListener("click", () => {
+  draft.activeSynTab = "pyramid";
+  renderWorkspace();
+});
+document.getElementById("synTabPdca").addEventListener("click", () => {
+  draft.activeSynTab = "pdca";
+  renderWorkspace();
+});
+document.getElementById("synTabSmart").addEventListener("click", () => {
+  draft.activeSynTab = "smart";
+  renderWorkspace();
+});
+
+/* ---------- Decision Quality Sliders ---------- */
+function computeDqOverall() {
+  return (draft.scores.clarity + draft.scores.evidence + draft.scores.insight + draft.scores.actionability) / 4;
+}
+
+function setupDqListeners() {
+  ["Clarity", "Evidence", "Insight", "Action"].forEach(f => {
+    const idLower = f.toLowerCase() === "action" ? "actionability" : f.toLowerCase();
+    const slider = document.getElementById("dq" + f);
+    if (slider) {
+      slider.addEventListener("input", (e) => {
+        draft.scores[idLower] = parseInt(e.target.value, 10);
+        document.getElementById("score" + f + "Val").textContent = e.target.value;
+        document.getElementById("dqOverallScore").textContent = computeDqOverall().toFixed(1);
+      });
+    }
+  });
+}
+setupDqListeners();
+
+/* ---------- Workspace Rendering ---------- */
+function renderWorkspace(){
+  const empty = document.getElementById("workspaceEmpty");
+  const content = document.getElementById("workspaceContent");
+  if(!activeDomain){ empty.classList.remove("hidden"); content.classList.add("hidden"); return; }
+  empty.classList.add("hidden"); content.classList.remove("hidden");
+
+  document.getElementById("wsBadge").textContent = activeDomain.icon;
+  document.getElementById("wsBadge").style.background = activeDomain.hex;
+  
+  const isEn = state.lang === "en";
+  document.getElementById("wsName").textContent = isEn ? activeDomain.en : activeDomain.name;
+  
+  if (state.mode === 'life') {
+    let tagsHtml = `<span style="font-weight:600;">${isEn ? activeDomain.name : activeDomain.en}</span> · `;
+    if(activeDomain.m4) tagsHtml += `<span class="badge" title="4M of Life">4M: ${activeDomain.m4}</span> `;
+    if(activeDomain.f4) tagsHtml += `<span class="badge" title="4F of Life: ${activeDomain.f4_full}">4F: ${activeDomain.f4}</span> `;
+    if(activeDomain.p6) tagsHtml += `<span class="badge" title="6P of Life: ${activeDomain.p6_full}">6P: ${activeDomain.p6}</span> `;
+    document.getElementById("wsEn").innerHTML = tagsHtml;
+  } else {
+    document.getElementById("wsEn").innerHTML = `<span style="font-weight:600;">${isEn ? activeDomain.name : activeDomain.en}</span> · <span class="badge" style="background:rgba(23,162,184,0.15);color:var(--accent);">Decision Template</span>`;
+  }
+
+  // Stepper
+  const stepper = document.getElementById("oridStepper");
+  stepper.innerHTML = "";
+  STAGES.forEach(s=>{
+    const filled = !!draft[s.id].trim();
+    const btn = document.createElement("button");
+    btn.className = `step-btn ${s.id===activeStage?"active":""} ${filled?"filled":""}`;
+    const stageLabel = isEn ? s.en : s.zh;
+    btn.innerHTML = `<span class="letter">${s.letter}</span><span>${stageLabel}</span>`;
+    btn.addEventListener("click", ()=>{ activeStage = s.id; renderWorkspace(); });
+    stepper.appendChild(btn);
+  });
+
+  // Stage cards (O-R-I-D)
+  const container = document.getElementById("stageCards");
+  container.innerHTML = "";
+  const curStage = STAGES.find(s=>s.id===activeStage);
+  
+  // Safe fetch questions (Bilingual support)
+  let qDomain = activeDomain.q;
+  let qList = [];
+  if (qDomain[state.lang] && qDomain[state.lang][activeStage]) {
+    qList = qDomain[state.lang][activeStage];
+  } else if (qDomain.zh && qDomain.zh[activeStage]) {
+    qList = qDomain.zh[activeStage];
+  } else if (qDomain[activeStage]) {
+    qList = qDomain[activeStage];
+  }
+  const questions = qList.map(q=>`<li>${escapeHtml(q)}</li>`).join("");
+
+  const card = document.createElement("div");
+  card.className = "stage-card";
+  const stageHeaderTitle = isEn ? `${curStage.letter} · ${curStage.en}` : `${curStage.letter} · ${curStage.zh}`;
+  const stageHeaderSub = isEn ? curStage.zh : curStage.en;
+  card.innerHTML = `
+    <h3>${stageHeaderTitle}</h3>
+    <p class="stage-en">${stageHeaderSub}</p>
+    <ul class="prompts">${questions}</ul>
+    <div class="input-row">
+      <textarea id="stageInput" placeholder="${isEn ? 'Write down your reflection here...' : '在此寫下你的反思...'}">${escapeHtml(draft[activeStage])}</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+
+  const txt = document.getElementById("stageInput");
+  txt.focus();
+  txt.addEventListener("input", (e)=>{
+    draft[activeStage] = e.target.value;
+    const filled = !!e.target.value.trim();
+    const stepBtn = stepper.children[STAGES.findIndex(s=>s.id===activeStage)];
+    if(stepBtn) stepBtn.classList.toggle("filled", filled);
+  });
+
+  // Life mode: rating
+  document.getElementById("ratingSlider").value = draft.rating;
+  document.getElementById("ratingValue").textContent = draft.rating;
+
+  // Decision mode: populate fields
+  if (state.mode === 'decision') {
+    document.getElementById("pyramidMessage").value = draft.pyramidMessage || "";
+    document.getElementById("pyramidFacts").value = draft.pyramidFacts || "";
+    document.getElementById("meceCheckME").checked = draft.meceME || false;
+    document.getElementById("meceCheckCE").checked = draft.meceCE || false;
+    renderMeceArgs();
+
+    // DQ Sliders
+    document.getElementById("dqClarity").value = draft.scores.clarity;
+    document.getElementById("scoreClarityVal").textContent = draft.scores.clarity;
+    document.getElementById("dqEvidence").value = draft.scores.evidence;
+    document.getElementById("scoreEvidenceVal").textContent = draft.scores.evidence;
+    document.getElementById("dqInsight").value = draft.scores.insight;
+    document.getElementById("scoreInsightVal").textContent = draft.scores.insight;
+    document.getElementById("dqAction").value = draft.scores.actionability;
+    document.getElementById("scoreActionVal").textContent = draft.scores.actionability;
+    
+    document.getElementById("dqOverallScore").textContent = computeDqOverall().toFixed(1);
+
+    // Populate PDCA fields
+    document.getElementById("pdcaPlan").value = draft.pdcaPlan || "";
+    document.getElementById("pdcaDo").value = draft.pdcaDo || "";
+    document.getElementById("pdcaCheck").value = draft.pdcaCheck || "";
+    document.getElementById("pdcaAct").value = draft.pdcaAct || "";
+
+    // Populate SMART fields
+    document.getElementById("smartSpecific").value = draft.smartSpecific || "";
+    document.getElementById("smartMeasurable").value = draft.smartMeasurable || "";
+    document.getElementById("smartAchievable").value = draft.smartAchievable || "";
+    document.getElementById("smartRelevant").value = draft.smartRelevant || "";
+    document.getElementById("smartTimeBound").value = draft.smartTimeBound || "";
+
+    // Toggle Synthesis Panels
+    const activeTab = draft.activeSynTab || "pyramid";
+    document.getElementById("synTabPyramid").classList.toggle("active", activeTab === "pyramid");
+    document.getElementById("synTabPdca").classList.toggle("active", activeTab === "pdca");
+    document.getElementById("synTabSmart").classList.toggle("active", activeTab === "smart");
+    
+    document.getElementById("synPanelPyramid").classList.toggle("hidden", activeTab !== "pyramid");
+    document.getElementById("synPanelPdca").classList.toggle("hidden", activeTab !== "pdca");
+    document.getElementById("synPanelSmart").classList.toggle("hidden", activeTab !== "smart");
+  }
+}
+
+document.getElementById("ratingSlider").addEventListener("input", (e)=>{
+  draft.rating = parseInt(e.target.value,10);
+  document.getElementById("ratingValue").textContent = draft.rating;
+});
+
+document.getElementById("clearFormBtn").addEventListener("click", ()=>{
+  resetDraft();
+  renderWorkspace();
+});
+
+document.getElementById("saveEntryBtn").addEventListener("click", ()=>{
+  if(!activeDomain) return;
+  const t = I18N[state.lang || "zh"];
+  const hasContent = draft.o.trim() || draft.r.trim() || draft.i.trim() || draft.d.trim();
+  if(!hasContent){
+    alert(t.alertFillAtLeastOne);
+    return;
+  }
+  
+  const entry = {
+    id: "e_"+Date.now()+"_"+Math.floor(Math.random()*1000),
+    mode: state.mode,
+    domain: activeDomain.id,
+    date: new Date().toISOString(),
+    o: draft.o, r: draft.r, i: draft.i, d: draft.d,
+    rating: state.mode === 'life' ? draft.rating : 0,
+    pyramidFacts: state.mode === 'decision' ? draft.pyramidFacts : "",
+    pyramidMessage: state.mode === 'decision' ? draft.pyramidMessage : "",
+    arguments: state.mode === 'decision' ? [...draft.arguments] : [],
+    meceME: state.mode === 'decision' ? draft.meceME : false,
+    meceCE: state.mode === 'decision' ? draft.meceCE : false,
+    pdcaPlan: state.mode === 'decision' ? draft.pdcaPlan : "",
+    pdcaDo: state.mode === 'decision' ? draft.pdcaDo : "",
+    pdcaCheck: state.mode === 'decision' ? draft.pdcaCheck : "",
+    pdcaAct: state.mode === 'decision' ? draft.pdcaAct : "",
+    smartSpecific: state.mode === 'decision' ? draft.smartSpecific : "",
+    smartMeasurable: state.mode === 'decision' ? draft.smartMeasurable : "",
+    smartAchievable: state.mode === 'decision' ? draft.smartAchievable : "",
+    smartRelevant: state.mode === 'decision' ? draft.smartRelevant : "",
+    smartTimeBound: state.mode === 'decision' ? draft.smartTimeBound : "",
+    scores: state.mode === 'decision' ? {
+      clarity: draft.scores.clarity,
+      evidence: draft.scores.evidence,
+      insight: draft.scores.insight,
+      actionability: draft.scores.actionability,
+      overall: parseFloat(computeDqOverall().toFixed(1))
+    } : null
+  };
+  
+  state.entries.unshift(entry);
+  save();
+  buildLegend();
+  resetDraft();
+  renderWorkspace();
+  renderDashboard();
+  alert(t.alertSaved);
+});
+
+/* ---------- Dashboard ---------- */
+function latestEntryFor(domainId){
+  return state.entries.find(e=>(e.mode || "life") === state.mode && e.domain===domainId) || null;
+}
+
+function renderDashboard(){
+  const grid = document.getElementById("dashGrid");
+  if(!grid) return;
+  grid.innerHTML = "";
+  
+  const t = I18N[state.lang || "zh"];
+  const titleEl = document.querySelector("#tab-dashboard h2");
+  const subEl = document.querySelector("#tab-dashboard p.sub");
+  
+  if (state.mode === "life") {
+    titleEl.innerHTML = t.dashTitleLife;
+    subEl.textContent = t.dashSubLife;
+  } else {
+    titleEl.innerHTML = t.dashTitleDecision;
+    subEl.textContent = t.dashSubDecision;
+  }
+  
+  const isEn = state.lang === "en";
+  DOMAINS.forEach(d=>{
+    const last = latestEntryFor(d.id);
+    let rating = 0;
+    if (last) {
+      rating = state.mode === "life" ? last.rating : (last.scores ? last.scores.overall : 0);
+    }
+    const card = document.createElement("div");
+    card.className = "dcard";
+    const displayName = isEn ? d.en : d.name;
+    const lastText = last ? (t.lastUpdated + new Date(last.date).toLocaleDateString()) : t.noEntries;
+    card.innerHTML = `
+      <div class="dcard-top">
+        <span class="name">${d.icon} ${displayName}</span>
+        <span style="color:${d.hex};font-weight:700;">${rating || "—"}</span>
+      </div>
+      <p class="last">${lastText}</p>
+      <div class="bar-bg"><div class="bar-fill" style="width:${(rating/5*100)}%;background:${d.hex};"></div></div>
+    `;
+    card.addEventListener("click", ()=> selectDomain(d.id, true));
+    grid.appendChild(card);
+  });
+  renderRadar();
+}
+
+function renderRadar(){
+  const svg = document.querySelector("svg.radar");
+  if(!svg) return;
+  const cx=150, cy=150, rMax=110;
+  const n = DOMAINS.length;
+  const step = (Math.PI*2)/n;
+  let rings = "";
+  for(let lvl=1; lvl<=5; lvl++){
+    const r = rMax*(lvl/5);
+    let pts = "";
+    for(let i=0;i<n;i++){
+      const a = -Math.PI/2 + i*step;
+      pts += `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)} `;
+    }
+    rings += `<polygon points="${pts}" fill="none" stroke="var(--border)" stroke-width="1"></polygon>`;
+  }
+  let axes = "", labels = "";
+  const isEn = state.lang === "en";
+  DOMAINS.forEach((d,i)=>{
+    const a = -Math.PI/2 + i*step;
+    const x = cx + rMax*Math.cos(a);
+    const y = cy + rMax*Math.sin(a);
+    axes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="1"></line>`;
+    const lx = cx + (rMax+18)*Math.cos(a);
+    const ly = cy + (rMax+18)*Math.sin(a);
+    const labelText = isEn ? d.en : d.name;
+    labels += `<text class="radar-label" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="${d.hex}">${labelText}</text>`;
+  });
+  
+  let polyPts = "";
+  let hasAny = false;
+  DOMAINS.forEach((d,i)=>{
+    const last = latestEntryFor(d.id);
+    let score = 0;
+    if (last) {
+      score = state.mode === "life" ? (last.rating || 0) : (last.scores ? last.scores.overall : 0);
+    }
+    if(score>0) hasAny = true;
+    const r = rMax*(score/5);
+    const a = -Math.PI/2 + i*step;
+    polyPts += `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)} `;
+  });
+  const dataPoly = hasAny ? `<polygon class="radar-poly" points="${polyPts}"></polygon>` : "";
+
+  svg.innerHTML = rings + axes + dataPoly + labels;
+}
+
+/* ---------- History ---------- */
+function populateHistFilter(){
+  const sel = document.getElementById("histFilterDomain");
+  if(!sel) return;
+  const current = sel.value;
+  const t = I18N[state.lang || "zh"];
+  sel.innerHTML = `<option value="">${t.histFilterAll}</option>`;
+  DOMAINS.forEach(d=>{
+    const displayName = state.lang === "en" ? d.en : d.name;
+    sel.innerHTML += `<option value="${d.id}">${d.icon} ${displayName}</option>`;
+  });
+  sel.value = current;
+}
+document.getElementById("histFilterDomain").addEventListener("change", renderHistory);
+document.getElementById("histSort").addEventListener("change", renderHistory);
+
+function renderHistory(){
+  const list = document.getElementById("histList");
+  if(!list) return;
+  list.innerHTML = "";
+  const filterDomain = document.getElementById("histFilterDomain").value;
+  const sortDir = document.getElementById("histSort").value;
+  const t = I18N[state.lang || "zh"];
+  const isEn = state.lang === "en";
+
+  let entries = state.entries.filter(e=>(e.mode || "life") === state.mode);
+  if(filterDomain) entries = entries.filter(e=>e.domain===filterDomain);
+  entries.sort((a,b)=>{
+    const da = new Date(a.date), db = new Date(b.date);
+    return sortDir === "desc" ? db - da : da - db;
+  });
+
+  if(entries.length === 0){
+    list.innerHTML = `<div class="empty-hint">${t.histEmpty}</div>`;
+    return;
+  }
+
+  entries.forEach(e=>{
+    const allDomains = state.mode === 'decision' ? DECISION_DOMAINS : LIFE_DOMAINS;
+    const d = allDomains.find(dom=>dom.id===e.domain) || {name:e.domain, en:e.domain, icon:"🧭", hex:"#F5A623"};
+    const item = document.createElement("div");
+    item.className = "hist-item";
+    
+    let scoreDisplay = "";
+    if (state.mode === 'life') {
+      scoreDisplay = `⭐ ${e.rating}/5`;
+    } else if (e.scores) {
+      scoreDisplay = `🎯 DQ ${e.scores.overall}/5`;
+    }
+
+    const domainDisplay = isEn ? d.en : d.name;
+    const unfilled = t.unfilled;
+
+    let detailsHtml = `
+      <div class="hist-details">
+        <p><b>O ${isEn ? 'Objective' : '客觀事實'}：</b>${e.o ? escapeHtml(e.o) : unfilled}</p>
+        <p><b>R ${isEn ? 'Reflective' : '反應感受'}：</b>${e.r ? escapeHtml(e.r) : unfilled}</p>
+        <p><b>I ${isEn ? 'Interpretive' : '詮釋意義'}：</b>${e.i ? escapeHtml(e.i) : unfilled}</p>
+        <p><b>D ${isEn ? 'Decisional' : '決定行動'}：</b>${e.d ? escapeHtml(e.d) : unfilled}</p>
+    `;
+    
+    if (state.mode === 'decision') {
+      const argsList = e.arguments && e.arguments.length ? e.arguments.map(arg => `<li>${escapeHtml(arg)}</li>`).join('') : "";
+      
+      let pdcaHtml = "";
+      if (e.pdcaPlan || e.pdcaDo || e.pdcaCheck || e.pdcaAct) {
+        pdcaHtml = `
+          <div style="margin-top:8px;padding:12px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;">
+            <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;display:flex;align-items:center;gap:4px;">🔄 ${isEn ? 'PDCA Action Plan' : 'PDCA 執行計畫 (D 連結)'}</h4>
+            <p style="margin:3px 0;"><b>P — Plan:</b> ${e.pdcaPlan ? escapeHtml(e.pdcaPlan) : unfilled}</p>
+            <p style="margin:3px 0;"><b>D — Do:</b> ${e.pdcaDo ? escapeHtml(e.pdcaDo) : unfilled}</p>
+            <p style="margin:3px 0;"><b>C — Check:</b> ${e.pdcaCheck ? escapeHtml(e.pdcaCheck) : unfilled}</p>
+            <p style="margin:3px 0;"><b>A — Act:</b> ${e.pdcaAct ? escapeHtml(e.pdcaAct) : unfilled}</p>
+          </div>
+        `;
+      }
+
+      let smartHtml = "";
+      if (e.smartSpecific || e.smartMeasurable || e.smartAchievable || e.smartRelevant || e.smartTimeBound) {
+        smartHtml = `
+          <div style="margin-top:8px;padding:12px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;">
+            <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;display:flex;align-items:center;gap:4px;">🎯 ${isEn ? 'SMART Goal Setting' : 'SMART 目標設定'}</h4>
+            <p style="margin:3px 0;"><b>S — Specific:</b> ${e.smartSpecific ? escapeHtml(e.smartSpecific) : unfilled}</p>
+            <p style="margin:3px 0;"><b>M — Measurable:</b> ${e.smartMeasurable ? escapeHtml(e.smartMeasurable) : unfilled}</p>
+            <p style="margin:3px 0;"><b>A — Achievable:</b> ${e.smartAchievable ? escapeHtml(e.smartAchievable) : unfilled}</p>
+            <p style="margin:3px 0;"><b>R — Relevant:</b> ${e.smartRelevant ? escapeHtml(e.smartRelevant) : unfilled}</p>
+            <p style="margin:3px 0;"><b>T — Time-bound:</b> ${e.smartTimeBound ? escapeHtml(e.smartTimeBound) : unfilled}</p>
+          </div>
+        `;
+      }
+
+      detailsHtml += `
+        <div style="margin-top:12px;padding:12px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;">
+          <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;display:flex;align-items:center;gap:4px;">🏛️ ${isEn ? 'Pyramid Structure & MECE' : '金字塔結構與 MECE 整合'}</h4>
+          <p style="margin:4px 0;"><b>${isEn ? 'Key Message' : '核心決策'}：</b>${e.pyramidMessage ? escapeHtml(e.pyramidMessage) : unfilled}</p>
+          <p style="margin:6px 0 2px;"><b>${isEn ? 'Supporting Arguments' : '支持論點'}：</b></p>
+          <ul style="margin:0 0 6px;padding-left:20px;font-size:12.5px;">${argsList || t.noArgs}</ul>
+          <p style="margin:4px 0;font-size:12px;color:var(--text-dim);font-weight:600;">
+            ${isEn ? 'MECE Logic Check:' : 'MECE 自檢：'}
+            ME ${e.meceME ? '✅' : '❌'} | 
+            CE ${e.meceCE ? '✅' : '❌'}
+          </p>
+          <p style="margin:4px 0;"><b>${isEn ? 'Supporting Facts & Data' : '支持事實'}：</b>${e.pyramidFacts ? escapeHtml(e.pyramidFacts) : unfilled}</p>
+        </div>
+        ${pdcaHtml}
+        ${smartHtml}
+        <div style="margin-top:8px;padding:10px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;font-size:12px;">
+          <h4 style="margin:0 0 6px;color:var(--accent);font-size:13px;">🎯 ${isEn ? 'Decision Quality (DQ) Score' : '決策品質評估 (Decision Quality)'}</h4>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;">
+            <div>${isEn ? 'Clarity' : '清晰度'}: ${e.scores ? e.scores.clarity : '—'}/5</div>
+            <div>${isEn ? 'Evidence' : '事實證據'}: ${e.scores ? e.scores.evidence : '—'}/5</div>
+            <div>${isEn ? 'Insight' : '洞察深度'}: ${e.scores ? e.scores.insight : '—'}/5</div>
+            <div>${isEn ? 'Action' : '可執行性'}: ${e.scores ? e.scores.actionability : '—'}/5</div>
+          </div>
+        </div>
+      `;
+    }
+    
+    detailsHtml += `
+        <div class="actions" style="margin-top:12px;"><button class="btn btn-danger btn-del">${t.deleteBtn}</button></div>
+      </div>`;
+    
+    item.innerHTML = `
+      <div class="hist-header">
+        <div>
+          <span class="dot" style="background:${d.hex}"></span>
+          <span class="domain-tag" style="background:rgba(255,255,255,0.06);color:${d.hex};">${d.icon} ${domainDisplay}</span>
+          <span class="time">${new Date(e.date).toLocaleString()}</span>
+        </div>
+        <span class="rating-badge">${scoreDisplay}</span>
+      </div>
+      ${detailsHtml}
+    `;
+
+    item.querySelector(".hist-header").addEventListener("click", ()=>{
+      item.classList.toggle("open");
+    });
+    item.querySelector(".btn-del").addEventListener("click", (ev)=>{
+      ev.stopPropagation();
+      if(confirm(t.confirmDelete)){
+        state.entries = state.entries.filter(x=>x.id!==e.id);
+        save();
+        buildLegend();
+        renderDashboard();
+        renderHistory();
+      }
+    });
+
+    list.appendChild(item);
+  });
+}
+
+/* ---------- Help Section Dynamic Rendering ---------- */
+function renderHelp() {
+  const container = document.getElementById("helpGuideContent");
+  if (!container) return;
+  const isEn = state.lang === "en";
+
+  if (isEn) {
+    container.innerHTML = `
+      <div class="help-section">
+        <h3>What is the Focused Conversation Method (ORID)?</h3>
+        <p>Originating from ICA facilitation techniques, ORID guides thinking through 4 structured levels from facts to concrete decisions:</p>
+        <div class="orid-explain">
+          <div><span class="letter">O</span><h4>Objective</h4><p>What happened? What observable data, figures, and facts occurred?</p></div>
+          <div><span class="letter">R</span><h4>Reflective</h4><p>What were your gut feelings, emotional reactions, or physical sensations?</p></div>
+          <div><span class="letter">I</span><h4>Interpretive</h4><p>What does this mean? What insights, root causes, or lessons emerge?</p></div>
+          <div><span class="letter">D</span><h4>Decisional</h4><p>What specific, tangible actions will you take next?</p></div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>F-SPIRE Life Dimensions & 4M / 4F / 6P Synthesis</h3>
+        <p>Use the <strong>F-SPIRE</strong> mnemonic to reflect across all 6 core life dimensions, integrated with 4M, 4F (4F of Life), and 6P (6P of Life) frameworks:</p>
+        
+        <table style="width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; border:1px solid var(--border);">
+          <thead>
+            <tr style="background:var(--bg-card);">
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">F-SPIRE Dimension</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">4M Framework</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">4F of Life</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">6P of Life</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;">💰 <b>Financial</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">Money</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">💵 <b>Fuel</b> your future</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🪙 <b>PROVE</b> yourself right</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🕊️ <b>Spiritual</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🕊️ <b>Find</b> your purpose</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🎯 <b>PRAYER</b> always</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;">💪 <b>Physical</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">Muscle</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🩺 <b>PUSH</b> yourself when doubted</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;">📚 <b>Intellectual</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">Mindset</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🧠 <b>Focus</b> on your present</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🧠 <b>PROMISE</b> yourself never give up</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🤝 <b>Relational</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">👥 <b>PROUD</b> of who you are</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;">❤️ <b>Emotional</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">Mood</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🌹 <b>Forgive</b> your past</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🧘 <b>PICK</b> yourself up when you fall</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-section">
+        <h3>🏛️ Pyramid Principle & MECE</h3>
+        <p>Created by Barbara Minto, the Pyramid Principle advocates top-down, conclusion-first communication:</p>
+        <ul>
+          <li><strong>Key Message:</strong> The single overarching recommendation at the apex of the pyramid (linked to ORID D).</li>
+          <li><strong>Supporting Arguments:</strong> 3-4 distinct reasons adhering to MECE (Mutually Exclusive, Collectively Exhaustive).</li>
+          <li><strong>Facts & Evidence:</strong> Concrete empirical data supporting the arguments (linked to ORID O).</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>🔄 PDCA Action Plan (Linked to D)</h3>
+        <p>Connect your decisions to Deming's continuous improvement cycle:</p>
+        <ul>
+          <li><strong>Plan (P):</strong> Specify the goal, milestones, and scope.</li>
+          <li><strong>Do (D):</strong> Define task ownership, resources, and timelines.</li>
+          <li><strong>Check (C):</strong> Track quantitative KPIs and milestones.</li>
+          <li><strong>Act (A):</strong> Standardize best practices into SOPs and adjust deviations.</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>🎯 SMART Goal Setting Criteria</h3>
+        <p>Transform high-level actions into crisp, measurable goals:</p>
+        <ul>
+          <li><strong>Specific:</strong> Exact, unambiguous scope and expected outcome.</li>
+          <li><strong>Measurable:</strong> Quantifiable acceptance metrics and milestones.</li>
+          <li><strong>Achievable:</strong> Realistically feasible within existing resources.</li>
+          <li><strong>Relevant:</strong> Aligned with core priorities and long-term values.</li>
+          <li><strong>Time-bound:</strong> Clear deadlines and review checkpoints.</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>Data Backup & Export</h3>
+        <p>All data is kept strictly inside your browser's localStorage. You can export JSON backups or formatted Markdown reports anytime.</p>
+        <div class="actions">
+          <button class="btn btn-ghost" id="exportJsonBtn">Export JSON</button>
+          <button class="btn btn-ghost" id="exportMdBtn">Export Markdown</button>
+          <button class="btn btn-ghost" id="importBtn">Import JSON</button>
+          <input type="file" id="importFile" accept=".json" class="hidden">
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>Demo Data</h3>
+        <p>Load comprehensive sample data for both Life Balance and Decision Mindset modes to explore all features instantly.</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="loadDemoBtn">Load Demo Data</button>
+          <button class="btn btn-danger" id="resetAllBtn">Reset All Data</button>
+        </div>
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <div class="help-section">
+        <h3>什麼是焦點討論法 (ORID)？</h3>
+        <p>焦點討論法（Focused Conversation Method）源自 ICA 引導技術，透過四個層次的提問，帶領思考從「事實」走向「行動」，避免流於情緒發洩或空談。</p>
+        <div class="orid-explain">
+          <div><span class="letter">O</span><h4>客觀事實 Objective</h4><p>發生了什麼？有哪些具體、可觀察的事實與數據？</p></div>
+          <div><span class="letter">R</span><h4>反應感受 Reflective</h4><p>你當下有什麼直覺反應、情緒或身體感覺？</p></div>
+          <div><span class="letter">I</span><h4>詮釋意義 Interpretive</h4><p>這代表什麼意義？對你的目標、關係、狀態有何啟發？</p></div>
+          <div><span class="letter">D</span><h4>決定行動 Decisional</h4><p>下一步你要做什麼？具體、可執行的行動是什麼？</p></div>
+        </div>
+      </div>
+
+      <div class="help-section" id="helpFspireSection">
+        <h3>六大生活面向 (F-SPIRE) 與 4M/4F/6P 跨模型整合</h3>
+        <p>透過 <strong>F-SPIRE</strong> 記憶口訣，全面檢視生活的六大維度。本羅盤融合了 <strong>4M</strong>、<strong>4F (4F of Life)</strong>、與 <strong>6P (6P of Life)</strong> 核心自我管理思維：</p>
+        
+        <table style="width:100%; border-collapse:collapse; margin:14px 0; font-size:13px; border:1px solid var(--border);">
+          <thead>
+            <tr style="background:var(--bg-card);">
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">F-SPIRE 面向</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">中文說明</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">4M 框架</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">4F 框架 (4F of Life)</th>
+              <th style="border:1px solid var(--border); padding:8px 10px; text-align:left;">6P 框架 (6P of Life)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;"><b>Financial</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">財務</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">💰 Money</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">💵 <b>Fuel</b> your future</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🪙 <b>PROVE</b> yourself right</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;"><b>Spiritual</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">靈性</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🕊️ <b>Find</b> your purpose</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🎯 <b>PRAYER</b> always</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;"><b>Physical</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">身體</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">💪 Muscle</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🩺 <b>PUSH</b> yourself when doubted</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;"><b>Intellectual</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">智識</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">📚 Mindset</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🧠 <b>Focus</b> on your present</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🧠 <b>PROMISE</b> yourself never give up</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;"><b>Relational</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">關係</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">—</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">👥 <b>PROUD</b> of who you are</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid var(--border); padding:8px 10px;"><b>Emotional</b></td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">情緒</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">❤️ Mood</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🌹 <b>Forgive</b> your past</td>
+              <td style="border:1px solid var(--border); padding:8px 10px;">🧘 <b>PICK</b> yourself up when you fall</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="help-section">
+        <h3>🏛️ 金字塔原理與 MECE</h3>
+        <p>由庫柏·明托（Barbara Minto）提出的結構化寫作與思考方法，主張<strong>「結論先行，自上而下」</strong>：</p>
+        <ul>
+          <li><strong>核心決策 (Key Message):</strong> 給出清晰可執行的核心建議（對應 D）。</li>
+          <li><strong>支持論點 (Supporting Arguments):</strong> 依 MECE（相互獨立，完全窮盡）拆解子論點。</li>
+          <li><strong>事實數據 (Facts & Data):</strong> 提供具體客觀的數據與事實支持（對應 O）。</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>🔄 PDCA 執行計畫（與 D 決定行動連結）</h3>
+        <p>將 ORID 的決策結論落實為敏捷專案循環：</p>
+        <ul>
+          <li><strong>P — Plan (計畫):</strong> 設定改善目標與具體規劃方案。</li>
+          <li><strong>D — Do (執行):</strong> 展開任務分工、責任歸屬與明確時程。</li>
+          <li><strong>C — Check (查核):</strong> 設定量化指標並度量執行成效。</li>
+          <li><strong>A — Act (處理/調整):</strong> 修正偏差並將成功經驗標準化寫入 SOP。</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>🎯 SMART 原則目標設定</h3>
+        <p>將行動方針進一步具體化為易於落實與驗收的明確指標：</p>
+        <ul>
+          <li><strong>S — Specific (明確性):</strong> 目標清晰具體，避免含糊詞彙。</li>
+          <li><strong>M — Measurable (可衡量性):</strong> 具備明確的量化標準或查核驗收指標。</li>
+          <li><strong>A — Achievable (可達成性):</strong> 在現有資源限制下具可行性。</li>
+          <li><strong>R — Relevant (相關性):</strong> 緊扣核心決策與長期目標。</li>
+          <li><strong>T — Time-bound (時限性):</strong> 具有清晰的截止日期與階段節點。</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>資料與匯出 Data & Export</h3>
+        <p>所有紀錄儲存在瀏覽器本機（localStorage），不會上傳至伺服器。支援匯出 JSON 與 Markdown 報告。</p>
+        <div class="actions">
+          <button class="btn btn-ghost" id="exportJsonBtn">匯出 JSON</button>
+          <button class="btn btn-ghost" id="exportMdBtn">匯出 Markdown</button>
+          <button class="btn btn-ghost" id="importBtn">匯入 JSON</button>
+          <input type="file" id="importFile" accept=".json" class="hidden">
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>示範資料 Demo Data</h3>
+        <p>點選下方按鈕，即可載入「生活平衡」與「思維決策」雙模式的完整示範資料。</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="loadDemoBtn">載入示範資料 Load Demo Data</button>
+          <button class="btn btn-danger" id="resetAllBtn">清除所有資料 Reset All Data</button>
+        </div>
+      </div>
+    `;
+  }
+
+  bindHelpActions();
+}
+
+function bindHelpActions() {
+  const exportJson = document.getElementById("exportJsonBtn");
+  if (exportJson) {
+    exportJson.onclick = () => {
+      const dataStr = JSON.stringify(state, null, 2);
+      const blob = new Blob([dataStr], {type:"application/json"});
+      downloadBlob(blob, `orid-compass-backup-${dateStamp()}.json`);
+    };
+  }
+
+  const exportMd = document.getElementById("exportMdBtn");
+  if (exportMd) {
+    exportMd.onclick = exportMarkdownReport;
+  }
+
+  const importBtn = document.getElementById("importBtn");
+  const importFile = document.getElementById("importFile");
+  if (importBtn && importFile) {
+    importBtn.onclick = () => importFile.click();
+    importFile.onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          if(parsed && Array.isArray(parsed.entries)){
+            state = parsed;
+            if(!state.mode) state.mode = "life";
+            if(!state.lang) state.lang = "zh";
+            save();
+            applyLanguage();
+            alert(I18N[state.lang].alertImportSuccess);
+          } else {
+            alert(I18N[state.lang].alertImportFail);
+          }
+        } catch(err){
+          alert(I18N[state.lang].alertImportFail);
+        }
+      };
+      reader.readAsText(file);
+    };
+  }
+
+  const loadDemo = document.getElementById("loadDemoBtn");
+  if (loadDemo) {
+    loadDemo.onclick = () => {
+      const t = I18N[state.lang];
+      if(!confirm(t.confirmLoadDemo)) return;
+      loadSampleDemoData();
+    };
+  }
+
+  const resetAll = document.getElementById("resetAllBtn");
+  if (resetAll) {
+    resetAll.onclick = () => {
+      const t = I18N[state.lang];
+      if(confirm(t.confirmResetAll)){
+        state.entries = [];
+        save();
+        buildLegend();
+        renderDashboard();
+        renderHistory();
+        alert(t.alertAllReset);
+      }
+    };
+  }
+}
+
+function exportMarkdownReport() {
+  const isEn = state.lang === "en";
+  let md = isEn ? `# 🧭 ORID Mindset & Decision Compass Report\n\n` : `# 🧭 ORID 焦點討論與決策羅盤報告\n\n`;
+  md += `${isEn ? 'Export Date' : '匯出時間'}：${new Date().toLocaleString()}\n\n---\n\n`;
+
+  ["life", "decision"].forEach(m => {
+    const entries = state.entries.filter(e => (e.mode || "life") === m);
+    if(entries.length === 0) return;
+    
+    if(m === "life") {
+      md += isEn ? `## 🌟 Part 1: Life Balance Reflections (F-SPIRE)\n\n` : `## 🌟 Part 1: 生活平衡焦點反思 (F-SPIRE)\n\n`;
+    } else {
+      md += isEn ? `## 🧠 Part 2: Decision & Reasoning Reports (Pyramid & PDCA & SMART)\n\n` : `## 🧠 Part 2: 思維與決策推演報告 (金字塔、PDCA 與 SMART)\n\n`;
+    }
+
+    const domainList = m === "life" ? LIFE_DOMAINS : DECISION_DOMAINS;
+
+    entries.forEach((e, idx) => {
+      const d = domainList.find(dom => dom.id === e.domain) || {name:e.domain, en:e.domain, icon:"🧭"};
+      const dName = isEn ? `${d.icon} ${d.en}` : `${d.icon} ${d.name} (${d.en})`;
+      md += `### ${idx+1}. ${dName} — ${new Date(e.date).toLocaleDateString()}\n\n`;
+      if(m === "life") {
+        md += `- **${isEn ? "Self-Rating" : "今日自評"}**：⭐ ${e.rating}/5\n`;
+      }
+      md += `- **O — ${isEn ? "Objective" : "客觀事實"}**：${e.o || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+      md += `- **R — ${isEn ? "Reflective" : "反應感受"}**：${e.r || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+      md += `- **I — ${isEn ? "Interpretive" : "詮釋意義"}**：${e.i || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+      md += `- **D — ${isEn ? "Decisional" : "決定行動"}**：${e.d || (isEn ? "(Unfilled)" : "（未填寫）")}\n\n`;
+
+      if(m === "decision") {
+        md += isEn ? `**🏛️ Pyramid Structure & MECE**\n` : `**🏛️ 金字塔結構與 MECE 整合**\n`;
+        md += `- **${isEn ? "Key Message" : "核心決策"}**：${e.pyramidMessage || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+        md += `- **${isEn ? "Supporting Arguments" : "支持論點"}**：\n`;
+        if(e.arguments && e.arguments.length > 0) {
+          e.arguments.forEach(arg => {
+            if(arg.trim()) md += `  - ${arg}\n`;
+          });
+        } else {
+          md += isEn ? `  (No arguments)\n` : `  （無論點）\n`;
+        }
+        md += `- **MECE Logic Check**：ME ${e.meceME ? '✅' : '❌'} | CE ${e.meceCE ? '✅' : '❌'}\n`;
+        md += `- **${isEn ? "Supporting Facts" : "支持事實"}**：${e.pyramidFacts || (isEn ? "(Unfilled)" : "（未填寫）")}\n\n`;
+        
+        if (e.pdcaPlan || e.pdcaDo || e.pdcaCheck || e.pdcaAct) {
+          md += isEn ? `**🔄 PDCA Action Plan**\n` : `**🔄 PDCA 執行計畫**\n`;
+          md += `- **Plan:** ${e.pdcaPlan || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Do:** ${e.pdcaDo || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Check:** ${e.pdcaCheck || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Act:** ${e.pdcaAct || (isEn ? "(Unfilled)" : "（未填寫）")}\n\n`;
+        }
+        
+        if (e.smartSpecific || e.smartMeasurable || e.smartAchievable || e.smartRelevant || e.smartTimeBound) {
+          md += isEn ? `**🎯 SMART Goal Setting**\n` : `**🎯 SMART 目標設定**\n`;
+          md += `- **Specific:** ${e.smartSpecific || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Measurable:** ${e.smartMeasurable || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Achievable:** ${e.smartAchievable || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Relevant:** ${e.smartRelevant || (isEn ? "(Unfilled)" : "（未填寫）")}\n`;
+          md += `- **Time-bound:** ${e.smartTimeBound || (isEn ? "(Unfilled)" : "（未填寫）")}\n\n`;
+        }
+        
+        md += isEn ? `**🎯 Decision Quality (DQ) Score**\n` : `**🎯 決策品質評估 (Decision Quality)**\n`;
+        md += `- ${isEn ? 'Clarity' : '清晰度'}: ${e.scores ? e.scores.clarity : '—'}/5\n`;
+        md += `- ${isEn ? 'Evidence' : '事實證據'}: ${e.scores ? e.scores.evidence : '—'}/5\n`;
+        md += `- ${isEn ? 'Insight' : '洞察深度'}: ${e.scores ? e.scores.insight : '—'}/5\n`;
+        md += `- ${isEn ? 'Actionability' : '可執行性'}: ${e.scores ? e.scores.actionability : '—'}/5\n\n`;
+      }
+    });
+  });
+
+  const blob = new Blob([md], {type:"text/markdown"});
+  downloadBlob(blob, `orid-mindset-compass-${dateStamp()}.md`);
+}
+
+function loadSampleDemoData() {
+  const now = Date.now();
+  const isEn = state.lang === "en";
+
+  const lifeDemo = [
+    {
+      domain: "financial", offset: 0, rating: 4,
+      o: isEn ? "Reviewed monthly bank statement: savings rate reached 32%, income increased 5%." : "檢視本月收支表：儲蓄率達到 32%，投資收益小幅增長 5%，外食花費略高於預期 10%。",
+      r: isEn ? "Feel secure about financial buffer, slightly conscious about food delivery costs." : "看到儲蓄率達標感到踏實安心；但對外食次數偏多感到有些需要節制。",
+      i: isEn ? "Disciplined automatic transfer ensures financial resilience; optimizing social meal expenses is next." : "自動化存錢機制有效運作，能提供足夠的安全邊際；外食偏高反映了近期工作忙碌以致缺乏自煮時間。",
+      d: isEn ? "Set a weekly grocery budget and cook dinner on Monday/Wednesday nights." : "下個月預算中增加生鮮採買比例，每週日固定備餐 2 天，降低平日臨時叫外送的頻率。"
+    },
+    {
+      domain: "physical", offset: 2, rating: 4,
+      o: isEn ? "Tracked 3 zone-2 cardio sessions, average sleep 7.2 hours." : "本週累積完成 3 次重訓與 1 次慢跑，平均每日步數 8,500 步，平均睡眠時間 7 小時 15 分鐘。",
+      r: isEn ? "Energetic in mornings, mild physical fatigue on Thursdays." : "運動後精神明顯變好，專注力提升；但週四晚上略感肌肉疲累。",
+      i: isEn ? "Consistent moderate exercise provides mental stamina and stress recovery." : "規律的肌力訓練對維持工作時的專注與耐力有顯著幫助，睡眠質量是體能恢復的核心關鍵。",
+      d: isEn ? "Maintain 3 workouts/week, add 10 min dynamic stretching before sleep." : "維持每週 3 次運動習慣，睡前 30 分鐘停止使用手機並進行 10 分鐘筋膜放鬆。"
+    }
+  ];
+
+  lifeDemo.forEach(item => {
+    state.entries.push({
+      id: "demo_life_" + item.domain + "_" + now,
+      mode: "life",
+      domain: item.domain,
+      date: new Date(now - item.offset * 86400000).toISOString(),
+      o: item.o, r: item.r, i: item.i, d: item.d, rating: item.rating,
+      pyramidFacts: "", pyramidMessage: "", arguments: [], meceME: false, meceCE: false,
+      pdcaPlan: "", pdcaDo: "", pdcaCheck: "", pdcaAct: "",
+      smartSpecific: "", smartMeasurable: "", smartAchievable: "", smartRelevant: "", smartTimeBound: "",
+      scores: null
+    });
+  });
+
+  const decisionDemo = [
+    {
+      domain: "problem_solving", offset: 0,
+      o: isEn ? "Project schedule was delayed by 2 weeks due to frequent backend API spec changes and frontend misalignment." : "專案時程延誤兩週，主要卡在後端 API 規格變動頻繁與前端溝通不良。",
+      r: isEn ? "Frontend team felt frustrated with rework; backend felt pressured by sudden customer change requests." : "前端團隊感到焦慮與挫折，覺得一直在做重工；後端團隊覺得規格變動是客戶強烈要求的，感到無奈。",
+      i: isEn ? "Absence of formal change control process is the root cause. Ad-hoc verbal changes caused misalignment." : "溝通機制的缺失是根本原因，缺乏規格異動審查，任何臨時變更直接口頭交付，造成理解偏差與程式重構。",
+      d: isEn ? "Establish a formal change control process with a 15-minute weekly alignment sync." : "建立規格異動審查機制，每週固定召開 15 分鐘規格對焦會，任何規格變動須同步於 Notion 文件並由 PM 確認。",
+      pyramidFacts: isEn ? "14 days delay; 20 verbal change requests; 32 hours of frontend rework." : "時程延期 14 天；規格口頭變更 20 次；前端重構時間累計 32 小時。",
+      pyramidMessage: isEn ? "To eliminate project delays caused by spec churn, establish weekly spec review meetings and centralized Notion change tracking." : "為了解決前後端溝通不良與規格頻繁變動導致的延誤，建議建立「每週固定規格審查會議」與「 Notion 規格異動追蹤機制」。",
+      arguments: isEn ? [
+        "Unsynchronized verbal requests create severe information asymmetry and rework.",
+        "Lack of change gatekeeping disrupts development sprint velocity.",
+        "No formal PM impact analysis allows low-value changes to derail deadlines."
+      ] : [
+        "前後端規格異動缺乏集中化記錄與同步，導致資訊不對稱與大量重工。",
+        "缺乏正式的規格異動控制流程，使需求能輕易被臨時塞入而打亂工程節奏。",
+        "缺乏 PM 對規格變動的商務價值與可行性評估，容易流於空談。"
+      ],
+      meceME: true, meceCE: true,
+      pdcaPlan: isEn ? "Draft API Change Protocol before 7/15 and setup Notion board." : "在 7/15 前制訂「前後端 API 規格變更協議」，並於 Notion 建立異動追蹤板。",
+      pdcaDo: isEn ? "PM leads weekly Wednesday 2 PM spec alignment meeting with frontend/backend leads." : "PM 負責召集每週三下午 2 點的規格對焦會，前端 Leader 與後端 Leader 必須對齊 Notion 變更記錄。",
+      pdcaCheck: isEn ? "Track unrecorded change requests (target: 0) and rework hours (target: -50%)." : "以每週異動無記錄口頭交付次數（目標 0 次）以及前端重構工時（目標減半）作為查核指標。",
+      pdcaAct: isEn ? "Review effectiveness after 2 weeks and standardize into Engineering SOP." : "運行兩週後評估，若成效良好則正式寫入「研發團隊開發流程 SOP」，新進人員受訓必須遵守。",
+      smartSpecific: isEn ? "Establish formal API change protocol by 7/15 and reduce verbal changes to 0." : "在 7/15 前制訂「前後端 API 規格變更協議」，將所有口頭規格變更減至 0 次，並在 Notion 上建立異動追蹤板。",
+      smartMeasurable: isEn ? "1. 100% changes logged in Notion; 2. 15-min weekly sync attendance 100%; 3. 0 verbal-only changes." : "1. 規格變動 100% 記錄在 Notion 異動追蹤板；2. 每週三下午召開 15 分鐘對焦會議；3. 口頭交付變更次數降為 0。",
+      smartAchievable: isEn ? "Feasible with current team stack and leadership buy-in." : "可行，團隊目前已具備 Notion 協同作業習慣，且 Leader 同意配合固定短會時間。",
+      smartRelevant: isEn ? "Directly eliminates rework and prevents timeline slippage." : "直接解決因頻繁口頭規格變更導致的專案延期與前端大量重做工時的問題。",
+      smartTimeBound: isEn ? "Protocol live by 7/15; review milestones on 7/31." : "於 2026/07/15 前完成協議制訂與 Notion 追蹤板建立，並自下半月起正式實行與查核。",
+      scores: { clarity: 4, evidence: 5, insight: 4, actionability: 4, overall: 4.3 }
+    }
+  ];
+
+  decisionDemo.forEach(item => {
+    state.entries.push({
+      id: "demo_dec_" + item.domain + "_" + now,
+      mode: "decision",
+      domain: item.domain,
+      date: new Date(now - item.offset * 86400000).toISOString(),
+      o: item.o, r: item.r, i: item.i, d: item.d, rating: 0,
+      pyramidFacts: item.pyramidFacts,
+      pyramidMessage: item.pyramidMessage,
+      arguments: item.arguments,
+      meceME: item.meceME,
+      meceCE: item.meceCE,
+      pdcaPlan: item.pdcaPlan || "",
+      pdcaDo: item.pdcaDo || "",
+      pdcaCheck: item.pdcaCheck || "",
+      pdcaAct: item.pdcaAct || "",
+      smartSpecific: item.smartSpecific || "",
+      smartMeasurable: item.smartMeasurable || "",
+      smartAchievable: item.smartAchievable || "",
+      smartRelevant: item.smartRelevant || "",
+      smartTimeBound: item.smartTimeBound || "",
+      scores: item.scores
+    });
+  });
+
+  save();
+  buildLegend();
+  renderDashboard();
+  renderHistory();
+  alert(I18N[state.lang].alertDemoLoaded);
+}
+
+/* ---------- Helpers ---------- */
+function escapeHtml(str){
+  if(!str) return "";
+  return str.replace(/[&<>"']/g, m=>({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[m]);
+}
+function dateStamp(){
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- Interactive SVG Flowchart ---------- */
+let updateFlowchartHighlight = null;
+
+function initFlowchart() {
+  const nodes = document.querySelectorAll(".interactive-node");
+  const detailsPlaceholder = document.getElementById("flowchartDetailsPlaceholder");
+  const detailsContent = document.getElementById("flowchartDetailsContent");
+  const detailTitle = document.getElementById("flowchartDetailTitle");
+  const detailSub = document.getElementById("flowchartDetailSub");
+  const detailDesc = document.getElementById("flowchartDetailDesc");
+  const detailTipsList = document.getElementById("flowchartDetailTipsList");
+  const flowchartSvg = document.getElementById("flowchartSvg");
+
+  if (!flowchartSvg) return;
+
+  nodes.forEach(node => {
+    node.addEventListener("mouseenter", () => {
+      const stepId = node.dataset.step;
+      const t = I18N[state.lang || "zh"];
+      const data = t.flowchart ? t.flowchart[stepId] : null;
+      if (data) {
+        detailTitle.innerHTML = data.title;
+        detailSub.textContent = data.sub;
+        detailDesc.textContent = data.desc;
+        detailTipsList.innerHTML = data.tips.map(tip => `<li>${escapeHtml(tip)}</li>`).join("");
+        
+        detailsPlaceholder.classList.add("hidden");
+        detailsContent.classList.remove("hidden");
+        
+        nodes.forEach(n => n.classList.remove("active-hover"));
+        node.classList.add("active-hover");
+      }
+    });
+  });
+
+  flowchartSvg.addEventListener("mouseleave", () => {
+    detailsPlaceholder.classList.remove("hidden");
+    detailsContent.classList.add("hidden");
+    nodes.forEach(n => n.classList.remove("active-hover"));
+  });
+
+  updateFlowchartHighlight = function() {
+    const isLife = state.mode === "life";
+    
+    const pMain = document.getElementById("flowPathMain");
+    const pLife = document.getElementById("flowPathLife");
+    const pLife2 = document.getElementById("flowPathLife2");
+    const pLife3 = document.getElementById("flowPathLife3");
+    
+    const pDec = document.getElementById("flowPathDecision");
+    const pDec2 = document.getElementById("flowPathDecision2");
+    const pDec3 = document.getElementById("flowPathDecision3");
+
+    if (!pMain) return;
+
+    pMain.classList.add("active");
+    pMain.setAttribute("marker-end", "url(#svg-arrow-active)");
+
+    if (isLife) {
+      [pLife, pLife2, pLife3].forEach(p => {
+        if(p) {
+          p.classList.add("active-life");
+          p.classList.remove("active");
+          p.setAttribute("marker-end", "url(#svg-arrow-active-life)");
+        }
+      });
+      [pDec, pDec2, pDec3].forEach(p => {
+        if(p) {
+          p.classList.remove("active", "active-life");
+          p.setAttribute("marker-end", "url(#svg-arrow)");
+        }
+      });
+    } else {
+      [pDec, pDec2, pDec3].forEach(p => {
+        if(p) {
+          p.classList.add("active");
+          p.classList.remove("active-life");
+          p.setAttribute("marker-end", "url(#svg-arrow-active)");
+        }
+      });
+      [pLife, pLife2, pLife3].forEach(p => {
+        if(p) {
+          p.classList.remove("active", "active-life");
+          p.setAttribute("marker-end", "url(#svg-arrow)");
+        }
+      });
+    }
+  };
+
+  updateFlowchartHighlight();
+}
+
+/* ---------- Init ---------- */
+load();
+applyTheme();
+applyLanguage();
+initFlowchart();
+
+})();
+</script>
+</body>
+</html>
