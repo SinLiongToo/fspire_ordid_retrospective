@@ -448,7 +448,8 @@ input[type=range]{flex:1;accent-color:var(--accent);}
 .empty-hint{color:var(--text-dim);font-size:13px;padding:30px;text-align:center;border:1px dashed var(--border);border-radius:12px;}
 
 .radar-wrap{display:flex;justify-content:center;margin:20px 0;}
-svg.radar{width:100%;max-width:340px;height:auto;}
+svg.radar{width:100%;max-width:440px;height:auto;overflow:visible;}
+.radar-label{font-size:12px;font-weight:600;}
 
 /* History */
 .hist-filter{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
@@ -524,7 +525,7 @@ select{
   <div class="panel workspace" id="tab-dashboard">
     <h2 style="margin-top:0;">總覽儀表板 <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Dashboard</span></h2>
     <p class="sub">六大面向的最新自評分數與更新狀態</p>
-    <div class="radar-wrap"><svg class="radar" viewBox="0 0 300 300"></svg></div>
+    <div class="radar-wrap"><svg class="radar" viewBox="0 0 420 300"></svg></div>
     <div class="dash-grid" id="dashGrid"></div>
   </div>
 
@@ -1306,9 +1307,9 @@ const I18N = {
     compassSubLife: "Select a life domain to start O-R-I-D reflection",
     compassTitleDecision: "Decision Compass",
     compassSubDecision: "Select a decision template to structure reasoning",
-    dashTitleLife: 'Life Balance Dashboard <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Dashboard</span>',
+    dashTitleLife: 'Life Balance Dashboard',
     dashSubLife: "Latest self-rating scores and status across 6 life dimensions",
-    dashTitleDecision: 'Mindset & Decision Dashboard <span style="color:var(--text-dim);font-weight:400;font-size:13px;">Decision Dashboard</span>',
+    dashTitleDecision: 'Mindset & Decision Dashboard',
     dashSubDecision: "Latest decision quality composite scores across 6 decision templates",
     noEntries: "No entries yet",
     lastUpdated: "Last updated: ",
@@ -2212,7 +2213,7 @@ function renderDashboard(){
 function renderRadar(){
   const svg = document.querySelector("svg.radar");
   if(!svg) return;
-  const cx=150, cy=150, rMax=110;
+  const cx=210, cy=150, rMax=92;
   const n = DOMAINS.length;
   const step = (Math.PI*2)/n;
   let rings = "";
@@ -2232,10 +2233,31 @@ function renderRadar(){
     const x = cx + rMax*Math.cos(a);
     const y = cy + rMax*Math.sin(a);
     axes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="1"></line>`;
-    const lx = cx + (rMax+18)*Math.cos(a);
-    const ly = cy + (rMax+18)*Math.sin(a);
+    
+    // Smart label placement and anchor
+    const cosA = Math.cos(a);
+    const sinA = Math.sin(a);
+    let lx, ly, anchor;
+    
+    if (Math.abs(cosA) < 0.1) {
+      // Top or Bottom
+      lx = cx;
+      ly = sinA < 0 ? y - 14 : y + 18;
+      anchor = "middle";
+    } else if (cosA > 0) {
+      // Right side
+      lx = x + 12;
+      ly = y + sinA * 6;
+      anchor = "start";
+    } else {
+      // Left side
+      lx = x - 12;
+      ly = y + sinA * 6;
+      anchor = "end";
+    }
+    
     const labelText = isEn ? d.en : d.name;
-    labels += `<text class="radar-label" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="${d.hex}">${labelText}</text>`;
+    labels += `<text class="radar-label" x="${lx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="middle" fill="${d.hex}">${labelText}</text>`;
   });
   
   let polyPts = "";
