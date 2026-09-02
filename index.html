@@ -1056,17 +1056,17 @@ select{
 </div>
 
 
-<!-- Mindful Modal (Single Root Instance) -->
+<!-- Mindful Modal -->
 <div id="mindfulModal" class="modal-overlay hidden" style="display:none;">
   <div class="modal-card">
     <div class="modal-header">
       <h2 id="mindfulModalTitle" style="margin:0;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--accent);">🧘 靜心覺察與定心練習 Mindful Pause</h2>
-      <button class="btn-icon" id="closeMindfulModalBtn" onclick="closeMindfulModal()" style="font-size:18px;cursor:pointer;">✕</button>
+      <button class="btn-icon" id="closeMindfulModalBtn" style="font-size:18px;cursor:pointer;">✕</button>
     </div>
     
     <div class="synthesis-tabs" style="margin-top:14px;">
-      <button class="synthesis-tab-btn active" id="mindfulTabBreathe" onclick="switchMindfulTab('breathe')">🌬️ 箱式呼吸 (Box Breathing)</button>
-      <button class="synthesis-tab-btn" id="mindfulTabStop" onclick="switchMindfulTab('stop')">🧭 STOP 覺察四步法</button>
+      <button class="synthesis-tab-btn active" id="mindfulTabBreathe">🌬️ 箱式呼吸 (Box Breathing)</button>
+      <button class="synthesis-tab-btn" id="mindfulTabStop">🧭 STOP 覺察四步法</button>
     </div>
 
     <!-- Panel 1: Box Breathing -->
@@ -1076,8 +1076,8 @@ select{
       </p>
 
       <div class="breathe-visual-wrap">
-        <div class="breathe-circle-outer" id="breatheOuter" onclick="toggleBreathing()" style="cursor:pointer;" title="Click to start/pause">
-          <div class="breathe-circle-inner" id="breatheInner" onclick="toggleBreathing()" style="cursor:pointer;">
+        <div class="breathe-circle-outer" id="breatheOuter" style="cursor:pointer;" title="Click to start/pause">
+          <div class="breathe-circle-inner" id="breatheInner">
             <span class="breathe-action" id="breatheActionText">吸氣 Inhale</span>
             <span class="breathe-timer" id="breatheTimerCount">4</span>
           </div>
@@ -1085,8 +1085,8 @@ select{
       </div>
 
       <div style="text-align:center;margin-top:20px;">
-        <button class="btn btn-primary" id="breatheControlBtn" onclick="toggleBreathing()" style="padding:8px 24px;font-size:13.5px;cursor:pointer;">▶️ 開始練習 Start</button>
-        <button class="btn btn-ghost" id="breatheResetBtn" onclick="resetBreathing()" style="padding:8px 16px;font-size:13.5px;margin-left:8px;cursor:pointer;">🔄 重設 Reset</button>
+        <button class="btn btn-primary" id="breatheControlBtn" style="padding:8px 24px;font-size:13.5px;cursor:pointer;">▶️ 開始練習 Start</button>
+        <button class="btn btn-ghost" id="breatheResetBtn" style="padding:8px 16px;font-size:13.5px;margin-left:8px;cursor:pointer;">🔄 重設 Reset</button>
       </div>
       
       <div style="margin-top:16px;text-align:center;font-size:12.5px;color:var(--text-dim);" id="breatheCycleInfo">
@@ -1133,7 +1133,7 @@ select{
     </div>
 
     <div class="modal-footer" style="margin-top:18px;display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px;">
-      <button class="btn btn-primary" id="finishMindfulBtn" onclick="closeMindfulModal(); goToTab('workspace');" style="padding:8px 20px;cursor:pointer;">🧭 帶著覺知進入羅盤 Proceed to Compass</button>
+      <button class="btn btn-primary" id="finishMindfulBtn" style="padding:8px 20px;cursor:pointer;">🧭 帶著覺知進入羅盤 Proceed to Compass</button>
     </div>
   </div>
 </div>
@@ -2137,7 +2137,7 @@ function applyLanguage() {
 
 /* ---------- Mindful Grounding & Breathing Controller ---------- */
 let breatheInterval = null;
-let breatheState = "idle"; // idle, running, paused
+let breatheState = "idle"; // "idle", "running", "paused"
 let breathePhaseIdx = 0; // 0: inhale, 1: hold, 2: exhale, 3: rest
 let breatheSecondsLeft = 4;
 let breatheCompletedCycles = 0;
@@ -2156,6 +2156,8 @@ function updateBreatheUI() {
   const timerCount = document.getElementById("breatheTimerCount");
   const circleInner = document.getElementById("breatheInner");
   const cycleDisplay = document.getElementById("breatheCycleCount");
+  const controlBtn = document.getElementById("breatheControlBtn");
+  const t = I18N[state.lang || "zh"];
 
   if (actionText) actionText.textContent = isEn ? phase.en : phase.zh;
   if (timerCount) timerCount.textContent = breatheSecondsLeft;
@@ -2164,14 +2166,20 @@ function updateBreatheUI() {
   if (circleInner) {
     circleInner.className = "breathe-circle-inner " + (breatheState === "running" ? phase.class : "");
   }
+
+  if (controlBtn) {
+    if (breatheState === "running") {
+      controlBtn.textContent = t.breathePause;
+    } else if (breatheState === "paused") {
+      controlBtn.textContent = t.breatheResume;
+    } else {
+      controlBtn.textContent = t.breatheStart;
+    }
+  }
 }
 
 function startBreathing() {
   breatheState = "running";
-  const t = I18N[state.lang || "zh"];
-  const btn = document.getElementById("breatheControlBtn");
-  if (btn) btn.textContent = t.breathePause;
-  
   updateBreatheUI();
 
   if (breatheInterval) clearInterval(breatheInterval);
@@ -2191,9 +2199,6 @@ function startBreathing() {
 function pauseBreathing() {
   breatheState = "paused";
   if (breatheInterval) clearInterval(breatheInterval);
-  const t = I18N[state.lang || "zh"];
-  const btn = document.getElementById("breatheControlBtn");
-  if (btn) btn.textContent = t.breatheResume;
   updateBreatheUI();
 }
 
@@ -2211,9 +2216,6 @@ function resetBreathing() {
   breathePhaseIdx = 0;
   breatheSecondsLeft = 4;
   breatheCompletedCycles = 0;
-  const t = I18N[state.lang || "zh"];
-  const btn = document.getElementById("breatheControlBtn");
-  if (btn) btn.textContent = t.breatheStart;
   updateBreatheUI();
 }
 
@@ -2236,12 +2238,6 @@ function switchMindfulTab(tab) {
   }
 }
 
-window.startBreathing = startBreathing;
-window.pauseBreathing = pauseBreathing;
-window.toggleBreathing = toggleBreathing;
-window.resetBreathing = resetBreathing;
-window.switchMindfulTab = switchMindfulTab;
-
 function openMindfulModal() {
   const modal = document.getElementById("mindfulModal");
   if (modal) {
@@ -2250,7 +2246,6 @@ function openMindfulModal() {
     updateBreatheUI();
   }
 }
-window.openMindfulModal = openMindfulModal;
 
 function closeMindfulModal() {
   const modal = document.getElementById("mindfulModal");
@@ -2260,10 +2255,8 @@ function closeMindfulModal() {
   }
   pauseBreathing();
 }
-window.closeMindfulModal = closeMindfulModal;
-window.goToTab = goToTab;
 
-// Mindful Listeners
+// Mindful Listeners (Clean, single registration)
 const mindfulBtn = document.getElementById("mindfulPauseBtn");
 if (mindfulBtn) mindfulBtn.addEventListener("click", openMindfulModal);
 
@@ -2280,40 +2273,25 @@ const wsMindfulBtn = document.getElementById("wsMindfulBtn");
 if (wsMindfulBtn) wsMindfulBtn.addEventListener("click", openMindfulModal);
 
 const tabBreatheBtn = document.getElementById("mindfulTabBreathe");
-const tabStopBtn = document.getElementById("mindfulTabStop");
-const panelBreathe = document.getElementById("mindfulPanelBreathe");
-const panelStop = document.getElementById("mindfulPanelStop");
+if (tabBreatheBtn) tabBreatheBtn.addEventListener("click", () => switchMindfulTab("breathe"));
 
-if (tabBreatheBtn && tabStopBtn) {
-  tabBreatheBtn.addEventListener("click", () => {
-    tabBreatheBtn.classList.add("active");
-    tabStopBtn.classList.remove("active");
-    panelBreathe.classList.remove("hidden");
-    panelStop.classList.add("hidden");
-  });
-  tabStopBtn.addEventListener("click", () => {
-    tabStopBtn.classList.add("active");
-    tabBreatheBtn.classList.remove("active");
-    panelStop.classList.remove("hidden");
-    panelBreathe.classList.add("hidden");
-  });
-}
+const tabStopBtn = document.getElementById("mindfulTabStop");
+if (tabStopBtn) tabStopBtn.addEventListener("click", () => switchMindfulTab("stop"));
 
 const breatheControlBtn = document.getElementById("breatheControlBtn");
-if (breatheControlBtn) {
-  breatheControlBtn.addEventListener("click", () => {
-    if (breatheState === "running") {
-      pauseBreathing();
-    } else {
-      startBreathing();
-    }
-  });
-}
+if (breatheControlBtn) breatheControlBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleBreathing();
+});
 
 const breatheResetBtn = document.getElementById("breatheResetBtn");
-if (breatheResetBtn) {
-  breatheResetBtn.addEventListener("click", resetBreathing);
-}
+if (breatheResetBtn) breatheResetBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  resetBreathing();
+});
+
+const breatheOuter = document.getElementById("breatheOuter");
+if (breatheOuter) breatheOuter.addEventListener("click", () => toggleBreathing());
 
 /* ---------- Compass SVG ---------- */
 function buildCompass(){
