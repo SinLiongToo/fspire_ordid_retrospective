@@ -2280,21 +2280,40 @@ function buildCompass(){
     const mid = start + step/2;
     const lx = cx + (rInner+rOuter)/2*Math.cos(mid);
     const ly = cy + (rInner+rOuter)/2*Math.sin(mid);
-    html += `<path class="wedge" id="wedge-${d.id}" data-domain="${d.id}" d="${path}" fill="${d.hex}"></path>`;
-    html += `<text class="wedge-label" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${d.icon}</text>`;
+    html += `
+      <g class="wedge-group" data-domain="${d.id}" style="cursor:pointer;">
+        <path class="wedge" id="wedge-${d.id}" data-domain="${d.id}" d="${path}" fill="${d.hex}"></path>
+        <text class="wedge-label" data-domain="${d.id}" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="18" style="pointer-events:all;cursor:pointer;">${d.icon}</text>
+      </g>
+    `;
   });
   
   const centerTitle = state.mode === 'life' ? (state.lang === 'zh' ? '生活' : 'Life') : (state.lang === 'zh' ? '思維' : 'Decision');
   const centerSub = state.mode === 'life' ? (state.lang === 'zh' ? '羅盤' : 'Compass') : (state.lang === 'zh' ? '決策' : 'Compass');
   
-  html += `<circle class="compass-center" cx="${cx}" cy="${cy}" r="${rInner-2}"></circle>`;
-  html += `<text class="compass-center-text" x="${cx}" y="${cy-4}">${centerTitle}</text>`;
-  html += `<text class="compass-center-text" x="${cx}" y="${cy+11}" style="font-weight:400;font-size:9px;">${centerSub}</text>`;
+  html += `
+    <g class="compass-center-group" style="cursor:pointer;" title="Click to switch mode">
+      <circle class="compass-center" cx="${cx}" cy="${cy}" r="${rInner-2}"></circle>
+      <text class="compass-center-text" x="${cx}" y="${cy-4}">${centerTitle}</text>
+      <text class="compass-center-text" x="${cx}" y="${cy+11}" style="font-weight:400;font-size:9px;">${centerSub}</text>
+    </g>
+  `;
   svg.innerHTML = html;
   
-  svg.querySelectorAll(".wedge").forEach(w=>{
-    w.addEventListener("click", ()=> selectDomain(w.dataset.domain, true));
+  svg.querySelectorAll(".wedge-group, .wedge, .wedge-label").forEach(el=>{
+    el.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const domId = el.dataset.domain;
+      if (domId) selectDomain(domId, true);
+    });
   });
+
+  const centerGroup = svg.querySelector(".compass-center-group");
+  if (centerGroup) {
+    centerGroup.addEventListener("click", () => {
+      switchMode(state.mode === "life" ? "decision" : "life");
+    });
+  }
 }
 
 function buildLegend(){
@@ -2716,7 +2735,7 @@ function renderRadar(){
     }
     
     const labelText = isEn ? d.en : d.name;
-    labels += `<text class="radar-label" x="${lx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="middle" fill="${d.hex}">${labelText}</text>`;
+    labels += `<text class="radar-label" data-domain="${d.id}" x="${lx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="middle" fill="${d.hex}" style="cursor:pointer;font-weight:700;">${labelText}</text>`;
   });
   
   let polyPts = "";
@@ -2735,6 +2754,9 @@ function renderRadar(){
   const dataPoly = hasAny ? `<polygon class="radar-poly" points="${polyPts}"></polygon>` : "";
 
   svg.innerHTML = rings + axes + dataPoly + labels;
+  svg.querySelectorAll(".radar-label").forEach(lbl => {
+    lbl.addEventListener("click", () => selectDomain(lbl.dataset.domain, true));
+  });
 }
 
 /* ---------- History ---------- */
@@ -3528,6 +3550,25 @@ load();
 applyTheme();
 applyLanguage();
 initFlowchart();
+
+// Brand logo click to go to dashboard
+const brandEl = document.querySelector(".brand");
+if (brandEl) {
+  brandEl.style.cursor = "pointer";
+  brandEl.addEventListener("click", () => goToTab("dashboard"));
+}
+
+// Close mindful modal when clicking background overlay or pressing Escape
+const modalEl = document.getElementById("mindfulModal");
+if (modalEl) {
+  modalEl.addEventListener("click", (e) => {
+    if (e.target.id === "mindfulModal") closeMindfulModal();
+  });
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeMindfulModal();
+});
+
 
 })();
 </script>
