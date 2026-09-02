@@ -1109,11 +1109,12 @@ select{
   </div>
 </div>
 
+
 </main>
 </div>
 
 
-<!-- Mindful Modal -->
+<!-- Mindful Modal (Single Root Instance) -->
 <div id="mindfulModal" class="modal-overlay hidden" style="display:none;">
   <div class="modal-card">
     <div class="modal-header">
@@ -1146,8 +1147,8 @@ select{
         <button class="btn btn-ghost" id="breatheResetBtn" onclick="resetBreathing()" style="padding:8px 16px;font-size:13.5px;margin-left:8px;cursor:pointer;">🔄 重設 Reset</button>
       </div>
       
-      <div style="margin-top:16px;text-align:center;font-size:12px;color:var(--text-dim);" id="breatheCycleInfo">
-        已完成循環：<span id="breatheCycleCount" style="color:var(--accent);font-weight:bold;">0</span> 次
+      <div style="margin-top:16px;text-align:center;font-size:12.5px;color:var(--text-dim);" id="breatheCycleInfo">
+        已完成循環：<span id="breatheCycleCount" style="color:var(--accent);font-weight:bold;font-size:15px;">0</span> 次
       </div>
     </div>
 
@@ -3695,62 +3696,6 @@ document.addEventListener("keydown", (e) => {
 
 })();
 </script>
-
-
-
-      <div style="text-align:center;margin-top:20px;">
-        <button class="btn btn-primary" id="breatheControlBtn" style="padding:8px 24px;font-size:13.5px;cursor:pointer;">▶️ 開始練習 Start</button>
-        <button class="btn btn-ghost" id="breatheResetBtn" style="padding:8px 16px;font-size:13.5px;margin-left:8px;cursor:pointer;">🔄 重設 Reset</button>
-      </div>
-      
-      <div style="margin-top:16px;text-align:center;font-size:12px;color:var(--text-dim);" id="breatheCycleInfo">
-        已完成循環：<span id="breatheCycleCount" style="color:var(--accent);font-weight:bold;">0</span> 次
-      </div>
-    </div>
-
-    <!-- Panel 2: STOP Practice -->
-    <div id="mindfulPanelStop" class="mindful-panel hidden">
-      <p id="stopDesc" style="font-size:13px;color:var(--text-dim);margin:12px 0 14px;">
-        <strong>S-T-O-P</strong> 是正念減壓 (MBSR) 中最經典的微冥想技巧。只需 1~2 分鐘，就能在刺激與反應之間創造出珍貴的空間：
-      </p>
-
-      <div class="stop-steps-grid">
-        <div class="stop-step-card">
-          <div class="stop-letter">S</div>
-          <div class="stop-content">
-            <h4 id="stopStep1Title">Stop / 停步</h4>
-            <p id="stopStep1Desc">暫停手邊所有的動作與思緒，給自己一個微小的間歇。</p>
-          </div>
-        </div>
-        <div class="stop-step-card">
-          <div class="stop-letter">T</div>
-          <div class="stop-content">
-            <h4 id="stopStep2Title">Take a breath / 呼吸</h4>
-            <p id="stopStep2Desc">做一個緩慢而深長的深呼吸，感受空氣進入與離開胸腔。</p>
-          </div>
-        </div>
-        <div class="stop-step-card">
-          <div class="stop-letter">O</div>
-          <div class="stop-content">
-            <h4 id="stopStep3Title">Observe / 覺察</h4>
-            <p id="stopStep3Desc">帶著好奇與不加評判的心，掃描身體緊繃感、當下情緒與浮現的念頭。</p>
-          </div>
-        </div>
-        <div class="stop-step-card">
-          <div class="stop-letter">P</div>
-          <div class="stop-content">
-            <h4 id="stopStep4Title">Proceed / 啟程</h4>
-            <p id="stopStep4Desc">帶著這份清明、平靜與自我覺知，繼續你的反思或決策。</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-footer" style="margin-top:18px;display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px;">
-      <button class="btn btn-primary" id="finishMindfulBtn" onclick="closeMindfulModal(); goToTab('workspace');" style="padding:8px 20px;cursor:pointer;">🧭 帶著覺知進入羅盤 Proceed to Compass</button>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
