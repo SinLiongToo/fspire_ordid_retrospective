@@ -480,6 +480,162 @@ select{
 .hidden{display:none !important;}
 ::-webkit-scrollbar{width:8px;height:8px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* Mindful Modal & Breathing Animation */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 27, 45, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 580px;
+  padding: 22px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  animation: modal-pop 0.25s ease-out;
+}
+@keyframes modal-pop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.btn-icon:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.08);
+}
+.breathe-visual-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 220px;
+  position: relative;
+}
+.breathe-circle-outer {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 166, 35, 0.15) 0%, rgba(127, 181, 160, 0.05) 70%, transparent 100%);
+  border: 2px dashed rgba(245, 166, 35, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+.breathe-circle-inner {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #7FB5A0);
+  box-shadow: 0 0 25px rgba(245, 166, 35, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+  transition: transform 4s ease-in-out, box-shadow 4s ease-in-out;
+}
+.breathe-circle-inner.inhale {
+  transform: scale(1.45);
+  box-shadow: 0 0 45px rgba(245, 166, 35, 0.8);
+}
+.breathe-circle-inner.hold {
+  transform: scale(1.45);
+  box-shadow: 0 0 40px rgba(127, 181, 160, 0.8);
+}
+.breathe-circle-inner.exhale {
+  transform: scale(0.88);
+  box-shadow: 0 0 15px rgba(245, 166, 35, 0.3);
+}
+.breathe-circle-inner.rest {
+  transform: scale(0.88);
+  box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);
+}
+.breathe-action {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.breathe-timer {
+  font-size: 26px;
+  font-weight: 900;
+  margin-top: 2px;
+}
+.stop-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.stop-step-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: border-color 0.2s;
+}
+.stop-step-card:hover {
+  border-color: var(--accent);
+}
+.stop-letter {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.stop-content h4 {
+  margin: 0 0 2px;
+  font-size: 13.5px;
+  color: var(--text);
+}
+.stop-content p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.mindful-tip-banner {
+  background: rgba(245, 166, 35, 0.08);
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  padding: 9px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  gap: 10px;
+}
 </style>
 </head>
 <body data-theme="dark">
@@ -504,6 +660,7 @@ select{
       <button id="modeLifeBtn" class="mode-btn active">🌟 生活平衡 Life</button>
       <button id="modeDecisionBtn" class="mode-btn">🧠 思維決策 Decision</button>
     </div>
+    <button class="btn btn-ghost" id="mindfulPauseBtn" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;color:var(--accent);" title="Mindful Pause / 靜心覺察">🧘 靜心覺察</button>
     <button class="btn btn-ghost" id="langToggle" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;" title="Switch Language / 切換語言">🌐 EN</button>
     <button class="icon-btn" id="themeToggle" title="Toggle dark/light">🌙</button>
   </div>
@@ -532,6 +689,7 @@ select{
   <div class="panel workspace hidden" id="tab-workspace">
     <div id="workspaceEmpty" class="empty-hint">← 請從左側羅盤選擇一個生活面向，開始今天的焦點討論反思。<br>Select a domain from the compass to begin.</div>
     <div id="workspaceContent" class="hidden">
+      <div class="mindful-tip-banner" id="wsMindfulBanner"><span>🧘 <strong id="wsMindfulText">刻意暫停</strong>：在進入焦點討論前，給自己 1 分鐘的時間慢下來、覺察當下的身心狀態。</span><button class="btn btn-ghost" id="wsMindfulBtn" style="font-size:11.5px;padding:3px 8px;border-radius:6px;border:1px solid var(--accent);color:var(--accent);flex-shrink:0;">開始覺察 Begin</button></div>
       <div class="domain-header">
         <div class="domain-badge" id="wsBadge"></div>
         <div>
@@ -884,6 +1042,89 @@ select{
     <div id="helpGuideContent"></div>
   </div>
 
+
+<!-- Mindful Modal -->
+<div id="mindfulModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 id="mindfulModalTitle" style="margin:0;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--accent);">🧘 靜心覺察與定心練習 Mindful Pause</h2>
+      <button class="btn-icon" id="closeMindfulModalBtn" style="font-size:18px;">✕</button>
+    </div>
+    
+    <div class="synthesis-tabs" style="margin-top:14px;">
+      <button class="synthesis-tab-btn active" id="mindfulTabBreathe">🌬️ 箱式呼吸 (Box Breathing)</button>
+      <button class="synthesis-tab-btn" id="mindfulTabStop">🧭 STOP 覺察四步法</button>
+    </div>
+
+    <!-- Panel 1: Box Breathing -->
+    <div id="mindfulPanelBreathe" class="mindful-panel">
+      <p id="breatheDesc" style="font-size:13px;color:var(--text-dim);text-align:center;margin:12px 0 16px;">
+        跟隨光圈節奏，進行 4-4-4-4 箱式呼吸。放慢心率，啟動副交感神經，將大腦從緊繃模式切換至清明覺知狀態。
+      </p>
+
+      <div class="breathe-visual-wrap">
+        <div class="breathe-circle-outer" id="breatheOuter">
+          <div class="breathe-circle-inner" id="breatheInner">
+            <span class="breathe-action" id="breatheActionText">吸氣 Inhale</span>
+            <span class="breathe-timer" id="breatheTimerCount">4</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:20px;">
+        <button class="btn btn-primary" id="breatheControlBtn" style="padding:8px 24px;font-size:13.5px;">▶️ 開始練習 Start</button>
+        <button class="btn btn-ghost" id="breatheResetBtn" style="padding:8px 16px;font-size:13.5px;margin-left:8px;">🔄 重設 Reset</button>
+      </div>
+      
+      <div style="margin-top:16px;text-align:center;font-size:12px;color:var(--text-dim);" id="breatheCycleInfo">
+        已完成循環：<span id="breatheCycleCount" style="color:var(--accent);font-weight:bold;">0</span> 次
+      </div>
+    </div>
+
+    <!-- Panel 2: STOP Practice -->
+    <div id="mindfulPanelStop" class="mindful-panel hidden">
+      <p id="stopDesc" style="font-size:13px;color:var(--text-dim);margin:12px 0 14px;">
+        <strong>S-T-O-P</strong> 是正念減壓 (MBSR) 中最經典的微冥想技巧。只需 1~2 分鐘，就能在刺激與反應之間創造出珍貴的空間：
+      </p>
+
+      <div class="stop-steps-grid">
+        <div class="stop-step-card">
+          <div class="stop-letter">S</div>
+          <div class="stop-content">
+            <h4 id="stopStep1Title">Stop / 停步</h4>
+            <p id="stopStep1Desc">暫停手邊所有的動作與思緒，給自己一個微小的間歇。</p>
+          </div>
+        </div>
+        <div class="stop-step-card">
+          <div class="stop-letter">T</div>
+          <div class="stop-content">
+            <h4 id="stopStep2Title">Take a breath / 呼吸</h4>
+            <p id="stopStep2Desc">做一個緩慢而深長的深呼吸，感受空氣進入與離開胸腔。</p>
+          </div>
+        </div>
+        <div class="stop-step-card">
+          <div class="stop-letter">O</div>
+          <div class="stop-content">
+            <h4 id="stopStep3Title">Observe / 覺察</h4>
+            <p id="stopStep3Desc">帶著好奇與不加評判的心，掃描身體緊繃感、當下情緒與浮現的念頭。</p>
+          </div>
+        </div>
+        <div class="stop-step-card">
+          <div class="stop-letter">P</div>
+          <div class="stop-content">
+            <h4 id="stopStep4Title">Proceed / 啟程</h4>
+            <p id="stopStep4Desc">帶著這份清明、平靜與自我覺知，繼續你的反思或決策。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="margin-top:18px;display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px;">
+      <button class="btn btn-primary" id="finishMindfulBtn" style="padding:8px 20px;">🧭 帶著覺知進入羅盤 Proceed to Compass</button>
+    </div>
+  </div>
+</div>
+
 </main>
 </div>
 
@@ -978,8 +1219,7 @@ const LIFE_DOMAINS = [
       en: {
         o: ["What specific interactions occurred recently with important people in your life?", "Were there conflicts, collaborations, or deep conversations?"],
         r: ["How did these interactions make you feel?", "Did you feel understood, neglected, or supported?"],
-        i: ["What does this reflect about the current state or needs of this relationship?", "Is there something left unsaid that needs to be expressed?"],
-        d: ["What action will you take to nurture or repair this relationship?", "What will you do differently in your next interaction?"]
+        i: ["What does this reflect about the current state or needs of this relationship?", "Is there something left unsaid that needs to be expressed?"]
       }
     }
   },
@@ -1122,6 +1362,7 @@ const I18N = {
   zh: {
     appTitle: "焦點討論與決策羅盤 ORID Mindset & Decision Compass",
     langBtn: "🌐 EN",
+    mindfulBtn: "🧘 靜心覺察",
     brandTitleLife: "焦點討論生活羅盤",
     brandSubLife: "ORID Life Compass · 財務 · 靈性 · 身體 · 智識 · 人際 · 情緒",
     brandTitleDecision: "思維反思與決策羅盤",
@@ -1217,6 +1458,31 @@ const I18N = {
     alertImportFail: "匯入失敗，請確認 JSON 檔案格式正確。\nImport failed: invalid JSON format.",
     fcTipsHeader: "💡 實作指引 & 技巧",
     fcPlaceholder: '<h4 style="margin-top:0;color:var(--accent);display:flex;align-items:center;gap:8px;">🧭 互動流程指南</h4><p style="font-size:13px;line-height:1.6;margin:0;color:var(--text-dim);">將滑鼠游標移至左側流程圖的各個步驟上，此處將顯示該步驟的<b>核心概念、引導提問與實用小技巧</b>。</p>',
+    
+    // Mindful Translations
+    mindfulModalTitle: "🧘 靜心覺察與定心練習 Mindful Pause",
+    mindfulTabBreathe: "🌬️ 箱式呼吸 (Box Breathing)",
+    mindfulTabStop: "🧭 STOP 覺察四步法",
+    breatheDesc: "跟隨光圈節奏，進行 4-4-4-4 箱式呼吸。放慢心率，啟動副交感神經，將大腦從緊繃模式切換至清明覺知狀態。",
+    breatheStart: "▶️ 開始練習 Start",
+    breathePause: "⏸️ 暫停 Pause",
+    breatheResume: "▶️ 繼續 Resume",
+    breatheReset: "🔄 重設 Reset",
+    breatheCyclePrefix: "已完成循環：",
+    breatheCycleSuffix: " 次",
+    stopDesc: "<strong>S-T-O-P</strong> 是正念減壓 (MBSR) 中最經典的微冥想技巧。只需 1~2 分鐘，就能在刺激與反應之間創造出珍貴的空間：",
+    stopStep1Title: "Stop / 停步",
+    stopStep1Desc: "暫停手邊所有的動作與思緒，給自己一個微小的間歇。",
+    stopStep2Title: "Take a breath / 呼吸",
+    stopStep2Desc: "做一個緩慢而深長的深呼吸，感受空氣進入與離開胸腔。",
+    stopStep3Title: "Observe / 覺察",
+    stopStep3Desc: "帶著好奇與不加評判的心，掃描身體緊繃感、當下情緒與浮現的念頭。",
+    stopStep4Title: "Proceed / 啟程",
+    stopStep4Desc: "帶著這份清明、平靜與自我覺知，繼續你的反思或決策。",
+    mindfulFinish: "🧭 帶著覺知進入羅盤 Proceed to Compass",
+    wsMindfulBanner: "🧘 <strong>刻意暫停</strong>：在進入焦點討論前，給自己 1 分鐘的時間慢下來、覺察當下的身心狀態。",
+    wsMindfulBannerBtn: "開始覺察 Begin",
+
     flowchart: {
       "step1": {
         title: "🎯 1. 選擇模式與面向",
@@ -1293,6 +1559,7 @@ const I18N = {
   en: {
     appTitle: "ORID Mindset & Decision Compass",
     langBtn: "🌐 中文",
+    mindfulBtn: "🧘 Mindful Pause",
     brandTitleLife: "ORID Life Compass",
     brandSubLife: "Financial · Spiritual · Physical · Intellectual · Relational · Emotional",
     brandTitleDecision: "ORID Mindset & Decision Compass",
@@ -1388,6 +1655,31 @@ const I18N = {
     alertImportFail: "Import failed: invalid JSON format.",
     fcTipsHeader: "💡 Action Tips & Guidelines",
     fcPlaceholder: '<h4 style="margin-top:0;color:var(--accent);display:flex;align-items:center;gap:8px;">🧭 Interactive Process Guide</h4><p style="font-size:13px;line-height:1.6;margin:0;color:var(--text-dim);">Hover over any step in the flowchart to view its <b>core concepts, guided questions, and practical tips</b>.</p>',
+    
+    // Mindful Translations (English)
+    mindfulModalTitle: "🧘 Mindful Pause & Grounding Practice",
+    mindfulTabBreathe: "🌬️ Box Breathing (4-4-4-4)",
+    mindfulTabStop: "🧭 STOP Mindfulness Practice",
+    breatheDesc: "Follow the pulsing light circle in a 4-4-4-4 box breathing pattern. Lower heart rate, activate the parasympathetic system, and shift from stress to clear awareness.",
+    breatheStart: "▶️ Start Practice",
+    breathePause: "⏸️ Pause",
+    breatheResume: "▶️ Resume",
+    breatheReset: "🔄 Reset",
+    breatheCyclePrefix: "Completed Cycles: ",
+    breatheCycleSuffix: " cycles",
+    stopDesc: "<strong>S-T-O-P</strong> is a foundational micro-mindfulness practice from MBSR. In just 1-2 minutes, it creates intentional space between stimulus and response:",
+    stopStep1Title: "S — Stop",
+    stopStep1Desc: "Pause what you are doing and thinking. Step off autopilot.",
+    stopStep2Title: "T — Take a Breath",
+    stopStep2Desc: "Take a slow, deep breath. Anchor your attention in the physical sensation of breathing.",
+    stopStep3Title: "O — Observe",
+    stopStep3Desc: "Notice your body sensations, current emotions, and passing thoughts without judgment.",
+    stopStep4Title: "P — Proceed",
+    stopStep4Desc: "Move forward into your reflection or decision with presence, calm, and clarity.",
+    mindfulFinish: "🧭 Proceed to Compass with Clarity",
+    wsMindfulBanner: "🧘 <strong>Mindful Pause</strong>: Take 1 minute to slow down and center your mind before starting your ORID reflection.",
+    wsMindfulBannerBtn: "Begin Grounding",
+
     flowchart: {
       "step1": {
         title: "🎯 1. Select Mode & Domain",
@@ -1522,7 +1814,6 @@ function load(){
       if(!state.mode) state.mode = "life";
       if(!state.lang) state.lang = "zh";
     } else {
-      // Auto-detect browser language if available
       const browserLang = navigator.language || navigator.userLanguage || "zh";
       state.lang = browserLang.toLowerCase().startsWith("zh") ? "zh" : "en";
     }
@@ -1627,6 +1918,8 @@ function applyLanguage() {
   document.title = t.appTitle;
   
   document.getElementById("langToggle").textContent = t.langBtn;
+  const mindfulBtn = document.getElementById("mindfulPauseBtn");
+  if (mindfulBtn) mindfulBtn.textContent = t.mindfulBtn;
 
   // Header & Brand
   const titleEl = document.getElementById("brandTitle");
@@ -1653,9 +1946,14 @@ function applyLanguage() {
   document.querySelector(".compass-panel h2").textContent = state.mode === "life" ? t.compassTitleLife : t.compassTitleDecision;
   document.querySelector(".compass-panel p.sub").textContent = state.mode === "life" ? t.compassSubLife : t.compassSubDecision;
 
-  // Empty workspace hint
+  // Empty workspace hint & banner
   document.getElementById("workspaceEmpty").innerHTML = t.workspaceEmpty;
   document.querySelector("#lifeRatingRow label").textContent = t.selfRatingLabel;
+  const wsBanner = document.getElementById("wsMindfulBanner");
+  if (wsBanner) {
+    wsBanner.querySelector("span").innerHTML = t.wsMindfulBanner;
+    wsBanner.querySelector("button").textContent = t.wsMindfulBannerBtn;
+  }
 
   // Synthesis Tab Buttons
   document.getElementById("synTabPyramid").textContent = t.pyramidTab;
@@ -1773,6 +2071,29 @@ function applyLanguage() {
   const overallLabelEl = document.querySelector("#decisionPyramidPanel div[style*='margin-top:16px;text-align:center'] strong");
   if (overallLabelEl) overallLabelEl.textContent = t.dqOverall;
 
+  // Mindful Modal Texts
+  const mTitle = document.getElementById("mindfulModalTitle");
+  if (mTitle) mTitle.innerHTML = t.mindfulModalTitle;
+  const mTabBreathe = document.getElementById("mindfulTabBreathe");
+  if (mTabBreathe) mTabBreathe.textContent = t.mindfulTabBreathe;
+  const mTabStop = document.getElementById("mindfulTabStop");
+  if (mTabStop) mTabStop.textContent = t.mindfulTabStop;
+  const mBreatheDesc = document.getElementById("breatheDesc");
+  if (mBreatheDesc) mBreatheDesc.textContent = t.breatheDesc;
+  const mStopDesc = document.getElementById("stopDesc");
+  if (mStopDesc) mStopDesc.innerHTML = t.stopDesc;
+  const mFinish = document.getElementById("finishMindfulBtn");
+  if (mFinish) mFinish.textContent = t.mindfulFinish;
+
+  const s1T = document.getElementById("stopStep1Title"); if(s1T) s1T.textContent = t.stopStep1Title;
+  const s1D = document.getElementById("stopStep1Desc"); if(s1D) s1D.textContent = t.stopStep1Desc;
+  const s2T = document.getElementById("stopStep2Title"); if(s2T) s2T.textContent = t.stopStep2Title;
+  const s2D = document.getElementById("stopStep2Desc"); if(s2D) s2D.textContent = t.stopStep2Desc;
+  const s3T = document.getElementById("stopStep3Title"); if(s3T) s3T.textContent = t.stopStep3Title;
+  const s3D = document.getElementById("stopStep3Desc"); if(s3D) s3D.textContent = t.stopStep3Desc;
+  const s4T = document.getElementById("stopStep4Title"); if(s4T) s4T.textContent = t.stopStep4Title;
+  const s4D = document.getElementById("stopStep4Desc"); if(s4D) s4D.textContent = t.stopStep4Desc;
+
   // Workspace buttons
   document.getElementById("saveEntryBtn").textContent = t.saveBtn;
   document.getElementById("clearFormBtn").textContent = t.clearBtn;
@@ -1800,6 +2121,144 @@ function applyLanguage() {
   renderDashboard();
   renderHistory();
   renderHelp();
+  updateBreatheUI();
+}
+
+/* ---------- Mindful Grounding & Breathing Controller ---------- */
+let breatheInterval = null;
+let breatheState = "idle"; // idle, running, paused
+let breathePhaseIdx = 0; // 0: inhale, 1: hold, 2: exhale, 3: rest
+let breatheSecondsLeft = 4;
+let breatheCompletedCycles = 0;
+
+const BREATHE_PHASES = [
+  { key: "inhale", zh: "吸氣 Inhale", en: "Inhale (4s)", class: "inhale", duration: 4 },
+  { key: "hold",   zh: "屏息 Hold",   en: "Hold (4s)",   class: "hold",   duration: 4 },
+  { key: "exhale", zh: "吐氣 Exhale", en: "Exhale (4s)", class: "exhale", duration: 4 },
+  { key: "rest",   zh: "靜止 Rest",   en: "Rest (4s)",   class: "rest",   duration: 4 }
+];
+
+function updateBreatheUI() {
+  const isEn = state.lang === "en";
+  const phase = BREATHE_PHASES[breathePhaseIdx];
+  const actionText = document.getElementById("breatheActionText");
+  const timerCount = document.getElementById("breatheTimerCount");
+  const circleInner = document.getElementById("breatheInner");
+  const cycleDisplay = document.getElementById("breatheCycleCount");
+
+  if (actionText) actionText.textContent = isEn ? phase.en : phase.zh;
+  if (timerCount) timerCount.textContent = breatheSecondsLeft;
+  if (cycleDisplay) cycleDisplay.textContent = breatheCompletedCycles;
+
+  if (circleInner) {
+    circleInner.className = "breathe-circle-inner " + (breatheState === "running" ? phase.class : "");
+  }
+}
+
+function startBreathing() {
+  breatheState = "running";
+  const t = I18N[state.lang || "zh"];
+  const btn = document.getElementById("breatheControlBtn");
+  if (btn) btn.textContent = t.breathePause;
+  
+  updateBreatheUI();
+
+  if (breatheInterval) clearInterval(breatheInterval);
+  breatheInterval = setInterval(() => {
+    breatheSecondsLeft--;
+    if (breatheSecondsLeft <= 0) {
+      breathePhaseIdx = (breathePhaseIdx + 1) % 4;
+      if (breathePhaseIdx === 0) {
+        breatheCompletedCycles++;
+      }
+      breatheSecondsLeft = 4;
+    }
+    updateBreatheUI();
+  }, 1000);
+}
+
+function pauseBreathing() {
+  breatheState = "paused";
+  if (breatheInterval) clearInterval(breatheInterval);
+  const t = I18N[state.lang || "zh"];
+  const btn = document.getElementById("breatheControlBtn");
+  if (btn) btn.textContent = t.breatheResume;
+  updateBreatheUI();
+}
+
+function resetBreathing() {
+  breatheState = "idle";
+  if (breatheInterval) clearInterval(breatheInterval);
+  breathePhaseIdx = 0;
+  breatheSecondsLeft = 4;
+  breatheCompletedCycles = 0;
+  const t = I18N[state.lang || "zh"];
+  const btn = document.getElementById("breatheControlBtn");
+  if (btn) btn.textContent = t.breatheStart;
+  updateBreatheUI();
+}
+
+function openMindfulModal() {
+  const modal = document.getElementById("mindfulModal");
+  if (modal) modal.classList.remove("hidden");
+}
+
+function closeMindfulModal() {
+  const modal = document.getElementById("mindfulModal");
+  if (modal) modal.classList.add("hidden");
+  pauseBreathing();
+}
+
+// Mindful Listeners
+const mindfulBtn = document.getElementById("mindfulPauseBtn");
+if (mindfulBtn) mindfulBtn.addEventListener("click", openMindfulModal);
+
+const closeMindfulBtn = document.getElementById("closeMindfulModalBtn");
+if (closeMindfulBtn) closeMindfulBtn.addEventListener("click", closeMindfulModal);
+
+const finishMindfulBtn = document.getElementById("finishMindfulBtn");
+if (finishMindfulBtn) finishMindfulBtn.addEventListener("click", () => {
+  closeMindfulModal();
+  goToTab("workspace");
+});
+
+const wsMindfulBtn = document.getElementById("wsMindfulBtn");
+if (wsMindfulBtn) wsMindfulBtn.addEventListener("click", openMindfulModal);
+
+const tabBreatheBtn = document.getElementById("mindfulTabBreathe");
+const tabStopBtn = document.getElementById("mindfulTabStop");
+const panelBreathe = document.getElementById("mindfulPanelBreathe");
+const panelStop = document.getElementById("mindfulPanelStop");
+
+if (tabBreatheBtn && tabStopBtn) {
+  tabBreatheBtn.addEventListener("click", () => {
+    tabBreatheBtn.classList.add("active");
+    tabStopBtn.classList.remove("active");
+    panelBreathe.classList.remove("hidden");
+    panelStop.classList.add("hidden");
+  });
+  tabStopBtn.addEventListener("click", () => {
+    tabStopBtn.classList.add("active");
+    tabBreatheBtn.classList.remove("active");
+    panelStop.classList.remove("hidden");
+    panelBreathe.classList.add("hidden");
+  });
+}
+
+const breatheControlBtn = document.getElementById("breatheControlBtn");
+if (breatheControlBtn) {
+  breatheControlBtn.addEventListener("click", () => {
+    if (breatheState === "running") {
+      pauseBreathing();
+    } else {
+      startBreathing();
+    }
+  });
+}
+
+const breatheResetBtn = document.getElementById("breatheResetBtn");
+if (breatheResetBtn) {
+  breatheResetBtn.addEventListener("click", resetBreathing);
 }
 
 /* ---------- Compass SVG ---------- */
@@ -2439,6 +2898,17 @@ function renderHelp() {
   if (isEn) {
     container.innerHTML = `
       <div class="help-section">
+        <h3>🧘 Why Mindful Grounding Matters for Reflection & Decisions</h3>
+        <p>When the brain is in a rushed, anxious, or emotionally reactive state (governed by the amygdala), objective perception shrinks and decisions become impulsive. Taking 1-2 minutes to practice <strong>Mindful Grounding (Box Breathing & STOP)</strong> shifts neural activation to the prefrontal cortex:</p>
+        <ul>
+          <li><strong>O (Objective Facts):</strong> Observe realities and metrics clearly without emotional distortions.</li>
+          <li><strong>R (Reflective Feelings):</strong> Acknowledge emotional states with curious acceptance rather than defensive denial.</li>
+          <li><strong>I (Interpretive Meaning):</strong> Gain space to uncover genuine, non-obvious root causes.</li>
+          <li><strong>D (Decisional Action):</strong> Formulate calm, sustainable, and strategic next steps.</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
         <h3>What is the Focused Conversation Method (ORID)?</h3>
         <p>Originating from ICA facilitation techniques, ORID guides thinking through 4 structured levels from facts to concrete decisions:</p>
         <div class="orid-explain">
@@ -2558,6 +3028,17 @@ function renderHelp() {
     `;
   } else {
     container.innerHTML = `
+      <div class="help-section">
+        <h3>🧘 為什麼在反思與決策前需要「自我覺察 (Mindful Grounding)」？</h3>
+        <p>當我們在進行生活反思或做出關鍵決策時，若大腦處於焦慮、匆忙或情緒起伏狀態（受杏仁核主導），思考容易受限於直覺反應或產生認知偏誤。透過 1~2 分鐘的<strong>「自我覺察定心（箱式呼吸與 STOP 原則）」</strong>，能有效啟動前額葉皮質：</p>
+        <ul>
+          <li><strong>O 客觀事實 (Objective)：</strong>跳脫主觀情緒濾鏡，看清真正發生的數據與事實。</li>
+          <li><strong>R 反應感受 (Reflective)：</strong>以好奇而非防禦的心態，直面內心最真實的情緒與生理反應。</li>
+          <li><strong>I 詮釋意義 (Interpretive)：</strong>獲得充分的心智餘裕，洞察隱藏在表象底下的本質與根本原因。</li>
+          <li><strong>D 決定行動 (Decisional)：</strong>產出沉穩、理性且具高度可行性的戰略與行動方案。</li>
+        </ul>
+      </div>
+
       <div class="help-section">
         <h3>什麼是焦點討論法 (ORID)？</h3>
         <p>焦點討論法（Focused Conversation Method）源自 ICA 引導技術，透過四個層次的提問，帶領思考從「事實」走向「行動」，避免流於情緒發洩或空談。</p>
