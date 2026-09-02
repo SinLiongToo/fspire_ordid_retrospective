@@ -375,10 +375,12 @@ main.layout{display:grid;grid-template-columns:360px 1fr;gap:26px;align-items:st
 /* Compass SVG */
 .compass-wrap{display:flex;justify-content:center;margin:6px 0 8px;}
 svg.compass{width:100%;max-width:300px;height:auto;}
-.wedge{cursor:pointer;stroke:var(--bg-panel);stroke-width:2;opacity:.88;transition:opacity .15s,transform .15s;transform-origin:150px 150px;}
-.wedge:hover{opacity:1;transform:scale(1.02);}
-.wedge.active{opacity:1;stroke:var(--accent);stroke-width:3;}
-.wedge-label{font-size:12px;fill:var(--cream);font-weight:600;pointer-events:none;}
+.wedge-group{cursor:pointer;transition:transform .15s;transform-origin:150px 150px;}
+.wedge-group:hover{transform:scale(1.04);}
+.wedge{cursor:pointer;stroke:var(--bg-panel);stroke-width:2;opacity:.88;transition:opacity .15s;}
+.wedge-group:hover .wedge{opacity:1;}
+.wedge.active{opacity:1;stroke:var(--accent);stroke-width:3.5;}
+.wedge-label{font-size:18px;pointer-events:none;user-select:none;}
 .compass-center{fill:var(--bg-panel);stroke:var(--border);stroke-width:1;}
 .compass-center-text{fill:var(--text);font-size:11px;font-weight:600;text-anchor:middle;pointer-events:none;}
 
@@ -1908,11 +1910,13 @@ function switchMode(newMode) {
   goToTab("dashboard");
 }
 
-modeLifeBtn.addEventListener("click", () => {
-  if (state.mode !== "life") switchMode("life");
+modeLifeBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  switchMode("life");
 });
-modeDecisionBtn.addEventListener("click", () => {
-  if (state.mode !== "decision") switchMode("decision");
+modeDecisionBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  switchMode("decision");
 });
 
 /* ---------- Language Toggle & Dynamic i18n Application ---------- */
@@ -2313,9 +2317,9 @@ function buildCompass(){
     const lx = cx + (rInner+rOuter)/2*Math.cos(mid);
     const ly = cy + (rInner+rOuter)/2*Math.sin(mid);
     html += `
-      <g class="wedge-group" data-domain="${d.id}" style="cursor:pointer;">
+      <g class="wedge-group" data-domain="${d.id}">
         <path class="wedge" id="wedge-${d.id}" data-domain="${d.id}" d="${path}" fill="${d.hex}"></path>
-        <text class="wedge-label" data-domain="${d.id}" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="18" style="pointer-events:all;cursor:pointer;">${d.icon}</text>
+        <text class="wedge-label" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${d.icon}</text>
       </g>
     `;
   });
@@ -2332,10 +2336,10 @@ function buildCompass(){
   `;
   svg.innerHTML = html;
   
-  svg.querySelectorAll(".wedge-group, .wedge, .wedge-label").forEach(el=>{
+  svg.querySelectorAll(".wedge-group, .wedge").forEach(el=>{
     el.addEventListener("click", (e)=>{
       e.stopPropagation();
-      const domId = el.dataset.domain;
+      const domId = el.getAttribute("data-domain") || (el.dataset && el.dataset.domain);
       if (domId) selectDomain(domId, true);
     });
   });
@@ -2372,7 +2376,10 @@ function selectDomain(domainId, jump){
   activeDomain = DOMAINS.find(d=>d.id===domainId);
   activeStage = "o";
   resetDraft();
-  document.querySelectorAll(".wedge").forEach(w=>w.classList.toggle("active", w.dataset.domain===domainId));
+  document.querySelectorAll(".wedge").forEach(w=>{
+    const wDomain = w.getAttribute("data-domain") || (w.dataset && w.dataset.domain);
+    w.classList.toggle("active", wDomain===domainId);
+  });
   document.querySelectorAll(".legend-item").forEach(l=>l.classList.toggle("active", l.id==="legend-"+domainId));
   renderWorkspace();
   if(jump) goToTab("workspace");
@@ -2787,7 +2794,7 @@ function renderRadar(){
 
   svg.innerHTML = rings + axes + dataPoly + labels;
   svg.querySelectorAll(".radar-label").forEach(lbl => {
-    lbl.addEventListener("click", () => selectDomain(lbl.dataset.domain, true));
+    lbl.addEventListener("click", () => { const domId = lbl.getAttribute("data-domain") || (lbl.dataset && lbl.dataset.domain); if (domId) selectDomain(domId, true); });
   });
 }
 
