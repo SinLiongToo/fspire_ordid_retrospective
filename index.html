@@ -483,15 +483,25 @@ select{
 
 /* Mindful Modal & Breathing Animation */
 .modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(15, 27, 45, 0.78);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(15, 27, 45, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+.modal-overlay.hidden {
+  display: none !important;
 }
 .modal-card {
   background: var(--bg-panel);
@@ -660,7 +670,7 @@ select{
       <button id="modeLifeBtn" class="mode-btn active">🌟 生活平衡 Life</button>
       <button id="modeDecisionBtn" class="mode-btn">🧠 思維決策 Decision</button>
     </div>
-    <button class="btn btn-ghost" id="mindfulPauseBtn" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;color:var(--accent);" title="Mindful Pause / 靜心覺察">🧘 靜心覺察</button>
+    <button class="btn btn-ghost" id="mindfulPauseBtn" onclick="openMindfulModal()" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;color:var(--accent);" title="Mindful Pause / 靜心覺察">🧘 靜心覺察</button>
     <button class="btn btn-ghost" id="langToggle" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;" title="Switch Language / 切換語言">🌐 EN</button>
     <button class="icon-btn" id="themeToggle" title="Toggle dark/light">🌙</button>
   </div>
@@ -689,7 +699,7 @@ select{
   <div class="panel workspace hidden" id="tab-workspace">
     <div id="workspaceEmpty" class="empty-hint">← 請從左側羅盤選擇一個生活面向，開始今天的焦點討論反思。<br>Select a domain from the compass to begin.</div>
     <div id="workspaceContent" class="hidden">
-      <div class="mindful-tip-banner" id="wsMindfulBanner"><span>🧘 <strong id="wsMindfulText">刻意暫停</strong>：在進入焦點討論前，給自己 1 分鐘的時間慢下來、覺察當下的身心狀態。</span><button class="btn btn-ghost" id="wsMindfulBtn" style="font-size:11.5px;padding:3px 8px;border-radius:6px;border:1px solid var(--accent);color:var(--accent);flex-shrink:0;">開始覺察 Begin</button></div>
+      <div class="mindful-tip-banner" id="wsMindfulBanner"><span>🧘 <strong id="wsMindfulText">刻意暫停</strong>：在進入焦點討論前，給自己 1 分鐘的時間慢下來、覺察當下的身心狀態。</span><button class="btn btn-ghost" id="wsMindfulBtn" onclick="openMindfulModal()" style="font-size:11.5px;padding:3px 8px;border-radius:6px;border:1px solid var(--accent);color:var(--accent);flex-shrink:0;">開始覺察 Begin</button></div>
       <div class="domain-header">
         <div class="domain-badge" id="wsBadge"></div>
         <div>
@@ -1043,33 +1053,7 @@ select{
   </div>
 
 
-<!-- Mindful Modal -->
-<div id="mindfulModal" class="modal-overlay hidden">
-  <div class="modal-card">
-    <div class="modal-header">
-      <h2 id="mindfulModalTitle" style="margin:0;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--accent);">🧘 靜心覺察與定心練習 Mindful Pause</h2>
-      <button class="btn-icon" id="closeMindfulModalBtn" style="font-size:18px;">✕</button>
-    </div>
-    
-    <div class="synthesis-tabs" style="margin-top:14px;">
-      <button class="synthesis-tab-btn active" id="mindfulTabBreathe">🌬️ 箱式呼吸 (Box Breathing)</button>
-      <button class="synthesis-tab-btn" id="mindfulTabStop">🧭 STOP 覺察四步法</button>
-    </div>
 
-    <!-- Panel 1: Box Breathing -->
-    <div id="mindfulPanelBreathe" class="mindful-panel">
-      <p id="breatheDesc" style="font-size:13px;color:var(--text-dim);text-align:center;margin:12px 0 16px;">
-        跟隨光圈節奏，進行 4-4-4-4 箱式呼吸。放慢心率，啟動副交感神經，將大腦從緊繃模式切換至清明覺知狀態。
-      </p>
-
-      <div class="breathe-visual-wrap">
-        <div class="breathe-circle-outer" id="breatheOuter">
-          <div class="breathe-circle-inner" id="breatheInner">
-            <span class="breathe-action" id="breatheActionText">吸氣 Inhale</span>
-            <span class="breathe-timer" id="breatheTimerCount">4</span>
-          </div>
-        </div>
-      </div>
 
       <div style="text-align:center;margin-top:20px;">
         <button class="btn btn-primary" id="breatheControlBtn" style="padding:8px 24px;font-size:13.5px;">▶️ 開始練習 Start</button>
@@ -2200,14 +2184,24 @@ function resetBreathing() {
 
 function openMindfulModal() {
   const modal = document.getElementById("mindfulModal");
-  if (modal) modal.classList.remove("hidden");
+  if (modal) {
+    modal.classList.remove("hidden");
+    modal.style.display = "flex";
+    updateBreatheUI();
+  }
 }
+window.openMindfulModal = openMindfulModal;
 
 function closeMindfulModal() {
   const modal = document.getElementById("mindfulModal");
-  if (modal) modal.classList.add("hidden");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.style.display = "none";
+  }
   pauseBreathing();
 }
+window.closeMindfulModal = closeMindfulModal;
+window.goToTab = goToTab;
 
 // Mindful Listeners
 const mindfulBtn = document.getElementById("mindfulPauseBtn");
@@ -3551,6 +3545,18 @@ applyTheme();
 applyLanguage();
 initFlowchart();
 
+// Global click delegation for mindful pause and other interactive elements
+document.addEventListener("click", function(e) {
+  if (e.target.closest("#mindfulPauseBtn") || e.target.closest("#wsMindfulBtn")) {
+    e.preventDefault();
+    openMindfulModal();
+  }
+  if (e.target.closest("#closeMindfulModalBtn")) {
+    e.preventDefault();
+    closeMindfulModal();
+  }
+});
+
 // Brand logo click to go to dashboard
 const brandEl = document.querySelector(".brand");
 if (brandEl) {
@@ -3572,5 +3578,88 @@ document.addEventListener("keydown", (e) => {
 
 })();
 </script>
+
+<!-- Mindful Modal (Placed at body root for reliable fixed overlay) -->
+<div id="mindfulModal" class="modal-overlay hidden" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 id="mindfulModalTitle" style="margin:0;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--accent);">🧘 靜心覺察與定心練習 Mindful Pause</h2>
+      <button class="btn-icon" id="closeMindfulModalBtn" onclick="closeMindfulModal()" style="font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    
+    <div class="synthesis-tabs" style="margin-top:14px;">
+      <button class="synthesis-tab-btn active" id="mindfulTabBreathe">🌬️ 箱式呼吸 (Box Breathing)</button>
+      <button class="synthesis-tab-btn" id="mindfulTabStop">🧭 STOP 覺察四步法</button>
+    </div>
+
+    <!-- Panel 1: Box Breathing -->
+    <div id="mindfulPanelBreathe" class="mindful-panel">
+      <p id="breatheDesc" style="font-size:13px;color:var(--text-dim);text-align:center;margin:12px 0 16px;">
+        跟隨光圈節奏，進行 4-4-4-4 箱式呼吸。放慢心率，啟動副交感神經，將大腦從緊繃模式切換至清明覺知狀態。
+      </p>
+
+      <div class="breathe-visual-wrap">
+        <div class="breathe-circle-outer" id="breatheOuter">
+          <div class="breathe-circle-inner" id="breatheInner">
+            <span class="breathe-action" id="breatheActionText">吸氣 Inhale</span>
+            <span class="breathe-timer" id="breatheTimerCount">4</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:20px;">
+        <button class="btn btn-primary" id="breatheControlBtn" style="padding:8px 24px;font-size:13.5px;cursor:pointer;">▶️ 開始練習 Start</button>
+        <button class="btn btn-ghost" id="breatheResetBtn" style="padding:8px 16px;font-size:13.5px;margin-left:8px;cursor:pointer;">🔄 重設 Reset</button>
+      </div>
+      
+      <div style="margin-top:16px;text-align:center;font-size:12px;color:var(--text-dim);" id="breatheCycleInfo">
+        已完成循環：<span id="breatheCycleCount" style="color:var(--accent);font-weight:bold;">0</span> 次
+      </div>
+    </div>
+
+    <!-- Panel 2: STOP Practice -->
+    <div id="mindfulPanelStop" class="mindful-panel hidden">
+      <p id="stopDesc" style="font-size:13px;color:var(--text-dim);margin:12px 0 14px;">
+        <strong>S-T-O-P</strong> 是正念減壓 (MBSR) 中最經典的微冥想技巧。只需 1~2 分鐘，就能在刺激與反應之間創造出珍貴的空間：
+      </p>
+
+      <div class="stop-steps-grid">
+        <div class="stop-step-card">
+          <div class="stop-letter">S</div>
+          <div class="stop-content">
+            <h4 id="stopStep1Title">Stop / 停步</h4>
+            <p id="stopStep1Desc">暫停手邊所有的動作與思緒，給自己一個微小的間歇。</p>
+          </div>
+        </div>
+        <div class="stop-step-card">
+          <div class="stop-letter">T</div>
+          <div class="stop-content">
+            <h4 id="stopStep2Title">Take a breath / 呼吸</h4>
+            <p id="stopStep2Desc">做一個緩慢而深長的深呼吸，感受空氣進入與離開胸腔。</p>
+          </div>
+        </div>
+        <div class="stop-step-card">
+          <div class="stop-letter">O</div>
+          <div class="stop-content">
+            <h4 id="stopStep3Title">Observe / 覺察</h4>
+            <p id="stopStep3Desc">帶著好奇與不加評判的心，掃描身體緊繃感、當下情緒與浮現的念頭。</p>
+          </div>
+        </div>
+        <div class="stop-step-card">
+          <div class="stop-letter">P</div>
+          <div class="stop-content">
+            <h4 id="stopStep4Title">Proceed / 啟程</h4>
+            <p id="stopStep4Desc">帶著這份清明、平靜與自我覺知，繼續你的反思或決策。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="margin-top:18px;display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px;">
+      <button class="btn btn-primary" id="finishMindfulBtn" onclick="closeMindfulModal(); goToTab('workspace');" style="padding:8px 20px;cursor:pointer;">🧭 帶著覺知進入羅盤 Proceed to Compass</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
