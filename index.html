@@ -1274,6 +1274,8 @@ select{
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
     <div id="helpGuideContent"></div>
   </div>
@@ -1355,7 +1357,6 @@ select{
   </div>
 
 </main>
-</div>
 
 <!-- Mandala Help Modal -->
 <div id="mandalaModalHelp" class="modal-overlay hidden" style="display:none;">
@@ -4074,15 +4075,31 @@ const MandalaStudio = (function() {
       const raw = localStorage.getItem(MANDALA_STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed.grids && parsed.rootId) {
+        if (parsed.grids && parsed.rootId && parsed.grids[parsed.rootId]) {
           mState.grids = parsed.grids;
           mState.rootId = parsed.rootId;
-          mState.activeGridId = parsed.activeGridId || "core";
+          mState.activeGridId = (parsed.grids[parsed.activeGridId]) ? parsed.activeGridId : parsed.rootId;
           mState.zoomScale = parsed.zoomScale || 1.0;
         }
       }
+      // Defensive check: ensure activeGridId exists and all grids have valid structure
+      if (!mState.grids || !mState.grids[mState.rootId]) {
+        loadPreset("fspire", false);
+      } else {
+        for (let gId in mState.grids) {
+          const g = mState.grids[gId];
+          if (!g.cells || !Array.isArray(g.cells)) g.cells = Array(9).fill("");
+          while (g.cells.length < 9) g.cells.push("");
+          if (!g.extensions || !Array.isArray(g.extensions)) g.extensions = [null, null, null, null, gId, null, null, null, null];
+          while (g.extensions.length < 9) g.extensions.push(null);
+        }
+        if (!mState.grids[mState.activeGridId]) {
+          mState.activeGridId = mState.rootId;
+        }
+      }
     } catch(e) {
-      console.warn("Mandala load failed", e);
+      console.warn("Mandala load failed, resetting to default FSPIRE", e);
+      loadPreset("fspire", false);
     }
   }
 
@@ -4198,22 +4215,26 @@ const MandalaStudio = (function() {
     let safetyCounter = 0;
     while (currentId && safetyCounter < 50) {
       safetyCounter++;
-      let foundParent = null;
-      for (let gridId in mState.grids) {
-        const idx = mState.grids[gridId].extensions.indexOf(currentId);
-        if (idx !== -1 && gridId !== currentId) {
-          foundParent = { id: gridId, cellName: mState.grids[gridId].cells[idx] };
-          break;
-        }
-      }
       if (currentId === mState.rootId) {
         path.unshift({ id: mState.rootId, name: "Core" });
         break;
-      } else if (foundParent) {
+      }
+      let foundParent = null;
+      for (let gridId in mState.grids) {
+        const g = mState.grids[gridId];
+        if (g && Array.isArray(g.extensions)) {
+          const idx = g.extensions.indexOf(currentId);
+          if (idx !== -1 && gridId !== currentId) {
+            foundParent = { id: gridId, cellName: g.cells[idx] || "Subgrid" };
+            break;
+          }
+        }
+      }
+      if (foundParent) {
         path.unshift({ id: currentId, name: foundParent.cellName });
         currentId = foundParent.id;
       } else {
-        path.unshift({ id: currentId, name: "Subgrid" });
+        path.unshift({ id: currentId, name: (mState.grids[currentId] ? mState.grids[currentId].title : "Subgrid") });
         break;
       }
     }
@@ -4425,25 +4446,26 @@ const MandalaStudio = (function() {
   }
 
   function generateMarkdownOutput() {
-    if (!mState.grids["core"]) return;
+    const rootGrid = mState.grids[mState.rootId] || mState.grids["core"];
+    if (!rootGrid || !rootGrid.cells) return;
     const lang = state.lang || "zh";
-    const rootName = sanitize(mState.grids["core"].cells[4]);
+    const rootName = sanitize(rootGrid.cells[4] || rootGrid.title || "Mandala Master");
     let md = `# Mandala 9-Grid: ${rootName}\n\n`;
     md += `> [!NOTE]\n`;
     md += `> Language: ${lang}\n`;
-    md += `> Core Grid ID: core\n\n`;
+    md += `> Core Grid ID: ${mState.rootId}\n\n`;
 
     md += `## Mindmap Diagram\n\n`;
     md += `\`\`\`mermaid\nmindmap\n  root(("${rootName}"))\n`;
 
     function parseMindmapNodes(gridId, depthStr) {
       const currentGrid = mState.grids[gridId];
-      if (!currentGrid) return;
+      if (!currentGrid || !Array.isArray(currentGrid.cells)) return;
       currentGrid.cells.forEach((cellVal, idx) => {
         if (idx === 4) return;
         const cleanText = sanitize(cellVal);
-        const childGridId = currentGrid.extensions[idx];
-        if (childGridId) {
+        const childGridId = currentGrid.extensions ? currentGrid.extensions[idx] : null;
+        if (childGridId && childGridId !== gridId && mState.grids[childGridId]) {
           md += `${depthStr}  ${childGridId}["${cleanText}"]\n`;
           parseMindmapNodes(childGridId, depthStr + "    ");
         } else {
@@ -4451,7 +4473,7 @@ const MandalaStudio = (function() {
         }
       });
     }
-    parseMindmapNodes("core", "  ");
+    parseMindmapNodes(mState.rootId, "  ");
     md += `\`\`\`\n\n---\n\n`;
 
     Object.keys(mState.grids).forEach(gridId => {
