@@ -665,6 +665,203 @@ select{
   font-size: 12.5px;
   gap: 10px;
 }
+
+/* Mandala 9-Grid Studio Pro */
+.mandala-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+@media(max-width: 1050px) {
+  .mandala-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.mandala-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+.mandala-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 0;
+}
+.mandala-breadcrumbs button {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.mandala-breadcrumbs button:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.mandala-breadcrumbs button.active {
+  background: rgba(245, 166, 35, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: bold;
+}
+.mandala-canvas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 480px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 14px;
+}
+.mandala-zoom-wrapper {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center top;
+  width: 100%;
+  max-width: 440px;
+}
+.mandala-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+.mandala-cell {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  aspect-ratio: 1 / 1;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.mandala-cell:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
+  transform: translateY(-1px);
+}
+.mandala-cell.center-cell {
+  background: rgba(245, 166, 35, 0.08);
+  border: 2px solid var(--accent);
+}
+.mandala-cell textarea {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  resize: none;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  font-family: inherit;
+  outline: none;
+}
+.mandala-cell.center-cell textarea {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.mandala-cell-actions {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  display: flex;
+  gap: 3px;
+}
+.mandala-btn-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .15s;
+  line-height: 1;
+  padding: 0;
+}
+.mandala-btn-icon:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(1.1);
+}
+.mandala-btn-expand {
+  background: var(--accent);
+  color: var(--navy);
+  border: none;
+  font-weight: bold;
+}
+.mandala-btn-expand:hover {
+  background: #e09618;
+  color: var(--navy);
+}
+.mandala-center-star {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 9px;
+  opacity: 0.5;
+  color: var(--accent);
+}
+.mandala-export-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+.mandala-export-box textarea {
+  width: 100%;
+  min-height: 320px;
+  flex: 1;
+  background: #0d1117;
+  color: #58a6ff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  resize: vertical;
+  line-height: 1.45;
+}
+.mandala-btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
 </style>
 </head>
 <body data-theme="dark">
@@ -681,6 +878,7 @@ select{
   <nav class="tabs">
     <button data-tab="dashboard" class="active">總覽 Dashboard</button>
     <button data-tab="workspace">羅盤 Compass</button>
+    <button data-tab="mandala">九宮格 Mandala</button>
     <button data-tab="history">紀錄 History</button>
     <button data-tab="help">說明 Help</button>
   </nav>
@@ -1080,7 +1278,128 @@ select{
     <div id="helpGuideContent"></div>
   </div>
 
+  <!-- Mandala 9-Grid Studio Pro Workspace Panel -->
+  <div class="panel workspace hidden" id="tab-mandala">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+      <div>
+        <h2 style="margin-top:0;display:flex;align-items:center;gap:8px;">
+          <span id="mandalaTitle">🌸 曼陀羅九宮格思維工坊</span>
+          <span style="color:var(--text-dim);font-weight:400;font-size:13px;" id="mandalaTitleEn">Mandala 9-Grid Studio Pro</span>
+        </h2>
+        <p class="sub" style="margin-bottom:0;" id="mandalaSubtitle">核心目標居中，向外放射 8 個維度；點擊「＋」或連結按鈕可展開為 81 格次級目標矩陣。</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-ghost" id="mandalaUndoBtn" onclick="MandalaStudio.undo()" style="font-size:12px;padding:5px 10px;border-radius:8px;" title="Undo / 復原">↩️ 復原</button>
+        <button class="btn btn-ghost" id="mandalaRedoBtn" onclick="MandalaStudio.redo()" style="font-size:12px;padding:5px 10px;border-radius:8px;" title="Redo / 重做">↪️ 重做</button>
+        <select id="mandalaTemplateSelect" onchange="MandalaStudio.loadPreset(this.value)" style="font-size:12px;padding:5px 10px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);">
+          <option value="" disabled selected id="mandalaOptTplLabel">💡 載入範本 Template</option>
+          <option value="empty" id="mandalaOptTplEmpty">📄 空白九宮格 (Empty Grid)</option>
+          <option value="fspire" id="mandalaOptTplFspire">🌟 FSPIRE 全人幸福目標 (81格)</option>
+          <option value="ohtani" id="mandalaOptTplOhtani">⚾ 大谷翔平 81 格奮鬥目標</option>
+          <option value="product" id="mandalaOptTplProduct">🚀 新產品上市策略計劃 (81格)</option>
+        </select>
+        <button class="btn btn-ghost" id="mandalaHelpBtn" onclick="MandalaStudio.openHelpModal()" style="font-size:12px;padding:5px 10px;border-radius:8px;" title="九宮格使用指南">📖 說明</button>
+      </div>
+    </div>
+
+    <!-- Mandala Main Workspace Layout -->
+    <div class="mandala-layout">
+      <!-- Left: Interactive Canvas -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <!-- Top Navigation & Breadcrumbs -->
+        <div class="mandala-card" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;">
+          <div class="mandala-breadcrumbs" id="mandalaBreadcrumbs"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="mandalaSaveIndicator" style="font-size:11px;color:#2ECC71;opacity:0;transition:opacity 0.3s;">● 已自動存檔</span>
+            <button id="mandalaBtnGoUp" onclick="MandalaStudio.navigateUp()" class="btn btn-ghost" style="display:none;font-size:11px;padding:3px 8px;border-radius:6px;">↩️ 返回上層</button>
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="mandala-canvas-container">
+          <!-- Zoom Scale Control -->
+          <div style="position:absolute;top:10px;right:14px;display:flex;align-items:center;gap:6px;background:var(--bg-card);padding:4px 10px;border-radius:8px;border:1px solid var(--border);font-size:11px;z-index:2;">
+            <span style="color:var(--text-dim);" id="mandalaZoomLabel">縮放:</span>
+            <input type="range" id="mandalaZoomRange" min="0.6" max="1.3" step="0.05" value="1.0" oninput="MandalaStudio.adjustZoom(this.value)" style="width:70px;">
+            <span id="mandalaZoomPercent" style="font-family:monospace;font-size:11px;min-width:32px;text-align:right;">100%</span>
+          </div>
+
+          <div class="mandala-zoom-wrapper" id="mandalaZoomWrapper">
+            <div id="mandalaActiveGridTitle" style="text-align:center;font-weight:700;font-size:12px;letter-spacing:0.5px;color:var(--accent);margin-bottom:12px;">
+              🏆 核心主矩陣 Central Master Grid
+            </div>
+            <div class="mandala-grid" id="mandalaGridDOM"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Markdown & Mindmap Output Box -->
+      <div class="mandala-card mandala-export-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h4 style="margin:0;font-size:13px;display:flex;align-items:center;gap:6px;" id="mandalaExportTitle">📝 Markdown &amp; 心智圖</h4>
+          <button class="btn btn-ghost" id="mandalaCopyCodeBtn" onclick="MandalaStudio.copyMermaid()" style="font-size:11px;padding:3px 8px;border-radius:6px;">📋 複製程式碼</button>
+        </div>
+        <textarea id="mandalaMarkdownOutput" readonly spellcheck="false"></textarea>
+        
+        <div class="mandala-btn-grid">
+          <input type="file" id="mandalaImportJsonFile" class="hidden" accept=".json" onchange="MandalaStudio.importJSON(event)" style="display:none;">
+          <button class="btn btn-ghost" id="mandalaBtnImportJson" onclick="document.getElementById('mandalaImportJsonFile').click()" style="font-size:11.5px;padding:6px;">📁 匯入 JSON</button>
+          <button class="btn btn-ghost" id="mandalaBtnExportJson" onclick="MandalaStudio.exportJSON()" style="font-size:11.5px;padding:6px;">💾 匯出 JSON</button>
+          
+          <input type="file" id="mandalaImportMdFile" class="hidden" accept=".md,.markdown,.txt" onchange="MandalaStudio.importMarkdown(event)" style="display:none;">
+          <button class="btn btn-ghost" id="mandalaBtnImportMd" onclick="document.getElementById('mandalaImportMdFile').click()" style="font-size:11.5px;padding:6px;">📝 匯入 MD</button>
+          <button class="btn btn-ghost" id="mandalaBtnExportMd" onclick="MandalaStudio.exportMarkdownFile()" style="font-size:11.5px;padding:6px;background:rgba(245,166,35,0.12);border-color:var(--accent);color:var(--accent);">📥 匯出 MD</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
+</div>
+
+<!-- Mandala Help Modal -->
+<div id="mandalaModalHelp" class="modal-overlay hidden" style="display:none;">
+  <div class="modal-card" style="max-width:680px;">
+    <div class="modal-header">
+      <h2 style="margin:0;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--accent);" id="mandalaModalHelpTitle">📖 曼陀羅九宮格思考法指南 (Mandala 9-Grid Guide)</h2>
+      <button class="btn-icon" onclick="MandalaStudio.closeHelpModal()" style="font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    <div id="mandalaModalHelpBody" style="font-size:13px;line-height:1.6;color:var(--text);margin-top:14px;max-height:70vh;overflow-y:auto;"></div>
+    <div style="margin-top:16px;text-align:right;">
+      <button class="btn btn-ghost" onclick="MandalaStudio.closeHelpModal()" style="padding:6px 16px;border-radius:8px;">關閉 Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mandala Mobile Cell Edit Bottom Sheet Modal -->
+<div id="mandalaModalCellEdit" class="modal-overlay hidden" style="display:none;align-items:flex-end;">
+  <div class="modal-card" style="max-width:540px;width:100%;border-radius:18px 18px 0 0;margin:0 auto;animation:slideUp 0.25s ease;">
+    <div class="modal-header">
+      <div>
+        <h3 id="mandalaMobileEditHeader" style="margin:0;font-size:14px;color:var(--accent);">編輯格子</h3>
+        <p id="mandalaMobileEditSubtitle" style="margin:2px 0 0;font-size:11px;color:var(--text-dim);"></p>
+      </div>
+      <button class="btn-icon" onclick="MandalaStudio.closeCellEditor()" style="font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    <div style="margin-top:12px;">
+      <textarea id="mandalaMobileCellTextarea" rows="3" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg-panel);color:var(--text);font-size:13px;" oninput="MandalaStudio.updateFromMobile(this.value)"></textarea>
+    </div>
+    <div style="margin-top:12px;background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <strong style="font-size:12px;display:block;" id="mandalaMobileSubgridState">子九宮格連結狀態</strong>
+        <span style="font-size:11px;color:var(--text-dim);" id="mandalaMobileSubgridDesc">可展開為獨立 9 宮格</span>
+      </div>
+      <div id="mandalaMobileSubgridActions"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button class="btn btn-ghost" onclick="MandalaStudio.cycleCellFocus(-1)" style="padding:4px 10px;">◀</button>
+        <span id="mandalaMobileFocusIndex" style="font-family:monospace;font-size:12px;color:var(--text-dim);">1/9</span>
+        <button class="btn btn-ghost" onclick="MandalaStudio.cycleCellFocus(1)" style="padding:4px 10px;">▶</button>
+      </div>
+      <button class="btn btn-ghost" onclick="MandalaStudio.closeCellEditor()" style="padding:6px 18px;background:var(--accent);color:var(--navy);font-weight:bold;border-radius:8px;">OK</button>
+    </div>
+  </div>
 </div>
 
 
@@ -1522,6 +1841,40 @@ const I18N = {
     wsMindfulBanner: "🧘 <strong>刻意暫停</strong>：在進入焦點討論前，給自己 1 分鐘的時間慢下來、覺察當下的身心狀態。",
     wsMindfulBannerBtn: "開始覺察 Begin",
 
+    // Mandala 9-Grid Translations (ZH)
+    tabMandala: "九宮格 Mandala",
+    mandalaTitle: "🌸 曼陀羅九宮格思維工坊",
+    mandalaTitleEn: "Mandala 9-Grid Studio Pro",
+    mandalaSubtitle: "核心目標居中，向外放射 8 個維度；點擊「＋」或連結按鈕可展開為 81 格次級目標矩陣。",
+    mandalaUndo: "↩️ 復原",
+    mandalaRedo: "↪️ 重做",
+    mandalaTplLabel: "💡 載入範本 Template",
+    mandalaTplEmpty: "📄 空白九宮格 (Empty Grid)",
+    mandalaTplFspire: "🌟 FSPIRE 全人幸福目標 (81格)",
+    mandalaTplOhtani: "⚾ 大谷翔平 81 格奮鬥目標",
+    mandalaTplProduct: "🚀 新產品上市策略計劃 (81格)",
+    mandalaHelpBtn: "📖 說明",
+    mandalaZoomLabel: "縮放:",
+    mandalaGoUp: "↩️ 返回上層",
+    mandalaExportTitle: "📝 Markdown & 心智圖",
+    mandalaCopyCode: "📋 複製程式碼",
+    mandalaImportJson: "📁 匯入 JSON",
+    mandalaExportJson: "💾 匯出 JSON",
+    mandalaImportMd: "📝 匯入 MD",
+    mandalaExportMd: "📥 匯出 MD",
+    mandalaRootGrid: "核心主矩陣",
+    mandalaSubGrid: "展開子矩陣",
+    mandalaPlaceholder: "輸入目標或行動...",
+    mandalaAutoSaved: "● 已自動存檔",
+    mandalaCopySuccess: "複製成功！已將 Mermaid 心智圖複製至剪貼簿。",
+    mandalaImportSuccess: "專案載入成功！",
+    mandalaImportFail: "載入失敗，檔案格式不符或損毀。",
+    mandalaConfirmDelete: "確定要刪除此格的展開子九宮格嗎？這將會清除其下的所有階層內容！",
+    mandalaEditCell: "編輯格子",
+    mandalaSubgridLinked: "已連結子宮格：",
+    mandalaSubgridNotLinked: "未連結",
+    mandalaExpandBtn: "展開此格 ＋",
+
     flowchart: {
       "step1": {
         title: "🎯 1. 選擇模式與面向",
@@ -1719,6 +2072,40 @@ const I18N = {
     wsMindfulBanner: "🧘 <strong>Mindful Pause</strong>: Take 1 minute to slow down and center your mind before starting your ORID reflection.",
     wsMindfulBannerBtn: "Begin Grounding",
 
+    // Mandala 9-Grid Translations (EN)
+    tabMandala: "Mandala 9-Grid",
+    mandalaTitle: "🌸 Mandala 9-Grid Studio Pro",
+    mandalaTitleEn: "Mandala 9-Grid Studio Pro",
+    mandalaSubtitle: "Core concept sits in the center. Click '+' or links on edge cells to expand into 81-grid submatrices.",
+    mandalaUndo: "↩️ Undo",
+    mandalaRedo: "↪️ Redo",
+    mandalaTplLabel: "💡 Load Template",
+    mandalaTplEmpty: "📄 Empty Grid",
+    mandalaTplFspire: "🌟 FSPIRE Wholebeing Goals (81 Cells)",
+    mandalaTplOhtani: "⚾ Shohei Ohtani 81-Goal Chart",
+    mandalaTplProduct: "🚀 Product Launch Strategy (81 Cells)",
+    mandalaHelpBtn: "📖 Guide",
+    mandalaZoomLabel: "Scale:",
+    mandalaGoUp: "↩️ Go Up",
+    mandalaExportTitle: "📝 Markdown & Mindmap",
+    mandalaCopyCode: "📋 Copy Code",
+    mandalaImportJson: "📁 Import JSON",
+    mandalaExportJson: "💾 Export JSON",
+    mandalaImportMd: "📝 Import MD",
+    mandalaExportMd: "📥 Export MD",
+    mandalaRootGrid: "Core Master Grid",
+    mandalaSubGrid: "Expansion Grid",
+    mandalaPlaceholder: "Enter objective or action...",
+    mandalaAutoSaved: "● Auto-saved",
+    mandalaCopySuccess: "Copied! Mermaid mindmap block saved to clipboard.",
+    mandalaImportSuccess: "Project loaded successfully!",
+    mandalaImportFail: "Import failed. Invalid file structure or corrupted data.",
+    mandalaConfirmDelete: "Are you sure you want to delete the subgrid expansion for this cell? This will delete all deeper subgrid layers under it!",
+    mandalaEditCell: "Edit Cell",
+    mandalaSubgridLinked: "Linked Subgrid: ",
+    mandalaSubgridNotLinked: "Not Linked",
+    mandalaExpandBtn: "Expand Cell ＋",
+
     flowchart: {
       "step1": {
         title: "🎯 1. Select Mode & Domain",
@@ -1883,6 +2270,12 @@ tabButtons.forEach(btn=>{
     if(btn.dataset.tab === "dashboard") renderDashboard();
     if(btn.dataset.tab === "history") renderHistory();
     if(btn.dataset.tab === "help") renderHelp();
+    if(btn.dataset.tab === "mandala") {
+      if (window.MandalaStudio) {
+        window.MandalaStudio.render();
+        window.MandalaStudio.autoScaleMobile();
+      }
+    }
   });
 });
 function goToTab(tabId){
@@ -1976,8 +2369,13 @@ function applyLanguage() {
   // Nav tabs
   document.querySelector('nav.tabs button[data-tab="dashboard"]').textContent = t.tabDashboard;
   document.querySelector('nav.tabs button[data-tab="workspace"]').textContent = t.tabWorkspace;
+  const tabMandalaBtn = document.querySelector('nav.tabs button[data-tab="mandala"]');
+  if (tabMandalaBtn) tabMandalaBtn.textContent = t.tabMandala;
   document.querySelector('nav.tabs button[data-tab="history"]').textContent = t.tabHistory;
   document.querySelector('nav.tabs button[data-tab="help"]').textContent = t.tabHelp;
+  if (window.MandalaStudio && typeof window.MandalaStudio.applyLanguage === "function") {
+    window.MandalaStudio.applyLanguage();
+  }
 
   // Mode buttons
   modeLifeBtn.textContent = t.modeLife;
@@ -3610,11 +4008,1133 @@ function initFlowchart() {
   updateFlowchartHighlight();
 }
 
+/* ---------- Mandala 9-Grid Studio Pro Module ---------- */
+const MandalaStudio = (function() {
+  const MANDALA_STORAGE_KEY = "mandala_pro_state";
+  let mState = {
+    rootId: "core",
+    grids: {
+      "core": {
+        title: "FSPIRE 全人幸福人生",
+        cells: ["財務自由 (F)", "精神意義 (S)", "身體健康 (P)", "智力心智 (I)", "FSPIRE 全人幸福人生", "人際關係 (R)", "情緒韌性 (E)", "志業貢獻 (C)", "生活休閒 (L)"],
+        extensions: ["sub_fin", "sub_spi", "sub_phy", "sub_int", "core", "sub_rel", "sub_emo", "sub_car", "sub_lif"]
+      },
+      "sub_fin": {
+        title: "財務自由 (F)",
+        cells: ["儲蓄與預算管理", "多元被動收入", "指數長期投資", "應急預備金6個月", "財務自由 (F)", "風險與保險配置", "資產配置再平衡", "債務清償零負債", "稅務優化退休規劃"],
+        extensions: [null, null, null, null, "sub_fin", null, null, null, null]
+      },
+      "sub_spi": {
+        title: "精神意義 (S)",
+        cells: ["晨間正念冥想", "確立核心價值觀", "大自然深度連結", "活在當下與心流", "精神意義 (S)", "探尋生命長遠使命", "睡前感恩三件事", "寬恕與放下執著", "靈性哲學閱讀"],
+        extensions: [null, null, null, null, "sub_spi", null, null, null, null]
+      },
+      "sub_phy": {
+        title: "身體健康 (P)",
+        cells: ["每晚深層睡眠7-8h", "每週規律阻力訓練", "原型食物均衡營養", "每日充足飲水2L", "身體健康 (P)", "有氧心肺活力運動", "定期全身健康檢查", "筋膜放鬆伸展拉筋", "戒除有害少糖少酒"],
+        extensions: [null, null, null, null, "sub_phy", null, null, null, null]
+      },
+      "sub_int": {
+        title: "智力心智 (I)",
+        cells: ["每月精讀2本書", "掌握跨界新技能", "批判思維心智模型", "每日寫作筆記輸出", "智力心智 (I)", "保持好奇探索未知", "科技AI素養提升", "高質量課程研討", "刻意練習深度複盤"],
+        extensions: [null, null, null, null, "sub_int", null, null, null, null]
+      },
+      "sub_rel": {
+        title: "人際關係 (R)",
+        cells: ["伴侶深度陪伴時光", "親密家庭晚餐溝通", "經營3-5位知心摯友", "傾聽同理不妄評判", "人際關係 (R)", "設邊界遠離消耗感", "表達愛與真誠讚美", "結識人生良師益友", "樂於助人社區連結"],
+        extensions: [null, null, null, null, "sub_rel", null, null, null, null]
+      },
+      "sub_emo": {
+        title: "情緒韌性 (E)",
+        cells: ["接納情緒允許脆弱", "覺察情緒觸發點", "呼吸調息撫平焦慮", "積極正向自我對話", "情緒韌性 (E)", "培養幽默樂觀心態", "逆境復原成長思維", "心理排毒數位休眠", "自我慈悲不苛求全"],
+        extensions: [null, null, null, null, "sub_emo", null, null, null, null]
+      },
+      "sub_car": {
+        title: "志業貢獻 (C)",
+        cells: ["發揮天賦核心優勢", "建立專業個人品牌", "解決他人真實痛點", "熱情與工作深度融合", "志業貢獻 (C)", "公益回饋社會奉獻", "指導提攜年輕後進", "打造長期價值作品", "慶祝里程碑成就感"],
+        extensions: [null, null, null, null, "sub_car", null, null, null, null]
+      },
+      "sub_lif": {
+        title: "生活休閒 (L)",
+        cells: ["整潔舒適居住環境", "每年探索2處新旅行", "培養藝術音樂愛好", "品味美食料理樂趣", "生活休閒 (L)", "無目的放鬆充電感", "營造日常溫馨儀式", "斷捨離極簡生活感", "珍藏美好生命回憶"],
+        extensions: [null, null, null, null, "sub_lif", null, null, null, null]
+      }
+    },
+    activeGridId: "core",
+    zoomScale: 1.0,
+    mobileFocusIndex: 0
+  };
+
+  let historyStack = [];
+  let historyIndex = -1;
+  let isPerformingHistoryAction = false;
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(MANDALA_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.grids && parsed.rootId) {
+          mState.grids = parsed.grids;
+          mState.rootId = parsed.rootId;
+          mState.activeGridId = parsed.activeGridId || "core";
+          mState.zoomScale = parsed.zoomScale || 1.0;
+        }
+      }
+    } catch(e) {
+      console.warn("Mandala load failed", e);
+    }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(MANDALA_STORAGE_KEY, JSON.stringify(mState));
+    } catch(e) {
+      console.warn("Mandala save failed", e);
+    }
+  }
+
+  function saveAndIndicator() {
+    save();
+    const indicator = document.getElementById("mandalaSaveIndicator");
+    if (indicator) {
+      indicator.style.opacity = "1";
+      setTimeout(() => { indicator.style.opacity = "0"; }, 1200);
+    }
+  }
+
+  function recordHistory() {
+    if (isPerformingHistoryAction) return;
+    historyStack = historyStack.slice(0, historyIndex + 1);
+    historyStack.push(JSON.stringify(mState.grids));
+    historyIndex = historyStack.length - 1;
+    updateHistoryButtons();
+  }
+
+  function updateHistoryButtons() {
+    const btnUndo = document.getElementById("mandalaUndoBtn");
+    const btnRedo = document.getElementById("mandalaRedoBtn");
+    if (btnUndo) btnUndo.disabled = (historyIndex <= 0);
+    if (btnRedo) btnRedo.disabled = (historyIndex >= historyStack.length - 1);
+  }
+
+  function undo() {
+    if (historyIndex > 0) {
+      isPerformingHistoryAction = true;
+      historyIndex--;
+      mState.grids = JSON.parse(historyStack[historyIndex]);
+      if (!mState.grids[mState.activeGridId]) {
+        mState.activeGridId = mState.rootId;
+      }
+      render();
+      saveAndIndicator();
+      isPerformingHistoryAction = false;
+    }
+  }
+
+  function redo() {
+    if (historyIndex < historyStack.length - 1) {
+      isPerformingHistoryAction = true;
+      historyIndex++;
+      mState.grids = JSON.parse(historyStack[historyIndex]);
+      if (!mState.grids[mState.activeGridId]) {
+        mState.activeGridId = mState.rootId;
+      }
+      render();
+      saveAndIndicator();
+      isPerformingHistoryAction = false;
+    }
+  }
+
+  function render() {
+    renderBreadcrumbs();
+    renderGridDOM();
+    generateMarkdownOutput();
+
+    const btnBack = document.getElementById("mandalaBtnGoUp");
+    if (btnBack) {
+      btnBack.style.display = (mState.activeGridId === mState.rootId) ? "none" : "inline-flex";
+    }
+    updateHistoryButtons();
+  }
+
+  function renderBreadcrumbs() {
+    const container = document.getElementById("mandalaBreadcrumbs");
+    if (!container) return;
+    container.innerHTML = "";
+    const lang = state.lang || "zh";
+    const t = I18N[lang];
+
+    const path = getBreadcrumbPath(mState.activeGridId);
+    path.forEach((node, idx) => {
+      const isLast = (idx === path.length - 1);
+      if (idx > 0) {
+        const sep = document.createElement("span");
+        sep.innerText = "›";
+        sep.style.opacity = "0.4";
+        sep.style.color = "var(--text-dim)";
+        container.appendChild(sep);
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      const nodeTitle = mState.grids[node.id] ? mState.grids[node.id].title : node.name;
+      btn.innerHTML = (node.id === mState.rootId) ? `🏠 ${t.mandalaRootGrid}` : `🌿 ${nodeTitle}`;
+      if (isLast) {
+        btn.classList.add("active");
+      } else {
+        btn.onclick = () => {
+          mState.activeGridId = node.id;
+          render();
+          autoScaleMobile();
+        };
+      }
+      container.appendChild(btn);
+    });
+  }
+
+  function getBreadcrumbPath(targetGridId) {
+    const path = [];
+    let currentId = targetGridId;
+    let safetyCounter = 0;
+    while (currentId && safetyCounter < 50) {
+      safetyCounter++;
+      let foundParent = null;
+      for (let gridId in mState.grids) {
+        const idx = mState.grids[gridId].extensions.indexOf(currentId);
+        if (idx !== -1 && gridId !== currentId) {
+          foundParent = { id: gridId, cellName: mState.grids[gridId].cells[idx] };
+          break;
+        }
+      }
+      if (currentId === mState.rootId) {
+        path.unshift({ id: mState.rootId, name: "Core" });
+        break;
+      } else if (foundParent) {
+        path.unshift({ id: currentId, name: foundParent.cellName });
+        currentId = foundParent.id;
+      } else {
+        path.unshift({ id: currentId, name: "Subgrid" });
+        break;
+      }
+    }
+    return path;
+  }
+
+  function renderGridDOM() {
+    const gridContainer = document.getElementById("mandalaGridDOM");
+    if (!gridContainer) return;
+    gridContainer.innerHTML = "";
+
+    const activeGrid = mState.grids[mState.activeGridId];
+    if (!activeGrid) return;
+
+    const lang = state.lang || "zh";
+    const t = I18N[lang];
+
+    const titleEl = document.getElementById("mandalaActiveGridTitle");
+    if (titleEl) {
+      titleEl.innerText = (mState.activeGridId === mState.rootId) ?
+        `🏆 ${t.mandalaRootGrid}: ${activeGrid.title}` :
+        `🌿 ${t.mandalaSubGrid}: ${activeGrid.title}`;
+    }
+
+    activeGrid.cells.forEach((cellText, idx) => {
+      const isCenter = (idx === 4);
+      const extId = activeGrid.extensions[idx];
+
+      const cell = document.createElement("div");
+      cell.className = `mandala-cell ${isCenter ? "center-cell" : ""}`;
+
+      const textarea = document.createElement("textarea");
+      textarea.value = cellText;
+      textarea.placeholder = t.mandalaPlaceholder;
+      textarea.onchange = (e) => {
+        updateCellValue(mState.activeGridId, idx, e.target.value);
+      };
+      textarea.onclick = (e) => {
+        if (window.innerWidth < 768) {
+          e.preventDefault();
+          textarea.blur();
+          openCellEditor(idx);
+        }
+      };
+      cell.appendChild(textarea);
+
+      if (!isCenter) {
+        const actionContainer = document.createElement("div");
+        actionContainer.className = "mandala-cell-actions";
+        if (extId) {
+          const navBtn = document.createElement("button");
+          navBtn.innerText = "🔗";
+          navBtn.title = (lang === "zh" ? "下鑽進入子九宮格" : "Zoom into subgrid");
+          navBtn.className = "mandala-btn-icon";
+          navBtn.onclick = (e) => {
+            e.stopPropagation();
+            mState.activeGridId = extId;
+            render();
+            autoScaleMobile();
+          };
+          actionContainer.appendChild(navBtn);
+        } else {
+          const addBtn = document.createElement("button");
+          addBtn.innerText = "＋";
+          addBtn.title = (lang === "zh" ? "展開為新九宮格" : "Expand into new 9-grid");
+          addBtn.className = "mandala-btn-icon mandala-btn-expand";
+          addBtn.onclick = (e) => {
+            e.stopPropagation();
+            expandCellNode(mState.activeGridId, idx);
+          };
+          actionContainer.appendChild(addBtn);
+        }
+        cell.appendChild(actionContainer);
+      } else {
+        const star = document.createElement("span");
+        star.innerText = "⭐";
+        star.className = "mandala-center-star";
+        cell.appendChild(star);
+      }
+
+      gridContainer.appendChild(cell);
+    });
+  }
+
+  function updateCellValue(gridId, idx, newValue) {
+    const isCenter = (idx === 4);
+    const grid = mState.grids[gridId];
+    if (!grid) return;
+
+    grid.cells[idx] = newValue;
+    if (isCenter) {
+      grid.title = newValue;
+    }
+
+    if (isCenter && gridId !== mState.rootId) {
+      for (let parentId in mState.grids) {
+        const extIdx = mState.grids[parentId].extensions.indexOf(gridId);
+        if (extIdx !== -1) {
+          mState.grids[parentId].cells[extIdx] = newValue;
+          break;
+        }
+      }
+    } else if (!isCenter) {
+      const targetSubGridId = grid.extensions[idx];
+      if (targetSubGridId && mState.grids[targetSubGridId]) {
+        mState.grids[targetSubGridId].cells[4] = newValue;
+        mState.grids[targetSubGridId].title = newValue;
+      }
+    }
+
+    recordHistory();
+    render();
+    saveAndIndicator();
+  }
+
+  function expandCellNode(parentGridId, cellIndex) {
+    const lang = state.lang || "zh";
+    const seedTitle = mState.grids[parentGridId].cells[cellIndex] || (lang === "zh" ? `分支 ${cellIndex + 1}` : `Branch ${cellIndex + 1}`);
+    const newGridId = "sub_" + Date.now() + "_" + cellIndex;
+
+    mState.grids[newGridId] = {
+      title: seedTitle,
+      cells: [
+        `${seedTitle} 1`, `${seedTitle} 2`, `${seedTitle} 3`,
+        `${seedTitle} 4`, seedTitle, `${seedTitle} 6`,
+        `${seedTitle} 7`, `${seedTitle} 8`, `${seedTitle} 9`
+      ],
+      extensions: [null, null, null, null, newGridId, null, null, null, null]
+    };
+
+    mState.grids[parentGridId].extensions[cellIndex] = newGridId;
+    mState.activeGridId = newGridId;
+
+    recordHistory();
+    render();
+    saveAndIndicator();
+    autoScaleMobile();
+  }
+
+  function removeSubgridLink(parentGridId, cellIndex) {
+    const targetGridId = mState.grids[parentGridId].extensions[cellIndex];
+    if (!targetGridId) return;
+
+    const lang = state.lang || "zh";
+    const confirmMsg = I18N[lang].mandalaConfirmDelete;
+    if (confirm(confirmMsg)) {
+      function deleteGridRecursive(gridId) {
+        const grid = mState.grids[gridId];
+        if (!grid) return;
+        grid.extensions.forEach((ext, idx) => {
+          if (ext && idx !== 4) deleteGridRecursive(ext);
+        });
+        delete mState.grids[gridId];
+      }
+      deleteGridRecursive(targetGridId);
+      mState.grids[parentGridId].extensions[cellIndex] = null;
+
+      recordHistory();
+      render();
+      saveAndIndicator();
+    }
+  }
+
+  function navigateUp() {
+    for (let parentId in mState.grids) {
+      const idx = mState.grids[parentId].extensions.indexOf(mState.activeGridId);
+      if (idx !== -1 && parentId !== mState.activeGridId) {
+        mState.activeGridId = parentId;
+        render();
+        autoScaleMobile();
+        return;
+      }
+    }
+    mState.activeGridId = mState.rootId;
+    render();
+    autoScaleMobile();
+  }
+
+  function adjustZoom(val) {
+    mState.zoomScale = parseFloat(val);
+    const zoomWrapper = document.getElementById("mandalaZoomWrapper");
+    if (zoomWrapper) zoomWrapper.style.transform = `scale(${mState.zoomScale})`;
+    const percentEl = document.getElementById("mandalaZoomPercent");
+    if (percentEl) percentEl.innerText = `${Math.round(mState.zoomScale * 100)}%`;
+    save();
+  }
+
+  function autoScaleMobile() {
+    if (window.innerWidth < 768) {
+      const container = document.querySelector(".mandala-canvas-container");
+      if (container) {
+        const width = container.clientWidth;
+        const targetWidth = Math.max(width - 32, 260);
+        const scale = Math.min(targetWidth / 440, 1.0);
+        mState.zoomScale = scale;
+        const rangeEl = document.getElementById("mandalaZoomRange");
+        if (rangeEl) rangeEl.value = scale.toFixed(2);
+        const zoomWrapper = document.getElementById("mandalaZoomWrapper");
+        if (zoomWrapper) zoomWrapper.style.transform = `scale(${scale})`;
+        const percentEl = document.getElementById("mandalaZoomPercent");
+        if (percentEl) percentEl.innerText = `${Math.round(scale * 100)}%`;
+      }
+    }
+  }
+
+  function sanitize(str) {
+    if (!str) return "";
+    return str.replace(/[\[\]\(\)\"\':;\{\}]/g, "").trim();
+  }
+
+  function generateMarkdownOutput() {
+    if (!mState.grids["core"]) return;
+    const lang = state.lang || "zh";
+    const rootName = sanitize(mState.grids["core"].cells[4]);
+    let md = `# Mandala 9-Grid: ${rootName}\n\n`;
+    md += `> [!NOTE]\n`;
+    md += `> Language: ${lang}\n`;
+    md += `> Core Grid ID: core\n\n`;
+
+    md += `## Mindmap Diagram\n\n`;
+    md += `\`\`\`mermaid\nmindmap\n  root(("${rootName}"))\n`;
+
+    function parseMindmapNodes(gridId, depthStr) {
+      const currentGrid = mState.grids[gridId];
+      if (!currentGrid) return;
+      currentGrid.cells.forEach((cellVal, idx) => {
+        if (idx === 4) return;
+        const cleanText = sanitize(cellVal);
+        const childGridId = currentGrid.extensions[idx];
+        if (childGridId) {
+          md += `${depthStr}  ${childGridId}["${cleanText}"]\n`;
+          parseMindmapNodes(childGridId, depthStr + "    ");
+        } else {
+          md += `${depthStr}  ["${cleanText}"]\n`;
+        }
+      });
+    }
+    parseMindmapNodes("core", "  ");
+    md += `\`\`\`\n\n---\n\n`;
+
+    Object.keys(mState.grids).forEach(gridId => {
+      const grid = mState.grids[gridId];
+      const cleanTitle = sanitize(grid.title);
+      md += `## Grid: ${gridId} (${cleanTitle})\n\n`;
+      md += `| | | |\n`;
+      md += `|---|---|---|\n`;
+      md += `| ${sanitize(grid.cells[0])} | ${sanitize(grid.cells[1])} | ${sanitize(grid.cells[2])} |\n`;
+      md += `| ${sanitize(grid.cells[3])} | **${sanitize(grid.cells[4])}** | ${sanitize(grid.cells[5])} |\n`;
+      md += `| ${sanitize(grid.cells[6])} | ${sanitize(grid.cells[7])} | ${sanitize(grid.cells[8])} |\n\n`;
+
+      for (let i = 0; i < 9; i++) {
+        const isCenter = (i === 4);
+        const ext = grid.extensions[i];
+        const val = sanitize(grid.cells[i]);
+        if (isCenter) {
+          md += `- Cell 5 (Center): **${val}**\n`;
+        } else {
+          if (ext) {
+            md += `- Cell ${i+1}: ${val} (Expanded: ${ext})\n`;
+          } else {
+            md += `- Cell ${i+1}: ${val}\n`;
+          }
+        }
+      }
+      md += `\n---\n\n`;
+    });
+
+    const out = document.getElementById("mandalaMarkdownOutput");
+    if (out) out.value = md;
+  }
+
+  function copyMermaid() {
+    const out = document.getElementById("mandalaMarkdownOutput");
+    if (out) {
+      out.select();
+      document.execCommand("copy");
+      const lang = state.lang || "zh";
+      alert(I18N[lang].mandalaCopySuccess);
+    }
+  }
+
+  function exportMarkdownFile() {
+    generateMarkdownOutput();
+    const out = document.getElementById("mandalaMarkdownOutput");
+    if (!out) return;
+    const mdText = out.value;
+    const rootName = sanitize(mState.grids["core"].cells[4]).replace(/\s+/g, '_');
+    const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(mdText);
+    const dlAnchor = document.createElement("a");
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `mandala_9grid_${rootName}.md`);
+    document.body.appendChild(dlAnchor);
+    dlAnchor.click();
+    dlAnchor.remove();
+  }
+
+  function exportJSON() {
+    const rootName = sanitize(mState.grids["core"].cells[4]).replace(/\s+/g, '_');
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(mState));
+    const dlAnchor = document.createElement("a");
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `mandala_9grid_${rootName}.json`);
+    document.body.appendChild(dlAnchor);
+    dlAnchor.click();
+    dlAnchor.remove();
+  }
+
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const lang = state.lang || "zh";
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (parsed.grids && parsed.rootId) {
+          mState.grids = parsed.grids;
+          mState.rootId = parsed.rootId;
+          mState.activeGridId = parsed.activeGridId || "core";
+          mState.zoomScale = parsed.zoomScale || 1.0;
+          adjustZoom(mState.zoomScale);
+          recordHistory();
+          render();
+          saveAndIndicator();
+          autoScaleMobile();
+          alert(I18N[lang].mandalaImportSuccess);
+        } else {
+          alert(I18N[lang].mandalaImportFail);
+        }
+      } catch (err) {
+        alert(I18N[lang].mandalaImportFail);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  }
+
+  function importMarkdown(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const lang = state.lang || "zh";
+      const mdText = e.target.result;
+      try {
+        const lines = mdText.split(/\r?\n/);
+        const parsedGrids = {};
+        let currentGridId = null;
+
+        for (let line of lines) {
+          line = line.trim();
+          if (!line) continue;
+          if (line.startsWith(">")) continue;
+
+          const gridHeaderMatch = line.match(/^##\s+Grid:\s*([a-zA-Z0-9_-]+)(?:\s+\((.*)\))?/i);
+          if (gridHeaderMatch) {
+            currentGridId = gridHeaderMatch[1].trim();
+            const gridTitle = gridHeaderMatch[2] ? gridHeaderMatch[2].trim() : "Grid";
+            parsedGrids[currentGridId] = {
+              title: gridTitle,
+              cells: Array(9).fill(""),
+              extensions: Array(9).fill(null)
+            };
+            if (currentGridId === "core") {
+              parsedGrids[currentGridId].extensions[4] = "core";
+            } else {
+              parsedGrids[currentGridId].extensions[4] = currentGridId;
+            }
+            continue;
+          }
+
+          if (currentGridId && line.startsWith("-")) {
+            const cellMatch = line.match(/^-\s+Cell\s+(\d+)(?:\s+\(Center\))?:\s*(.*)$/i);
+            if (cellMatch) {
+              const cellIndex = parseInt(cellMatch[1]) - 1;
+              let cellValue = cellMatch[2].trim();
+              let extensionId = null;
+
+              const expMatch = cellValue.match(/(.*?)\s*\(Expanded:\s*([a-zA-Z0-9_-]+)\)/i);
+              if (expMatch) {
+                cellValue = expMatch[1].trim();
+                extensionId = expMatch[2].trim();
+              }
+              if (cellIndex === 4) {
+                cellValue = cellValue.replace(/^\*\*(.*)\*\*$/, '$1');
+              }
+              parsedGrids[currentGridId].cells[cellIndex] = cellValue;
+              if (cellIndex !== 4) {
+                parsedGrids[currentGridId].extensions[cellIndex] = extensionId;
+              }
+            }
+          }
+        }
+
+        if (Object.keys(parsedGrids).length === 0 || !parsedGrids["core"]) {
+          throw new Error("Invalid format.");
+        }
+
+        mState.grids = parsedGrids;
+        mState.rootId = "core";
+        mState.activeGridId = "core";
+
+        Object.keys(mState.grids).forEach(gridId => {
+          const grid = mState.grids[gridId];
+          grid.cells.forEach((cellText, idx) => {
+            if (idx === 4) return;
+            const ext = grid.extensions[idx];
+            if (ext && mState.grids[ext]) {
+              mState.grids[ext].cells[4] = cellText;
+              mState.grids[ext].title = cellText;
+            }
+          });
+        });
+
+        recordHistory();
+        render();
+        saveAndIndicator();
+        autoScaleMobile();
+        alert(I18N[lang].mandalaImportSuccess);
+      } catch (err) {
+        alert(I18N[lang].mandalaImportFail);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  }
+
+  // Presets & Templates
+  function loadPreset(type) {
+    if (!type) return;
+    const lang = state.lang || "zh";
+    const isZh = (lang === "zh");
+
+    if (type === "empty") {
+      mState.grids = {
+        "core": {
+          title: isZh ? "核心目標" : "Central Goal",
+          cells: Array(9).fill("").map((_, i) => i === 4 ? (isZh ? "核心目標" : "Central Goal") : (isZh ? `分支目標 ${i+1}` : `Branch Goal ${i+1}`)),
+          extensions: [null, null, null, null, "core", null, null, null, null]
+        }
+      };
+      mState.activeGridId = "core";
+    }
+    else if (type === "fspire") {
+      mState.grids = {
+        "core": {
+          title: isZh ? "FSPIRE 全人幸福人生" : "FSPIRE Wholebeing Life",
+          cells: isZh ?
+            ["財務自由 (F)", "精神意義 (S)", "身體健康 (P)", "智力心智 (I)", "FSPIRE 全人幸福人生", "人際關係 (R)", "情緒韌性 (E)", "志業貢獻 (C)", "生活休閒 (L)"] :
+            ["Financial Wealth (F)", "Spiritual Purpose (S)", "Physical Vitality (P)", "Intellectual Growth (I)", "FSPIRE Wholebeing Life", "Relational Harmony (R)", "Emotional Resilience (E)", "Career & Impact (C)", "Lifestyle & Joy (L)"],
+          extensions: ["sub_fin", "sub_spi", "sub_phy", "sub_int", "core", "sub_rel", "sub_emo", "sub_car", "sub_lif"]
+        },
+        "sub_fin": {
+          title: isZh ? "財務自由 (F)" : "Financial Wealth (F)",
+          cells: isZh ?
+            ["儲蓄與預算管理", "多元被動收入", "指數長期投資", "應急預備金6個月", "財務自由 (F)", "風險與保險配置", "資產配置再平衡", "債務清償零負債", "稅務優化退休規劃"] :
+            ["Budget & Cashflow", "Passive Income", "Index Investing", "6-Mo Emergency Fund", "Financial Wealth (F)", "Insurance & Risk", "Asset Rebalance", "Debt Elimination", "Retirement Planning"],
+          extensions: [null, null, null, null, "sub_fin", null, null, null, null]
+        },
+        "sub_spi": {
+          title: isZh ? "精神意義 (S)" : "Spiritual Purpose (S)",
+          cells: isZh ?
+            ["晨間正念冥想", "確立核心價值觀", "大自然深度連結", "活在當下與心流", "精神意義 (S)", "探尋生命長遠使命", "睡前感恩三件事", "寬恕與放下執著", "靈性哲學閱讀"] :
+            ["Morning Meditation", "Core Values", "Nature Connection", "Present Flow State", "Spiritual Purpose (S)", "Life Purpose Mission", "Gratitude Practice", "Forgiveness & Peace", "Philosophy Reading"],
+          extensions: [null, null, null, null, "sub_spi", null, null, null, null]
+        },
+        "sub_phy": {
+          title: isZh ? "身體健康 (P)" : "Physical Vitality (P)",
+          cells: isZh ?
+            ["每晚深層睡眠7-8h", "每週規律阻力訓練", "原型食物均衡營養", "每日充足飲水2L", "身體健康 (P)", "有氧心肺活力運動", "定期全身健康檢查", "筋膜放鬆伸展拉筋", "戒除有害少糖少酒"] :
+            ["7-8h Deep Sleep", "Resistance Training", "Whole Food Nutrition", "Daily Hydration 2L", "Physical Vitality (P)", "Cardio Fitness", "Annual Checkup", "Mobility & Stretch", "Clean Habits No Sugar"],
+          extensions: [null, null, null, null, "sub_phy", null, null, null, null]
+        },
+        "sub_int": {
+          title: isZh ? "智力心智 (I)" : "Intellectual Growth (I)",
+          cells: isZh ?
+            ["每月精讀2本書", "掌握跨界新技能", "批判思維心智模型", "每日寫作筆記輸出", "智力心智 (I)", "保持好奇探索未知", "科技AI素養提升", "高質量課程研討", "刻意練習深度複盤"] :
+            ["Read 2 Books Monthly", "Learn New Skill", "Mental Models", "Daily Journal Output", "Intellectual Growth (I)", "Curiosity & Wonder", "Tech & AI Literacy", "Masterclasses", "Deliberate Reflection"],
+          extensions: [null, null, null, null, "sub_int", null, null, null, null]
+        },
+        "sub_rel": {
+          title: isZh ? "人際關係 (R)" : "Relational Harmony (R)",
+          cells: isZh ?
+            ["伴侶深度陪伴時光", "親密家庭晚餐溝通", "經營3-5位知心摯友", "傾聽同理不妄評判", "人際關係 (R)", "設邊界遠離消耗感", "表達愛與真誠讚美", "結識人生良師益友", "樂於助人社區連結"] :
+            ["Partner Quality Time", "Family Dinner Bonding", "3-5 Deep Friends", "Empathetic Listening", "Relational Harmony (R)", "Healthy Boundaries", "Appreciation & Love", "Mentors & Mastermind", "Community Giving"],
+          extensions: [null, null, null, null, "sub_rel", null, null, null, null]
+        },
+        "sub_emo": {
+          title: isZh ? "情緒韌性 (E)" : "Emotional Resilience (E)",
+          cells: isZh ?
+            ["接納情緒允許脆弱", "覺察情緒觸發點", "呼吸調息撫平焦慮", "積極正向自我對話", "情緒韌性 (E)", "培養幽默樂觀心態", "逆境復原成長思維", "心理排毒數位休眠", "自我慈悲不苛求全"] :
+            ["Accept Vulnerability", "Emotional Triggers", "Box Breathing Calm", "Positive Self-Talk", "Emotional Resilience (E)", "Humor & Optimism", "Growth Mindset", "Digital Detox", "Self-Compassion"],
+          extensions: [null, null, null, null, "sub_emo", null, null, null, null]
+        },
+        "sub_car": {
+          title: isZh ? "志業貢獻 (C)" : "Career & Impact (C)",
+          cells: isZh ?
+            ["發揮天賦核心優勢", "建立專業個人品牌", "解決他人真實痛點", "熱情與工作深度融合", "志業貢獻 (C)", "公益回饋社會奉獻", "指導提攜年輕後進", "打造長期價值作品", "慶祝里程碑成就感"] :
+            ["Leverage Strengths", "Personal Brand", "Solve Real Problems", "Passion & Vocation", "Career & Impact (C)", "Social Contribution", "Mentor Others", "Long-term Legacy", "Celebrate Milestones"],
+          extensions: [null, null, null, null, "sub_car", null, null, null, null]
+        },
+        "sub_lif": {
+          title: isZh ? "生活休閒 (L)" : "Lifestyle & Joy (L)",
+          cells: isZh ?
+            ["整潔舒適居住環境", "每年探索2處新旅行", "培養藝術音樂愛好", "品味美食料理樂趣", "生活休閒 (L)", "無目的放鬆充電感", "營造日常溫馨儀式", "斷捨離極簡生活感", "珍藏美好生命回憶"] :
+            ["Cozy Living Space", "Travel 2 Places/Yr", "Art & Music Hobby", "Culinary Enjoyment", "Lifestyle & Joy (L)", "Aimless Downtime", "Daily Rituals", "Minimalism Declutter", "Cherish Memories"],
+          extensions: [null, null, null, null, "sub_lif", null, null, null, null]
+        }
+      };
+      mState.activeGridId = "core";
+    }
+    else if (type === "ohtani") {
+      mState.grids = {
+        "core": {
+          title: isZh ? "8球團第一指名" : "NPB Draft Pick #1 (8 Teams)",
+          cells: isZh ?
+            ["體力/體格", "控球", "球質", "球速160km/h", "8球團第一指名", "變化球", "運氣", "人品", "精神力"] :
+            ["Physical", "Control", "Pitch Quality", "Speed 160km/h", "NPB Draft Pick #1", "Breaking Balls", "Luck", "Character", "Mental Strength"],
+          extensions: ["sub_body", "sub_ctrl", "sub_pitch", "sub_speed", "core", "sub_breaking", "sub_luck", "sub_char", "sub_mental"]
+        },
+        "sub_body": {
+          title: isZh ? "體力/體格" : "Physical",
+          cells: isZh ?
+            ["睡眠8小時", "一日三餐", "營養劑補充", "柔軟度維持", "體力/體格", "心肺耐力", "體重目標管理", "核心軀幹訓練", "運動後護理"] :
+            ["8 Hrs Sleep", "3 Balanced Meals", "Supplements", "Flexibility Work", "Physical", "Cardio Stamina", "Weight Control", "Core Training", "Post-Workout Care"],
+          extensions: [null, null, null, null, "sub_body", null, null, null, null]
+        },
+        "sub_ctrl": {
+          title: isZh ? "控球" : "Control",
+          cells: isZh ?
+            ["下半身穩定", "釋放點掌握", "身體軸心前傾", "排除雜念", "控球", "投球姿勢復原力", "出手角度一致", "全身力量平衡", "傳接球練習"] :
+            ["Lower Body Stability", "Release Point", "Axis Alignment", "Clear Thoughts", "Control", "Form Recovery", "Consistent Arm Angle", "Muscle Balance", "Catch Play"],
+          extensions: [null, null, null, null, "sub_ctrl", null, null, null, null]
+        },
+        "sub_pitch": {
+          title: isZh ? "球質" : "Pitch Quality",
+          cells: isZh ?
+            ["指尖扣球感覺", "轉速提升", "向下壓的角度", "重球壓迫感", "球質", "前導手延伸", "髖關節帶動力量", "握力訓練", "縫線咬合度"] :
+            ["Fingertip Grip Feel", "Increase Spin Rate", "Downward Angle", "Heavy Ball Feeling", "Pitch Quality", "Front Arm Extension", "Hip Rotation Drive", "Grip Strength", "Seam Precision"],
+          extensions: [null, null, null, null, "sub_pitch", null, null, null, null]
+        },
+        "sub_speed": {
+          title: isZh ? "球速160km/h" : "Speed 160km/h",
+          cells: isZh ?
+            ["軀幹扭轉力", "肩關節柔軟度", "後腳推蹬力量", "爆發力訓練", "球速160km/h", "全身協調性", "重量訓練", "短跑衝刺", "投球機制微調"] :
+            ["Torque Generation", "Shoulder Mobility", "Leg Extension Power", "Explosiveness", "Speed 160km/h", "Intermuscular Coord", "Weight Training", "Sprint Shuttles", "Form Mechanics"],
+          extensions: [null, null, null, null, "sub_speed", null, null, null, null]
+        },
+        "sub_breaking": {
+          title: isZh ? "變化球" : "Breaking Balls",
+          cells: isZh ?
+            ["滑球精度", "曲球大曲度", "指叉球下墜", "變速球速差", "變化球", "投球後半段位移", "握法研究", "揮臂速度維持", "旋轉控制"] :
+            ["Slider Precision", "Big Sweep Curve", "Forkball Drop", "Changeup Speed Diff", "Breaking Balls", "Late Movement", "Grip Research", "Arm Speed Retention", "Spin Control"],
+          extensions: [null, null, null, null, "sub_breaking", null, null, null, null]
+        },
+        "sub_luck": {
+          title: isZh ? "運氣" : "Luck",
+          cells: isZh ?
+            ["隨手撿垃圾", "向人熱情打招呼", "愛惜球具", "保持禮貌與謙遜", "運氣", "積極樂觀態度", "整理乾淨房間", "閱讀學習", "全力為隊友加油"] :
+            ["Pick Up Trash", "Energetic Greetings", "Respect Equipment", "Be Polite & Humble", "Luck", "Optimistic Attitude", "Clean Dorm Room", "Read Books", "Cheer on Teammates"],
+          extensions: [null, null, null, null, "sub_luck", null, null, null, null]
+        },
+        "sub_char": {
+          title: isZh ? "人品" : "Character",
+          cells: isZh ?
+            ["感恩與回饋之心", "替他人著想", "誠信做事", "保持謙遜謙讓", "人品", "對棒球的熱情", "言行舉止合宜", "情緒管理穩定", "自我反思"] :
+            ["Gratitude & Payback", "Think of Others", "Integrity Always", "Modesty & Humility", "Character", "Passion for Baseball", "Respectful Manners", "Emotional Control", "Self-Reflection"],
+          extensions: [null, null, null, null, "sub_char", null, null, null, null]
+        },
+        "sub_mental": {
+          title: isZh ? "精神力" : "Mental Strength",
+          cells: isZh ?
+            ["清晰奮鬥目標", "高度自律自我克制", "從不找藉口", "面對挫折積極面對", "精神力", "關鍵時刻的勇氣", "高抗壓性", "耐力與專注", "享受比賽過程"] :
+            ["Clear Target Setting", "Strict Self-Discipline", "No Excuses Allowed", "Face Setbacks Directly", "Mental Strength", "Clutch Courage", "Pressure Tolerance", "Patience & Focus", "Enjoy the Game"],
+          extensions: [null, null, null, null, "sub_mental", null, null, null, null]
+        }
+      };
+      mState.activeGridId = "core";
+    }
+    else if (type === "product") {
+      mState.grids = {
+        "core": {
+          title: isZh ? "成功上市新產品" : "Successful Product Launch",
+          cells: isZh ?
+            ["產品研發與完善", "市場調研定位", "定價與銷售包裝", "品牌與創意素材", "成功上市新產品", "公關與輿論推廣", "數位行銷投放", "銷售渠道賦能", "客戶成功與售後"] :
+            ["Product Readiness", "Market Research", "Pricing & Packaging", "Branding & Creative", "Successful Launch", "PR & Outreach", "Digital Marketing", "Sales Enablement", "Customer Success"],
+          extensions: ["sub_prod", "sub_mkt", "sub_price", "sub_brand", "core", "sub_pr", "sub_dig", "sub_sales", "sub_cs"]
+        },
+        "sub_prod": {
+          title: isZh ? "產品研發與完善" : "Product Readiness",
+          cells: isZh ?
+            ["修復關鍵缺陷", "核心功能測試", "使用者體驗優化", "多裝置相容性", "產品研發與完善", "安全性與合規性", "加載速度性能優化", "撰寫產品手冊", "版本發布規劃"] :
+            ["Fix Critical Bugs", "Core Feature Testing", "UX Optimization", "Cross-Device Compat", "Product Readiness", "Security Compliance", "Performance Optimization", "Write User Docs", "Release Roadmap Plan"],
+          extensions: [null, null, null, null, "sub_prod", null, null, null, null]
+        },
+        "sub_mkt": {
+          title: isZh ? "市場調研定位" : "Market Research",
+          cells: isZh ?
+            ["競爭對手分析", "目標客群畫像", "使用者痛點調研", "核心價值主張", "市場調研定位", "法規與政策環境", "試用版問卷反饋", "藍海市場探索", "確定差異化優勢"] :
+            ["Competitor Analysis", "Target Personas", "Pain Point Surveys", "Value Propositions", "Market Research", "Regulatory Environment", "Beta Feedback Survey", "Blue Ocean Strategy", "Define Key Diff"],
+          extensions: [null, null, null, null, "sub_mkt", null, null, null, null]
+        },
+        "sub_price": {
+          title: isZh ? "定價與銷售包裝" : "Pricing & Packaging",
+          cells: isZh ?
+            ["訂閱制收費方案", "早鳥優惠折扣", "企業專屬套裝", "競品價格對比", "定價與銷售包裝", "增值附加服務", "退款保障條款", "免費試用期設計", "渠道商利潤分配"] :
+            ["Subscription Tiers", "Early Bird Discount", "Enterprise Bundle", "Price Benchmarking", "Pricing & Packaging", "Add-on Services Pricing", "Refund Guarantee Policy", "Free Trial Strategy", "Partner Margin Setup"],
+          extensions: [null, null, null, null, "sub_price", null, null, null, null]
+        },
+        "sub_brand": {
+          title: isZh ? "品牌與創意素材" : "Branding & Creative",
+          cells: isZh ?
+            ["主視覺海報設計", "產品官網改版", "宣傳展示短片", "品牌字體與標準色", "品牌與創意素材", "客戶案例訪談", "社交媒體頭像包", "宣傳物料印刷", "品牌商標註冊"] :
+            ["Key Visual Poster", "Landing Page Design", "Promo Video Clip", "Brand Assets (Fonts)", "Branding & Creative", "Customer Success Story", "Social Media Kits", "Printed Brochures", "Trademark Filing"],
+          extensions: [null, null, null, null, "sub_brand", null, null, null, null]
+        },
+        "sub_pr": {
+          title: isZh ? "公關與輿論推廣" : "PR & Outreach",
+          cells: isZh ?
+            ["主流媒體新聞稿", "行業分析師發布", "KOL評測合作", "媒體發佈會活動", "公關與輿論推廣", "論壇口碑營銷", "危機公關預案", "產品上市故事", "聯合行銷招商"] :
+            ["PR Press Release", "Analyst Briefing", "KOL Reviews Collab", "Launch Event Meetup", "PR & Outreach", "Forum Buzz Generation", "Crisis PR Plan", "Founder Story Outreach", "Joint Promo Campaigns"],
+          extensions: [null, null, null, null, "sub_pr", null, null, null, null]
+        },
+        "sub_dig": {
+          title: isZh ? "數位行銷投放" : "Digital Marketing",
+          cells: isZh ?
+            ["搜尋引擎優化SEO", "關鍵字廣告SEM", "社群廣告投放", "EDM電子報發送", "數位行銷投放", "追蹤像素配置", "轉換率漏斗分析", "再行銷名單收集", "內容行銷文章"] :
+            ["SEO Optimization", "Keyword Ads (SEM)", "Social Media Ads", "Email Newsletter", "Digital Marketing", "Tracking Pixel Setup", "Funnel Analytics", "Retargeting Campaigns", "Content Blog Posts"],
+          extensions: [null, null, null, null, "sub_dig", null, null, null, null]
+        },
+        "sub_sales": {
+          title: isZh ? "銷售渠道賦能" : "Sales Enablement",
+          cells: isZh ?
+            ["產品簡報PPT", "銷售話術手冊", "Demo演示技巧", "報價單與合約範本", "銷售渠道賦能", "渠道代理商培訓", "銷售業績激勵", "客戶常見問題集", "競爭力對比表"] :
+            ["Sales Pitch Deck", "Playbook / Scripts", "Demo Best Practices", "Quotes & Contract Tpl", "Sales Enablement", "Reseller Training", "Commission Incentives", "Sales FAQ sheets", "Competitor Battlecard"],
+          extensions: [null, null, null, null, "sub_sales", null, null, null, null]
+        },
+        "sub_cs": {
+          title: isZh ? "客戶成功與售後" : "Customer Success",
+          cells: isZh ?
+            ["快速導入指南", "自助式客服中心", "客戶反饋收集", "定期主動關懷", "客戶成功與售後", "續約引導流程", "用戶社群經營", "產品更新推播", "專屬技術窗口"] :
+            ["Quick Onboarding Guide", "Self-Serve Helpdesk", "Feedback Gathering", "Proactive Healthcheck", "Customer Success", "Renewal Operations", "User Community Management", "Product Updates Feed", "Dedicated Support Desk"],
+          extensions: [null, null, null, null, "sub_cs", null, null, null, null]
+        }
+      };
+      mState.activeGridId = "core";
+    }
+
+    const tplSelect = document.getElementById("mandalaTemplateSelect");
+    if (tplSelect) tplSelect.value = "";
+
+    recordHistory();
+    render();
+    saveAndIndicator();
+    autoScaleMobile();
+  }
+
+  // Mobile Bottom Sheet Cell Editor
+  function openCellEditor(index) {
+    mState.mobileFocusIndex = index;
+    const lang = state.lang || "zh";
+    const t = I18N[lang];
+    const activeGrid = mState.grids[mState.activeGridId];
+    if (!activeGrid) return;
+
+    const isCenter = (index === 4);
+    const extId = activeGrid.extensions[index];
+
+    const headerEl = document.getElementById("mandalaMobileEditHeader");
+    const subEl = document.getElementById("mandalaMobileEditSubtitle");
+    if (headerEl) headerEl.innerText = `${t.mandalaEditCell} - ${isCenter ? 'Center (★)' : 'Cell ' + (index + 1)}`;
+    if (subEl) subEl.innerText = `${activeGrid.title}`;
+
+    const textarea = document.getElementById("mandalaMobileCellTextarea");
+    if (textarea) {
+      textarea.value = activeGrid.cells[index];
+      textarea.placeholder = t.mandalaPlaceholder;
+    }
+
+    const focusIdxEl = document.getElementById("mandalaMobileFocusIndex");
+    if (focusIdxEl) focusIdxEl.innerText = `${index + 1}/9`;
+
+    const descEl = document.getElementById("mandalaMobileSubgridDesc");
+    const actionContainer = document.getElementById("mandalaMobileSubgridActions");
+    if (actionContainer) actionContainer.innerHTML = "";
+
+    if (isCenter) {
+      if (descEl) descEl.innerText = t.mandalaSubgridLinked + " Self (Master)";
+      const badge = document.createElement("span");
+      badge.innerText = "⭐ Center";
+      badge.style.fontSize = "11px";
+      badge.style.fontWeight = "bold";
+      badge.style.color = "var(--accent)";
+      if (actionContainer) actionContainer.appendChild(badge);
+    } else {
+      if (extId) {
+        if (descEl) descEl.innerText = t.mandalaSubgridLinked + (mState.grids[extId] ? mState.grids[extId].title : "Subgrid");
+        const flex = document.createElement("div");
+        flex.style.display = "flex";
+        flex.style.gap = "6px";
+
+        const enterBtn = document.createElement("button");
+        enterBtn.innerText = "🔎";
+        enterBtn.className = "btn btn-ghost";
+        enterBtn.style.padding = "4px 8px";
+        enterBtn.onclick = () => {
+          mState.activeGridId = extId;
+          closeCellEditor();
+          render();
+          autoScaleMobile();
+        };
+        flex.appendChild(enterBtn);
+
+        const delBtn = document.createElement("button");
+        delBtn.innerText = "🗑️";
+        delBtn.className = "btn btn-ghost";
+        delBtn.style.padding = "4px 8px";
+        delBtn.style.color = "#E74C3C";
+        delBtn.onclick = () => {
+          removeSubgridLink(mState.activeGridId, index);
+          openCellEditor(index);
+        };
+        flex.appendChild(delBtn);
+
+        if (actionContainer) actionContainer.appendChild(flex);
+      } else {
+        if (descEl) descEl.innerText = t.mandalaSubgridNotLinked;
+        const addBtn = document.createElement("button");
+        addBtn.innerText = t.mandalaExpandBtn;
+        addBtn.className = "btn btn-ghost";
+        addBtn.style.padding = "4px 10px";
+        addBtn.style.background = "var(--accent)";
+        addBtn.style.color = "var(--navy)";
+        addBtn.style.fontWeight = "bold";
+        addBtn.onclick = () => {
+          expandCellNode(mState.activeGridId, index);
+          closeCellEditor();
+        };
+        if (actionContainer) actionContainer.appendChild(addBtn);
+      }
+    }
+
+    const modal = document.getElementById("mandalaModalCellEdit");
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.style.display = "flex";
+    }
+  }
+
+  function closeCellEditor() {
+    const modal = document.getElementById("mandalaModalCellEdit");
+    if (modal) {
+      modal.classList.add("hidden");
+      modal.style.display = "none";
+    }
+  }
+
+  function updateFromMobile(value) {
+    updateCellValue(mState.activeGridId, mState.mobileFocusIndex, value);
+  }
+
+  function cycleCellFocus(dir) {
+    let nextIndex = mState.mobileFocusIndex + dir;
+    if (nextIndex < 0) nextIndex = 8;
+    if (nextIndex > 8) nextIndex = 0;
+    openCellEditor(nextIndex);
+  }
+
+  // Help Modal
+  function openHelpModal() {
+    const lang = state.lang || "zh";
+    const isZh = (lang === "zh");
+    const container = document.getElementById("mandalaModalHelpBody");
+    if (container) {
+      container.innerHTML = isZh ? `
+        <p><strong>九宮格思考法（Lotus Blossom Technique，又稱蓮花瓣法）</strong>是一種放射性思考與目標管理工具。以 3x3 網格為基礎，將一個核心焦點拆解為 8 個次級核心，再將次級核心各自擴展成 8 個更具體的行動方案（共 81 格）。</p>
+        <h4 style="color:var(--accent);margin:12px 0 6px;">🌟 經典範本介紹：</h4>
+        <ul style="padding-left:20px;margin:0 0 12px;">
+          <li><strong>🌿 FSPIRE 全人幸福</strong>：涵蓋財務 (F)、精神 (S)、身體 (P)、智識 (I)、人際 (R)、情緒 (E)、志業 (C)、生活 (L) 8 大維度 81 格平衡人生藍圖。</li>
+          <li><strong>⚾ 大谷翔平 81 格目標</strong>：MLB 球星高中時制定的 81 格棒球奮鬥目標（體能、控球、球質、球速、變化球、運氣、人品、精神力）。</li>
+          <li><strong>🚀 新產品上市策略</strong>：包含產品研發、市場調研、定價包裝、品牌創意、公關推廣、數位行銷、渠道賦能與客戶成功。</li>
+        </ul>
+        <h4 style="color:var(--accent);margin:12px 0 6px;">💡 操作技巧：</h4>
+        <ol style="padding-left:20px;margin:0;">
+          <li>直接在格內輸入文字。中心格（第5格）代表主題，外圍8格代表分支。</li>
+          <li>將滑鼠移至外圍格子時會出現「＋」按鈕，點擊即可展開為下一層獨立的 9 宮格（子矩陣）。</li>
+          <li>點擊帶有 🔗 連結的格子可下鑽（Zoom in）進入該子宮格；使用頂部麵包屑導覽或「返回上層」即可退回。</li>
+          <li>支援標準 Markdown (.md) 雙向匯入與匯出，完美相容 Obsidian 與 Mermaid 心智圖！</li>
+        </ol>
+      ` : `
+        <p><strong>The Mandala 9-Grid (Lotus Blossom Technique)</strong> is a structured brainstorming and goal setting system. It begins with a 3x3 grid where a central theme expands into 8 sub-themes. Each sub-theme then blossoms into 8 concrete actions, yielding an 81-cell strategy.</p>
+        <h4 style="color:var(--accent);margin:12px 0 6px;">🌟 Preset Templates:</h4>
+        <ul style="padding-left:20px;margin:0 0 12px;">
+          <li><strong>🌿 FSPIRE Wholebeing Goals</strong>: 8-Pillar 81-grid wholebeing life mastery based on SPIRE + Financial wealth + Career & Lifestyle.</li>
+          <li><strong>⚾ Shohei Ohtani 81-Goal Chart</strong>: MLB superstar's high school baseball blueprint (Pitch Quality, Control, Speed, Luck, Character, Mental Strength, etc.).</li>
+          <li><strong>🚀 Product Launch Strategy</strong>: Comprehensive 81-cell commercial roadmap covering R&D, Market Research, Pricing, PR, Marketing, Sales, CS.</li>
+        </ul>
+        <h4 style="color:var(--accent);margin:12px 0 6px;">💡 How to use:</h4>
+        <ol style="padding-left:20px;margin:0;">
+          <li>Type directly into cells. Cell 5 (center) represents the core; the surrounding 8 are branches.</li>
+          <li>Hover over edge cells and click '+' to expand that cell into a new 9-grid. A 🔗 link icon will appear.</li>
+          <li>Click any cell with a 🔗 icon to drill down into the subgrid. Use breadcrumbs or 'Go Up' to return.</li>
+          <li>Supports dual-sync with Markdown (.md) files, rendering Mermaid mindmaps and tables natively in Obsidian/GitHub!</li>
+        </ol>
+      `;
+    }
+
+    const modal = document.getElementById("mandalaModalHelp");
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.style.display = "flex";
+    }
+  }
+
+  function closeHelpModal() {
+    const modal = document.getElementById("mandalaModalHelp");
+    if (modal) {
+      modal.classList.add("hidden");
+      modal.style.display = "none";
+    }
+  }
+
+  function applyLanguage() {
+    const lang = state.lang || "zh";
+    const t = I18N[lang];
+
+    const titleEl = document.getElementById("mandalaTitle");
+    if (titleEl) titleEl.innerText = t.mandalaTitle;
+    const titleEnEl = document.getElementById("mandalaTitleEn");
+    if (titleEnEl) titleEnEl.innerText = t.mandalaTitleEn;
+    const subEl = document.getElementById("mandalaSubtitle");
+    if (subEl) subEl.innerText = t.mandalaSubtitle;
+
+    const undoBtn = document.getElementById("mandalaUndoBtn");
+    if (undoBtn) undoBtn.innerText = t.mandalaUndo;
+    const redoBtn = document.getElementById("mandalaRedoBtn");
+    if (redoBtn) redoBtn.innerText = t.mandalaRedo;
+    const helpBtn = document.getElementById("mandalaHelpBtn");
+    if (helpBtn) helpBtn.innerText = t.mandalaHelpBtn;
+    const goUpBtn = document.getElementById("mandalaBtnGoUp");
+    if (goUpBtn) goUpBtn.innerText = t.mandalaGoUp;
+
+    const optLabel = document.getElementById("mandalaOptTplLabel");
+    if (optLabel) optLabel.innerText = t.mandalaTplLabel;
+    const optEmpty = document.getElementById("mandalaOptTplEmpty");
+    if (optEmpty) optEmpty.innerText = t.mandalaTplEmpty;
+    const optFspire = document.getElementById("mandalaOptTplFspire");
+    if (optFspire) optFspire.innerText = t.mandalaTplFspire;
+    const optOhtani = document.getElementById("mandalaOptTplOhtani");
+    if (optOhtani) optOhtani.innerText = t.mandalaTplOhtani;
+    const optProduct = document.getElementById("mandalaOptTplProduct");
+    if (optProduct) optProduct.innerText = t.mandalaTplProduct;
+
+    const zoomLbl = document.getElementById("mandalaZoomLabel");
+    if (zoomLbl) zoomLbl.innerText = t.mandalaZoomLabel;
+    const expTitle = document.getElementById("mandalaExportTitle");
+    if (expTitle) expTitle.innerText = t.mandalaExportTitle;
+    const copyCodeBtn = document.getElementById("mandalaCopyCodeBtn");
+    if (copyCodeBtn) copyCodeBtn.innerText = t.mandalaCopyCode;
+
+    const btnImpJson = document.getElementById("mandalaBtnImportJson");
+    if (btnImpJson) btnImpJson.innerText = t.mandalaImportJson;
+    const btnExpJson = document.getElementById("mandalaBtnExportJson");
+    if (btnExpJson) btnExpJson.innerText = t.mandalaExportJson;
+    const btnImpMd = document.getElementById("mandalaBtnImportMd");
+    if (btnImpMd) btnImpMd.innerText = t.mandalaImportMd;
+    const btnExpMd = document.getElementById("mandalaBtnExportMd");
+    if (btnExpMd) btnExpMd.innerText = t.mandalaExportMd;
+
+    render();
+  }
+
+  function init() {
+    load();
+    recordHistory();
+    window.addEventListener("resize", autoScaleMobile);
+    const modalHelp = document.getElementById("mandalaModalHelp");
+    if (modalHelp) {
+      modalHelp.addEventListener("click", (e) => {
+        if (e.target.id === "mandalaModalHelp") closeHelpModal();
+      });
+    }
+    const modalCell = document.getElementById("mandalaModalCellEdit");
+    if (modalCell) {
+      modalCell.addEventListener("click", (e) => {
+        if (e.target.id === "mandalaModalCellEdit") closeCellEditor();
+      });
+    }
+  }
+
+  return {
+    init,
+    render,
+    undo,
+    redo,
+    loadPreset,
+    adjustZoom,
+    autoScaleMobile,
+    navigateUp,
+    copyMermaid,
+    exportMarkdownFile,
+    exportJSON,
+    importJSON,
+    importMarkdown,
+    openHelpModal,
+    closeHelpModal,
+    openCellEditor,
+    closeCellEditor,
+    updateFromMobile,
+    cycleCellFocus,
+    applyLanguage
+  };
+})();
+window.MandalaStudio = MandalaStudio;
+
 /* ---------- Init ---------- */
 load();
 applyTheme();
 applyLanguage();
 initFlowchart();
+MandalaStudio.init();
 
 // Global click delegation for mindful pause and other interactive elements
 document.addEventListener("click", function(e) {
