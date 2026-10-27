@@ -343,13 +343,19 @@ header{
 .brand p{margin:2px 0 0;font-size:12.5px;color:var(--text-dim);}
 
 nav.tabs{display:flex;gap:6px;flex-wrap:wrap;}
-nav.tabs button{
+nav.tabs button, nav.tabs a.tab-link{
   background:transparent;border:1px solid var(--border);color:var(--text-dim);
   padding:9px 16px;border-radius:999px;font-size:13.5px;cursor:pointer;
   transition:all .15s;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  line-height:normal;
+  font-family:inherit;
 }
-nav.tabs button:hover{color:var(--text);border-color:var(--accent);}
-nav.tabs button.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:600;}
+nav.tabs button:hover, nav.tabs a.tab-link:hover{color:var(--text);border-color:var(--accent);transform:translateY(-1px);}
+nav.tabs button.active, nav.tabs a.tab-link.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:600;}
 
 .header-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .icon-btn{
@@ -879,6 +885,7 @@ select{
     <button data-tab="dashboard" class="active">總覽 Dashboard</button>
     <button data-tab="workspace">羅盤 Compass</button>
     <button data-tab="mandala">九宮格 Mandala</button>
+    <a href="mindful_quotes.html" class="tab-link" id="tabQuotesLink" title="正念平靜 100 金句 · 100 Mindfulness & Peace Quotes">🧘 正念金句 Quotes ↗</a>
     <button data-tab="history">紀錄 History</button>
     <button data-tab="help">說明 Help</button>
   </nav>
@@ -891,9 +898,9 @@ select{
     <button class="btn btn-ghost" id="langToggle" style="font-size:12px;padding:5px 10px;font-weight:bold;border-radius:18px;border:1px solid var(--border);display:flex;align-items:center;gap:4px;" title="Switch Language / 切換語言">🌐 EN</button>
     <button class="icon-btn" id="themeToggle" title="Toggle dark/light">🌙</button>
     <div class="author-meta-tag" id="authorMetaTag">
-      <span class="meta-version" title="Version">v1.2.0</span>
+      <span class="meta-version" title="Version">v1.3.0</span>
       <span class="meta-divider">·</span>
-      <span class="meta-date" title="Last Updated">2026-09-02</span>
+      <span class="meta-date" title="Last Updated">2026-10-28</span>
       <span class="meta-divider">·</span>
       <a href="https://www.linkedin.com/in/masatu19810322/" target="_blank" rel="noopener noreferrer" class="meta-author" title="Author / LinkedIn Profile">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:2px;display:inline-block;"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>Masa Tu
@@ -1842,7 +1849,8 @@ const I18N = {
     wsMindfulBanner: "🧘 <strong>刻意暫停</strong>：在進入焦點討論前，給自己 1 分鐘的時間慢下來、覺察當下的身心狀態。",
     wsMindfulBannerBtn: "開始覺察 Begin",
 
-    // Mandala 9-Grid Translations (ZH)
+    // Mindful Quotes & Mandala 9-Grid Translations (ZH)
+    tabQuotes: "🧘 正念金句 Quotes ↗",
     tabMandala: "九宮格 Mandala",
     mandalaTitle: "🌸 曼陀羅九宮格思維工坊",
     mandalaTitleEn: "Mandala 9-Grid Studio Pro",
@@ -2073,7 +2081,8 @@ const I18N = {
     wsMindfulBanner: "🧘 <strong>Mindful Pause</strong>: Take 1 minute to slow down and center your mind before starting your ORID reflection.",
     wsMindfulBannerBtn: "Begin Grounding",
 
-    // Mandala 9-Grid Translations (EN)
+    // Mindful Quotes & Mandala 9-Grid Translations (EN)
+    tabQuotes: "🧘 Mindful Quotes ↗",
     tabMandala: "Mandala 9-Grid",
     mandalaTitle: "🌸 Mandala 9-Grid Studio Pro",
     mandalaTitleEn: "Mandala 9-Grid Studio Pro",
@@ -2372,6 +2381,8 @@ function applyLanguage() {
   document.querySelector('nav.tabs button[data-tab="workspace"]').textContent = t.tabWorkspace;
   const tabMandalaBtn = document.querySelector('nav.tabs button[data-tab="mandala"]');
   if (tabMandalaBtn) tabMandalaBtn.textContent = t.tabMandala;
+  const tabQuotesLink = document.getElementById("tabQuotesLink");
+  if (tabQuotesLink) tabQuotesLink.textContent = t.tabQuotes;
   document.querySelector('nav.tabs button[data-tab="history"]').textContent = t.tabHistory;
   document.querySelector('nav.tabs button[data-tab="help"]').textContent = t.tabHelp;
   if (window.MandalaStudio && typeof window.MandalaStudio.applyLanguage === "function") {
