@@ -424,6 +424,9 @@ body.light .spotlight-takeaway{background:rgba(0,0,0,0.03);}
   .playback-quote{max-width:220px;font-size:12px;}
   .playback-info{width:100%;justify-content:space-between;}
   .playback-controls{width:100%;justify-content:flex-end;}
+  .playback-jump{display:none;}
+  .start-from-control{font-size:11px;}
+  .start-from-control input{width:46px;font-size:11px;}
   .quotes-grid{grid-template-columns:1fr;}
   .spotlight-card{padding:18px 20px;}
   .spotlight-quote-en{font-size:18px;}
@@ -570,6 +573,56 @@ body.light .spotlight-takeaway{background:rgba(0,0,0,0.03);}
 }
 .action-btn:hover{color:var(--text);border-color:var(--accent);}
 
+.btn-play-from{
+  background:rgba(46,204,113,0.14) !important;
+  border-color:rgba(46,204,113,0.4) !important;
+  color:#2ECC71 !important;
+  font-weight:600 !important;
+}
+.btn-play-from:hover{
+  background:#2ECC71 !important;
+  color:#0F1B2D !important;
+  border-color:#2ECC71 !important;
+  transform:scale(1.03);
+}
+
+.start-from-control{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  padding:3px 8px;
+  border-radius:20px;
+}
+.start-from-label{
+  font-size:12px;
+  color:var(--text-dim);
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.start-from-control input{
+  width:58px;
+  padding:3px 6px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+  outline:none;
+}
+.start-from-control input:focus{
+  border-color:var(--accent);
+}
+.playback-jump{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+
 /* Pagination / Load more */
 .load-more-wrap{
   display:flex;
@@ -644,6 +697,12 @@ footer a:hover{text-decoration:underline;}
       <span class="playback-badge">🔊 播放中 Speaking</span>
       <span class="playback-quote" id="headerPlaybackText">"Smile, breathe, and go slowly."</span>
       <span class="playback-index" id="headerPlaybackIndex">(1 / 1000)</span>
+      <div class="playback-jump">
+        <label style="font-size:11.5px;color:var(--text-dim);display:inline-flex;align-items:center;gap:3px;">
+          跳至 #<input type="number" id="headerJumpInput" min="1" max="1000" style="width:55px;padding:2px 4px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px;text-align:center;" onkeydown="if(event.key==='Enter') jumpToPlaybackNumber()">
+        </label>
+        <button class="btn btn-sm" onclick="jumpToPlaybackNumber()" style="font-size:10.5px !important;padding:2px 7px !important;">Go</button>
+      </div>
     </div>
     <div class="playback-controls">
       <button class="btn btn-sm" onclick="prevAutoPlayQuote()" title="上一句 Previous">⏮️ 上一句 Prev</button>
@@ -659,8 +718,9 @@ footer a:hover{text-decoration:underline;}
   <div class="spotlight-card" id="spotlightCard">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
       <div class="spotlight-tag" id="spotlightTag">⭐ 每日正念啟發 Daily Mindful Insight</div>
-      <div style="display:flex;gap:8px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="shuffleSpotlight()" style="font-size:12px;padding:5px 12px;">🎲 隨機抽一句 Shuffle</button>
+        <button class="btn" onclick="startAutoPlayFromSpotlight()" style="font-size:12px;padding:5px 12px;font-weight:600;" title="從此每日金句開始連續朗讀">▶️ 從此句連播 Play From Here</button>
         <button class="btn" id="spotlightAudioBtn" onclick="speakSpotlight()" style="font-size:12px;padding:5px 12px;">🔊 朗讀 Read</button>
         <button class="btn" onclick="copySpotlight()" style="font-size:12px;padding:5px 12px;">📋 複製 Copy</button>
       </div>
@@ -722,6 +782,16 @@ footer a:hover{text-decoration:underline;}
     </div>
     <div class="toolbar-controls">
       <span class="count-indicator" id="countIndicator">顯示 24 / 共 1000 句</span>
+
+      <div class="start-from-control" title="指定從第幾句開始連續朗讀 (1-1000)">
+        <label for="startFromInput" class="start-from-label">
+          <span id="startFromPrefix">從第</span>
+          <input type="number" id="startFromInput" min="1" max="1000" value="1" onkeydown="if(event.key==='Enter') startFromInputValue()">
+          <span id="startFromSuffix">句</span>
+        </label>
+        <button class="btn btn-sm" onclick="startFromInputValue()" title="從指定句數開始連續朗讀">▶️ 播放 Play</button>
+      </div>
+
       <button class="btn" id="autoCycleBtn" onclick="toggleAutoPlay()" style="font-size:12px;padding:5px 14px;" title="點擊啟動/暫停連續語音朗讀">🎧 自動語音朗讀 Auto-Play</button>
     </div>
   </div>
@@ -13853,6 +13923,10 @@ function applyLanguage() {
     "Search quotes, authors, concepts (e.g., peace, breath, Marcus Aurelius)..." :
     "搜尋名句、作者、核心哲思關鍵字 (如：平靜、呼吸、Marcus Aurelius)...";
   document.getElementById("backToCompassBtn").textContent = isEn ? "🧭 Back to Compass" : "🧭 返回生活羅盤 Back to Compass";
+  const startFromPrefix = document.getElementById("startFromPrefix");
+  const startFromSuffix = document.getElementById("startFromSuffix");
+  if (startFromPrefix) startFromPrefix.textContent = isEn ? "From #" : "從第";
+  if (startFromSuffix) startFromSuffix.textContent = isEn ? "" : "句";
   updateAutoPlayBtnUI();
 }
 
@@ -13982,6 +14056,9 @@ function renderQuotes() {
           </div>
 
           <div class="card-actions">
+            <button class="action-btn btn-play-from" onclick="startAutoPlayFromId('${q.id}')" title="${isEn ? 'Start continuous playback from here' : '從此金句開始連續自動朗讀'}">
+              ▶️ ${isEn ? 'Play From Here' : '從此句連播'}
+            </button>
             <button class="action-btn ${isSpeakingThis ? 'btn-primary' : ''}" onclick="userClickSpeak('${q.id}')" title="朗讀英文金句">
               ${isSpeakingThis ? '🔊 播放中...' : '🔊 ' + (isEn ? 'Listen' : '朗讀')}
             </button>
@@ -14138,11 +14215,14 @@ function toggleAutoPlay() {
   if (state.isAutoPlaying) {
     stopAutoPlay();
   } else {
-    startAutoPlay();
+    const input = document.getElementById("startFromInput");
+    let val = input ? parseInt(input.value, 10) : 1;
+    if (isNaN(val) || val < 1) val = 1;
+    startAutoPlay(val - 1);
   }
 }
 
-function startAutoPlay() {
+function startAutoPlay(fromIndex = 0) {
   if (!("speechSynthesis" in window)) {
     showToast(state.lang === "en" ? "Speech audio is not supported in this browser." : "此瀏覽器不支援語音朗讀功能");
     return;
@@ -14154,12 +14234,75 @@ function startAutoPlay() {
     return;
   }
 
+  if (typeof fromIndex !== "number" || isNaN(fromIndex)) fromIndex = 0;
+  if (fromIndex < 0) fromIndex = 0;
+  if (fromIndex >= pool.length) fromIndex = pool.length - 1;
+
   state.isAutoPlaying = true;
-  state.autoPlayIndex = 0;
+  state.autoPlayIndex = fromIndex;
+  if (fromIndex >= state.visibleCount) {
+    state.visibleCount = Math.min(fromIndex + 12, state.quotes.length);
+  }
   updateAutoPlayBtnUI();
-  showToast(state.lang === "en" ? "🎧 Audio Auto-Play Started!" : "🎧 正念自動語音朗讀已啟動！");
+  const startNum = fromIndex + 1;
+  const quoteId = pool[fromIndex].id;
+  showToast(state.lang === "en" ? `🎧 Playing from #${startNum} (${quoteId})` : `🎧 已從第 ${startNum} 句 (${quoteId}) 開始連續朗讀！`);
 
   playNextInAutoSequence();
+}
+
+function startAutoPlayFromId(id) {
+  const pool = getFilteredQuotes();
+  const idx = pool.findIndex(q => q.id === id);
+  if (idx !== -1) {
+    startAutoPlay(idx);
+  } else {
+    setCategory('all');
+    setTimeout(() => {
+      const allPool = getFilteredQuotes();
+      const allIdx = allPool.findIndex(q => q.id === id);
+      startAutoPlay(allIdx !== -1 ? allIdx : 0);
+    }, 50);
+  }
+}
+
+function startFromInputValue() {
+  const input = document.getElementById("startFromInput");
+  const pool = getFilteredQuotes();
+  if (!pool || pool.length === 0) return;
+  let val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 1) val = 1;
+  if (val > pool.length) val = pool.length;
+  input.value = val;
+  startAutoPlay(val - 1);
+}
+
+function jumpToPlaybackNumber() {
+  const input = document.getElementById("headerJumpInput");
+  if (!input) return;
+  const pool = getFilteredQuotes();
+  if (!pool || pool.length === 0) return;
+  let val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 1) val = 1;
+  if (val > pool.length) val = pool.length;
+  input.value = val;
+  if (state.autoPlayTimer) {
+    clearTimeout(state.autoPlayTimer);
+    state.autoPlayTimer = null;
+  }
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  state.autoPlayIndex = val - 1;
+  playNextInAutoSequence();
+}
+
+function startAutoPlayFromSpotlight() {
+  if (state.currentSpotlightId) {
+    startAutoPlayFromId(state.currentSpotlightId);
+  } else {
+    startAutoPlay(0);
+  }
 }
 
 function stopAutoPlay() {
@@ -14196,6 +14339,13 @@ function playNextInAutoSequence() {
   // Sync with spotlight hero card
   displaySpotlight(currentQuote);
 
+  // Sync inputs with current quote number
+  const curNum = state.autoPlayIndex + 1;
+  const startInput = document.getElementById("startFromInput");
+  if (startInput) startInput.value = curNum;
+  const jumpInput = document.getElementById("headerJumpInput");
+  if (jumpInput) jumpInput.value = curNum;
+
   // Update sticky header playback bar content
   const playbackText = document.getElementById("headerPlaybackText");
   if (playbackText) {
@@ -14204,7 +14354,7 @@ function playNextInAutoSequence() {
   }
   const playbackIndex = document.getElementById("headerPlaybackIndex");
   if (playbackIndex) {
-    playbackIndex.textContent = `(${state.autoPlayIndex + 1} / ${pool.length})`;
+    playbackIndex.textContent = `(${curNum} / ${pool.length})`;
   }
 
   // If card is beyond visible range, expand visible range
