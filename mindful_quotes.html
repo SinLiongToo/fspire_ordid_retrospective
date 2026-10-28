@@ -58,16 +58,135 @@ body{
 header{
   background:var(--bg-panel);
   border-bottom:1px solid var(--border);
-  padding:14px 28px;
+  padding:12px 28px;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 3px 14px rgba(0,0,0,0.18);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  transition:all .2s ease;
+}
+
+.header-main-row{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:16px;
   flex-wrap:wrap;
-  position:sticky;
-  top:0;
-  z-index:100;
-  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  width:100%;
+}
+
+.header-playback-bar{
+  display:none;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  width:100%;
+  padding-top:10px;
+  margin-top:10px;
+  border-top:1px dashed var(--border);
+  animation:slideDown .22s ease-out;
+}
+
+.header-playback-bar.active{
+  display:flex !important;
+}
+
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.playback-info{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  flex:1;
+  min-width:240px;
+}
+
+.playback-badge{
+  background:rgba(46,204,113,0.18);
+  color:#2ECC71;
+  border:1px solid #2ECC71;
+  font-size:11.5px;
+  padding:3px 9px;
+  border-radius:12px;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  letter-spacing:0.3px;
+}
+
+.playback-quote{
+  font-size:13.5px;
+  font-style:italic;
+  color:var(--text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:480px;
+}
+
+.playback-index{
+  font-size:12px;
+  color:var(--text-dim);
+  font-weight:700;
+  background:var(--bg-card);
+  padding:2px 8px;
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+
+.playback-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn-stop-highlight{
+  background:#E74C3C !important;
+  color:#FFFFFF !important;
+  border-color:#C0392B !important;
+  font-weight:700 !important;
+  font-size:12px !important;
+  padding:5px 14px !important;
+  border-radius:16px !important;
+  box-shadow:0 3px 10px rgba(231,76,60,0.4) !important;
+  cursor:pointer;
+  transition:transform .12s, background .15s, box-shadow .15s;
+}
+
+.btn-stop-highlight:hover{
+  background:#C0392B !important;
+  transform:scale(1.04);
+  box-shadow:0 4px 14px rgba(231,76,60,0.6) !important;
+}
+
+.btn-autoplay-header{
+  font-size:12px !important;
+  padding:5px 14px !important;
+  font-weight:600 !important;
+  cursor:pointer;
+}
+
+.btn-sm{
+  font-size:11.5px !important;
+  padding:4px 10px !important;
+  border-radius:14px !important;
+  cursor:pointer;
+}
+
+.quote-card, .spotlight-card{
+  scroll-margin-top:140px;
 }
 
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
@@ -300,6 +419,11 @@ body.light .spotlight-takeaway{background:rgba(0,0,0,0.03);}
   gap:20px;
 }
 @media(max-width:768px){
+  header{padding:10px 16px;}
+  .header-main-row{gap:10px;}
+  .playback-quote{max-width:220px;font-size:12px;}
+  .playback-info{width:100%;justify-content:space-between;}
+  .playback-controls{width:100%;justify-content:flex-end;}
   .quotes-grid{grid-template-columns:1fr;}
   .spotlight-card{padding:18px 20px;}
   .spotlight-quote-en{font-size:18px;}
@@ -489,25 +613,42 @@ footer a:hover{text-decoration:underline;}
 </head>
 <body>
 
-<header>
-  <a href="index.html" class="brand" title="返回焦點討論生活羅盤">
-    <div class="brand-mark">🧘</div>
-    <div>
-      <h1>正念平靜 500 金句 <span style="font-weight:400;font-size:13px;color:var(--text-dim);">Mindfulness &amp; Peace 500 Quotes</span></h1>
-      <p>500 句跨越世紀的正念覺知、心靈寧靜、斯多葛沉思與人生智慧</p>
-    </div>
-  </a>
+<header id="mainHeader">
+  <div class="header-main-row">
+    <a href="index.html" class="brand" title="返回焦點討論生活羅盤">
+      <div class="brand-mark">🧘</div>
+      <div>
+        <h1>正念平靜 500 金句 <span style="font-weight:400;font-size:13px;color:var(--text-dim);">Mindfulness &amp; Peace 500 Quotes</span></h1>
+        <p>500 句跨越世紀的正念覺知、心靈寧靜、斯多葛沉思與人生智慧</p>
+      </div>
+    </a>
 
-  <div class="header-tools">
-    <a href="index.html" class="btn btn-back" id="backToCompassBtn">🧭 返回生活羅盤 Back to Compass</a>
-    <button class="btn btn-ghost" id="langToggle" onclick="toggleLanguage()">🌐 EN</button>
-    <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
-    <div class="author-meta">
-      <span>v1.3.0</span>
-      <span>·</span>
-      <span>2026-10-28</span>
-      <span>·</span>
-      <a href="https://www.linkedin.com/in/masatu19810322/" target="_blank" rel="noopener noreferrer">Masa Tu</a>
+    <div class="header-tools">
+      <button class="btn btn-autoplay-header" id="headerAutoCycleBtn" onclick="toggleAutoPlay()" title="點擊啟動/暫停連續語音朗讀">🎧 語音朗讀 Auto-Play</button>
+      <a href="index.html" class="btn btn-back" id="backToCompassBtn">🧭 返回生活羅盤 Back to Compass</a>
+      <button class="btn btn-ghost" id="langToggle" onclick="toggleLanguage()">🌐 EN</button>
+      <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+      <div class="author-meta">
+        <span>v1.3.0</span>
+        <span>·</span>
+        <span>2026-10-28</span>
+        <span>·</span>
+        <a href="https://www.linkedin.com/in/masatu19810322/" target="_blank" rel="noopener noreferrer">Masa Tu</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Playback Controller Bar: Always visible while playing even when page scrolls down -->
+  <div class="header-playback-bar" id="headerPlaybackBar">
+    <div class="playback-info">
+      <span class="playback-badge">🔊 播放中 Speaking</span>
+      <span class="playback-quote" id="headerPlaybackText">"Smile, breathe, and go slowly."</span>
+      <span class="playback-index" id="headerPlaybackIndex">(1 / 500)</span>
+    </div>
+    <div class="playback-controls">
+      <button class="btn btn-sm" onclick="prevAutoPlayQuote()" title="上一句 Previous">⏮️ 上一句 Prev</button>
+      <button class="btn btn-stop-highlight" onclick="stopAutoPlay()" title="立即停止語音朗讀 (按 Esc 亦可停止)">⏹️ 停止朗讀 Stop</button>
+      <button class="btn btn-sm" onclick="nextAutoPlayQuote()" title="下一句 Next">⏭️ 下一句 Next</button>
     </div>
   </div>
 </header>
@@ -7555,6 +7696,17 @@ function playNextInAutoSequence() {
   // Sync with spotlight hero card
   displaySpotlight(currentQuote);
 
+  // Update sticky header playback bar content
+  const playbackText = document.getElementById("headerPlaybackText");
+  if (playbackText) {
+    playbackText.textContent = `"${currentQuote.quote_en}"`;
+    playbackText.title = `「${currentQuote.quote_zh}」 - ${currentQuote.author_zh}`;
+  }
+  const playbackIndex = document.getElementById("headerPlaybackIndex");
+  if (playbackIndex) {
+    playbackIndex.textContent = `(${state.autoPlayIndex + 1} / ${pool.length})`;
+  }
+
   // If card is beyond visible range, expand visible range
   if (state.autoPlayIndex >= state.visibleCount) {
     state.visibleCount = Math.min(state.autoPlayIndex + 12, state.quotes.length);
@@ -7581,17 +7733,68 @@ function playNextInAutoSequence() {
   });
 }
 
+function prevAutoPlayQuote() {
+  if (!state.isAutoPlaying) return;
+  if (state.autoPlayTimer) {
+    clearTimeout(state.autoPlayTimer);
+    state.autoPlayTimer = null;
+  }
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  const pool = getFilteredQuotes();
+  if (!pool || pool.length === 0) return;
+  state.autoPlayIndex = (state.autoPlayIndex - 1 + pool.length) % pool.length;
+  playNextInAutoSequence();
+}
+
+function nextAutoPlayQuote() {
+  if (!state.isAutoPlaying) return;
+  if (state.autoPlayTimer) {
+    clearTimeout(state.autoPlayTimer);
+    state.autoPlayTimer = null;
+  }
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  const pool = getFilteredQuotes();
+  if (!pool || pool.length === 0) return;
+  state.autoPlayIndex = (state.autoPlayIndex + 1) % pool.length;
+  playNextInAutoSequence();
+}
+
 function updateAutoPlayBtnUI() {
   const btn = document.getElementById("autoCycleBtn");
-  if (!btn) return;
+  const headerBtn = document.getElementById("headerAutoCycleBtn");
+  const playbackBar = document.getElementById("headerPlaybackBar");
   const isEn = state.lang === "en";
 
   if (state.isAutoPlaying) {
-    btn.innerHTML = isEn ? "⏸️ Pause Auto-Play" : "⏸️ 暫停語音朗讀 Pause";
-    btn.className = "btn btn-autoplay-active";
+    const pauseText = isEn ? "⏸️ Pause Auto-Play" : "⏸️ 暫停語音朗讀 Pause";
+    if (btn) {
+      btn.innerHTML = pauseText;
+      btn.className = "btn btn-autoplay-active";
+    }
+    if (headerBtn) {
+      headerBtn.innerHTML = isEn ? "⏹️ Stop Playback" : "⏹️ 停止朗讀 Stop";
+      headerBtn.className = "btn btn-stop-highlight";
+    }
+    if (playbackBar) {
+      playbackBar.classList.add("active");
+    }
   } else {
-    btn.innerHTML = isEn ? "🎧 Auto-Play Audio" : "🎧 自動語音朗讀 Auto-Play";
-    btn.className = "btn";
+    const playText = isEn ? "🎧 Auto-Play Audio" : "🎧 自動語音朗讀 Auto-Play";
+    if (btn) {
+      btn.innerHTML = playText;
+      btn.className = "btn";
+    }
+    if (headerBtn) {
+      headerBtn.innerHTML = isEn ? "🎧 Auto-Play" : "🎧 語音朗讀 Auto-Play";
+      headerBtn.className = "btn btn-autoplay-header";
+    }
+    if (playbackBar) {
+      playbackBar.classList.remove("active");
+    }
   }
 }
 
@@ -7615,6 +7818,12 @@ function escapeHtml(str) {
     }[m];
   });
 }
+
+window.addEventListener("keydown", function(e) {
+  if (e.key === "Escape" && state.isAutoPlaying) {
+    stopAutoPlay();
+  }
+});
 
 window.addEventListener("DOMContentLoaded", init);
 </script>
